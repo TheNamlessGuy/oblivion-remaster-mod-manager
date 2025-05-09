@@ -25,10 +25,6 @@ icon_alignment = 2
 
 [node name="ChildContainerContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
 
 [node name="ChildContainer" type="VBoxContainer" parent="ChildContainerContainer"]
 layout_mode = 2

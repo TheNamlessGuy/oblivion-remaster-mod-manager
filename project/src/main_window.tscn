@@ -1,18 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://bjwv31s6dex8a"]
+[gd_scene load_steps=4 format=3 uid="uid://bjwv31s6dex8a"]
 
 [ext_resource type="Script" uid="uid://ygkki874fl4x" path="res://src/main_window.gd" id="1_8yauh"]
+[ext_resource type="Theme" uid="uid://c10b6gwhnjmvi" path="res://res/default_theme.tres" id="2_bkkg0"]
 [ext_resource type="PackedScene" uid="uid://0po52glch3w" path="res://src/components/window_tab_container.tscn" id="2_l4bt5"]
 
-[node name="MainWindow" type="Control" node_paths=PackedStringArray("save_button", "tab_container")]
+[node name="MainWindow" type="Control" node_paths=PackedStringArray("save_button", "tab_container", "background")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_bkkg0")
 script = ExtResource("1_8yauh")
 save_button = NodePath("MarginContainer/WindowContent/ButtonContainer/SaveButton")
 tab_container = NodePath("MarginContainer/WindowContent/WindowTabContainer")
+background = NodePath("Background")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -21,7 +24,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0.4, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -30,10 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme = ExtResource("2_bkkg0")
 
 [node name="WindowContent" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2

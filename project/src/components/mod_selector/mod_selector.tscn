@@ -33,10 +33,6 @@ add_file_dialog = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLis
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -80,7 +76,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Move the selected mods up one step in the list"
-theme_override_constants/icon_max_width = 20
 icon = ExtResource("2_5wjti")
 icon_alignment = 1
 
@@ -89,7 +84,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Move the selected mods down one step in the list"
-theme_override_constants/icon_max_width = 20
 icon = ExtResource("2_62o63")
 icon_alignment = 1
 
@@ -154,7 +148,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Add new mods"
-theme_override_constants/icon_max_width = 20
 icon = ExtResource("6_ux7iu")
 
 [node name="FileDialog" type="FileDialog" parent="MarginContainer/ScrollContainer/VBoxContainer/ModLists/AvailableModsContainer/Header/AddButton"]
@@ -164,7 +157,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Remove selected mods"
-theme_override_constants/icon_max_width = 20
 icon = ExtResource("7_wgbqt")
 
 [node name="AvailableMods" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/ModLists/AvailableModsContainer"]

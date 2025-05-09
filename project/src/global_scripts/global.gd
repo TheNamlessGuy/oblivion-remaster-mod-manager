@@ -35,7 +35,11 @@ func get_executable_name() -> String:
     return "namless-oblivion-remaster-mod-manager"
   return FileSystem.get_filename(OS.get_executable_path(), [".exe"])
 
-func get_executable_directory() -> String: return FileSystem.get_directory(OS.get_executable_path())
+func get_executable_directory() -> String:
+  if OS.is_debug_build():
+    return ProjectSettings.globalize_path("res://")
+  return FileSystem.get_directory(OS.get_executable_path())
+
 func get_manager_folder() -> String: return FileSystem.path([get_executable_directory(), get_executable_name()])
 func get_manager_subpath(file: String) -> String: return FileSystem.path([get_manager_folder(), file])
 

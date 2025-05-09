@@ -1,0 +1,10 @@
+[gd_resource type="Theme" format=3 uid="uid://c10b6gwhnjmvi"]
+
+[resource]
+Button/constants/icon_max_width = 20
+HSeparator/constants/separation = 15
+MainWindow/colors/background_color = Color(0, 0, 0.4, 1)
+MarginContainer/constants/margin_bottom = 5
+MarginContainer/constants/margin_left = 5
+MarginContainer/constants/margin_right = 5
+MarginContainer/constants/margin_top = 5

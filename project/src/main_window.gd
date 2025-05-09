@@ -3,12 +3,15 @@ extends Control
 
 @export var save_button: Button
 @export var tab_container: WindowTabContainer
+@export var background: ColorRect
 
 func _ready() -> void:
   save_button.button_up.connect(_on_save_button_pressed)
   tab_container.tab_changed.connect(_on_tab_changed)
 
   _on_tab_changed(tab_container.current_tab)
+
+  background.color = ThemeManager.color(ThemeManager.BACKGROUND_COLOR, self)
 
 func _on_save_button_pressed() -> void:
   tab_container.tab_node(tab_container.current_tab).save()

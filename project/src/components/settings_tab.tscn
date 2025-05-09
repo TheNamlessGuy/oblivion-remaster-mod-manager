@@ -18,10 +18,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
 script = ExtResource("1_byv1d")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
@@ -46,7 +42,6 @@ dialog_filter_descriptions = Array[String](["The executable"])
 
 [node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/GeneralSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="DefaultTabSelector" parent="ScrollContainer/VBoxContainer/GeneralSettings" instance=ExtResource("4_p0sff")]
 layout_mode = 2
@@ -82,7 +77,6 @@ This can be overridden per mod type."
 
 [node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/GeneralSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="FileConflictModTypeInfo" type="Label" parent="ScrollContainer/VBoxContainer/GeneralSettings"]
 layout_mode = 2
@@ -106,7 +100,6 @@ label_tooltip = "Show the ESP/ESM tab"
 
 [node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/EspEsmSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
@@ -131,7 +124,6 @@ label_tooltip = "Which \"Add mode\" to use when adding new ESP/ESM mods per defa
 
 [node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/EspEsmSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("4_p0sff")]
 layout_mode = 2
@@ -193,7 +185,6 @@ label_tooltip = "Show the UnrealPak tab"
 
 [node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UnrealPakSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
@@ -227,7 +218,6 @@ label_tooltip = "Which \"Add mode\" to use when adding new UnrealPak mods per de
 
 [node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/UnrealPakSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
 layout_mode = 2
@@ -309,7 +299,6 @@ label_tooltip = "Show the OBSE tab"
 
 [node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/OBSESettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
@@ -343,7 +332,6 @@ label_tooltip = "Which \"Add mode\" to use when adding new OBSE mods per default
 
 [node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/OBSESettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("4_p0sff")]
 layout_mode = 2
@@ -425,7 +413,6 @@ label_tooltip = "Show the UE4SS tab"
 
 [node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UE4SSSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
@@ -450,7 +437,6 @@ label_tooltip = "Which \"Add mode\" to use when adding new UE4SS mods per defaul
 
 [node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/UE4SSSettings"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
 [node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
 layout_mode = 2
