@@ -9,6 +9,9 @@ Hello! We have some fine user guides available for you. If you're new here, we'd
 We also have a FAQ section below.
 
 ## Frequently Asked Questions
+### Does using NORMM lock me into using it for my mod management?
+No! NORMM is specifically designed to be used as much or as little as you want. You can use it to install one mod, delete it, and you won't even know it was there.
+
 ### Why is the name of one of my mods a different color?
 NORMM uses a few colors for mod names to give you more information about them. Generally, you can hover over them to get a description of why it's a different color, but here's an overlook:
 * Cyan/Blue  
