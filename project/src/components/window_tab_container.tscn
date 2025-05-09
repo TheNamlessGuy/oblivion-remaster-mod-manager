@@ -1,0 +1,100 @@
+[gd_scene load_steps=8 format=3 uid="uid://0po52glch3w"]
+
+[ext_resource type="Script" uid="uid://by1lj3ryk104a" path="res://src/components/window_tab_container.gd" id="1_1layt"]
+[ext_resource type="PackedScene" uid="uid://bq3enopddrsdl" path="res://src/components/settings_tab.tscn" id="2_1od4f"]
+[ext_resource type="PackedScene" uid="uid://brgqkv5wnpor1" path="res://src/components/mod_selector/mod_selector.tscn" id="2_yr0b0"]
+[ext_resource type="Script" uid="uid://1agw8wdhwbvr" path="res://src/helper_scripts/components/mod_selector/esp_esm_mod_selector.gd" id="3_cd5pc"]
+[ext_resource type="Script" uid="uid://bogqdjcqyx6e0" path="res://src/helper_scripts/components/mod_selector/unreal_pak_mod_selector.gd" id="4_mrmo6"]
+[ext_resource type="Script" uid="uid://ctdmjvbxd51es" path="res://src/helper_scripts/components/mod_selector/obse_mod_selector.gd" id="5_dy8p3"]
+[ext_resource type="Script" uid="uid://cece1bqc5i51n" path="res://src/helper_scripts/components/mod_selector/ue4ss_mod_selector.gd" id="6_a5vv3"]
+
+[node name="WindowTabContainer" type="TabContainer" node_paths=PackedStringArray("settings_node", "esp_esm_node", "unreal_pak_node", "obse_node", "ue4ss_node")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+script = ExtResource("1_1layt")
+settings_node = NodePath("Settings/SettingsTab")
+esp_esm_node = NodePath("EspEsm/EspEsmModSelector")
+unreal_pak_node = NodePath("UnrealPak/UnrealPakModSelector")
+obse_node = NodePath("OBSE/OBSEModSelector")
+ue4ss_node = NodePath("UE4SS/UE4SSModSelector")
+
+[node name="Settings" type="Control" parent="."]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="SettingsTab" parent="Settings" instance=ExtResource("2_1od4f")]
+layout_mode = 1
+
+[node name="EspEsm" type="Control" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="EspEsmModSelector" parent="EspEsm" instance=ExtResource("2_yr0b0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_cd5pc")
+mod_type = 1
+
+[node name="UnrealPak" type="Control" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="UnrealPakModSelector" parent="UnrealPak" instance=ExtResource("2_yr0b0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_mrmo6")
+mod_type = 2
+
+[node name="OBSE" type="Control" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="OBSEModSelector" parent="OBSE" instance=ExtResource("2_yr0b0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_dy8p3")
+mod_type = 3
+
+[node name="UE4SS" type="Control" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
+
+[node name="UE4SSModSelector" parent="UE4SS" instance=ExtResource("2_yr0b0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_a5vv3")
+mod_type = 4

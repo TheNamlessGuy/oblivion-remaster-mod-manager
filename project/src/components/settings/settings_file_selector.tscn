@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://dodo7a5tc3n2n"]
+
+[ext_resource type="Script" uid="uid://c4l6tjmnpfteq" path="res://src/components/settings/settings_file_selector.gd" id="1_8lm3y"]
+[ext_resource type="PackedScene" uid="uid://b753q31qokki8" path="res://src/components/alerts/alert_container.tscn" id="2_mhkri"]
+
+[node name="FileSelector" type="VBoxContainer" node_paths=PackedStringArray("_label", "_input", "_button", "_dialog", "_alert_container")]
+offset_right = 209.0
+offset_bottom = 40.0
+script = ExtResource("1_8lm3y")
+label_text = "Default text"
+_label = NodePath("HBoxContainer/Label")
+_input = NodePath("HBoxContainer/LineEdit")
+_button = NodePath("HBoxContainer/Button")
+_dialog = NodePath("HBoxContainer/Button/FileDialog")
+_alert_container = NodePath("AlertContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+mouse_filter = 0
+text = "Default text: "
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Browse"
+
+[node name="FileDialog" type="FileDialog" parent="HBoxContainer/Button"]
+title = "Select a file"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[node name="AlertContainer" parent="." instance=ExtResource("2_mhkri")]
+layout_mode = 2
+separator_mode = 1

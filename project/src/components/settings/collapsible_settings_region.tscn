@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpk3pcl78w54u"]
+
+[ext_resource type="Script" uid="uid://4r16padxpaqe" path="res://src/components/settings/collapsible_settings_region.gd" id="1_7pri0"]
+[ext_resource type="Texture2D" uid="uid://c1us01kcr72qi" path="res://res/up.png" id="2_t21qv"]
+[ext_resource type="Texture2D" uid="uid://caqwkgmokw1r" path="res://res/down.png" id="3_yo1b1"]
+
+[node name="CollapsibleSettingsRegion" type="VBoxContainer" node_paths=PackedStringArray("_header", "_node_to_hide", "_child_container")]
+offset_right = 104.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_7pri0")
+_header = NodePath("Header")
+_node_to_hide = NodePath("ChildContainerContainer")
+_child_container = NodePath("ChildContainerContainer/ChildContainer")
+_icon_collapsed = ExtResource("2_t21qv")
+_icon_uncollapsed = ExtResource("3_yo1b1")
+
+[node name="Header" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Default text"
+alignment = 0
+icon_alignment = 2
+
+[node name="ChildContainerContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ChildContainer" type="VBoxContainer" parent="ChildContainerContainer"]
+layout_mode = 2

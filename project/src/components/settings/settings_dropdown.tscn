@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://cesi123bshiwn"]
+
+[ext_resource type="Script" uid="uid://ggbyfbe7upnl" path="res://src/components/settings/settings_dropdown.gd" id="1_w1qmo"]
+[ext_resource type="Script" uid="uid://desbvm4xjpq5b" path="res://src/components/alerts/alert_container.gd" id="2_5ea2a"]
+
+[node name="SettingsDropdown" type="VBoxContainer" node_paths=PackedStringArray("_label", "_dropdown", "_alert_container")]
+offset_right = 133.0
+offset_bottom = 50.0
+script = ExtResource("1_w1qmo")
+_label = NodePath("HBoxContainer/Label")
+_dropdown = NodePath("HBoxContainer/OptionButton")
+_alert_container = NodePath("AlertContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+mouse_filter = 0
+text = "Default text: "
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AlertContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+script = ExtResource("2_5ea2a")
+separator_mode = 1
+metadata/_custom_type_script = "uid://desbvm4xjpq5b"

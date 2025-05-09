@@ -1,3 +1,10 @@
+project/bin/
+.vscode/
+
+**/config.json
+**/copy-on-activation-mods.json
+**/log.txt
+
 # Godot 4+ specific ignores
 .godot/
 

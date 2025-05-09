@@ -1,0 +1,28 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Namless Oblivion Remaster Mod Manager"
+run/main_scene="uid://bjwv31s6dex8a"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://res/icon.svg"
+config/windows_native_icon="res://res/icon.ico"
+
+[autoload]
+
+Global="*res://src/global_scripts/global.gd"
+Log="*res://src/global_scripts/log.gd"
+Config="*res://src/global_scripts/config.gd"
+CopyOnActivationMods="*res://src/global_scripts/copy_on_activation_mods.gd"
+
+[display]
+
+window/energy_saving/keep_screen_on=false

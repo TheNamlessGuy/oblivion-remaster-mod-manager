@@ -1,0 +1,495 @@
+[gd_scene load_steps=12 format=3 uid="uid://bq3enopddrsdl"]
+
+[ext_resource type="Script" uid="uid://bcaceokonnahf" path="res://src/components/settings_tab.gd" id="1_byv1d"]
+[ext_resource type="PackedScene" uid="uid://dodo7a5tc3n2n" path="res://src/components/settings/settings_file_selector.tscn" id="2_p0sff"]
+[ext_resource type="Script" uid="uid://cqyek135kmy6o" path="res://src/helper_scripts/components/settings_file_selector/install_directory_file_selector.gd" id="3_httsq"]
+[ext_resource type="PackedScene" uid="uid://cesi123bshiwn" path="res://src/components/settings/settings_dropdown.tscn" id="4_p0sff"]
+[ext_resource type="Script" uid="uid://qax2mtyqjowy" path="res://src/helper_scripts/components/settings_dropdown/tab_settings_dropdown.gd" id="5_httsq"]
+[ext_resource type="PackedScene" uid="uid://cpk3pcl78w54u" path="res://src/components/settings/collapsible_settings_region.tscn" id="6_nc8sb"]
+[ext_resource type="Script" uid="uid://4hnswbyimwqx" path="res://src/helper_scripts/components/settings_dropdown/add_mode_settings_dropdown.gd" id="7_1rh33"]
+[ext_resource type="Script" uid="uid://butwidf8y3qcy" path="res://src/helper_scripts/components/settings_dropdown/add_mode_conflict_settings_dropdown.gd" id="8_1a0r4"]
+[ext_resource type="Script" uid="uid://cwuc3e22oqifa" path="res://src/helper_scripts/components/settings_dropdown/mod_activated_conflict_settings_dropdown.gd" id="9_s1ok2"]
+[ext_resource type="Script" uid="uid://bfey8e2k2tshp" path="res://src/helper_scripts/components/settings_dropdown/mod_deactivated_conflict_settings_dropdown.gd" id="10_4483j"]
+[ext_resource type="Script" uid="uid://bggwjeogyplfx" path="res://src/helper_scripts/components/settings_dropdown/bool_settings_dropdown.gd" id="11_gbo0q"]
+
+[node name="SettingsTab" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_byv1d")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GeneralSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "General settings"
+
+[node name="InstallationDirectoryFileSelector" parent="ScrollContainer/VBoxContainer/GeneralSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+script = ExtResource("3_httsq")
+label_text = "Installation directory"
+label_tooltip = "The directory Oblivion Remastered is installed in"
+dialog_title = "Select the game executable"
+dialog_filters = Array[String](["OblivionRemastered.exe"])
+dialog_filter_descriptions = Array[String](["The executable"])
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/GeneralSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="DefaultTabSelector" parent="ScrollContainer/VBoxContainer/GeneralSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("5_httsq")
+config_key = 1
+label_text = "Default tab"
+label_tooltip = "The tab to open when the program launches"
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/GeneralSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 2
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new mods.
+
+This can be overridden per mod type."
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/GeneralSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 3
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new mods per default.
+
+This can be overridden per mod type."
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/GeneralSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="FileConflictModTypeInfo" type="Label" parent="ScrollContainer/VBoxContainer/GeneralSettings"]
+layout_mode = 2
+text = "See the mod type specific settings for how to handle eventual file conflicts while handling mod files"
+
+[node name="EspEsmSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "'ESP/ESM' specific settings"
+collapsed_by_default = true
+
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("11_gbo0q")
+true_name = "Yes"
+true_tooltip = ""
+false_name = "No"
+false_tooltip = ""
+config_key = 4
+label_text = "Show"
+label_tooltip = "Show the ESP/ESM tab"
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/EspEsmSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 5
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new ESP/ESM mods"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 6
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new ESP/ESM mods per default."
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/EspEsmSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("8_1a0r4")
+skip_enabled = true
+skip_text = "Skip"
+skip_tooltip = "Skips over adding the file, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing file"
+config_key = 7
+label_text = "Action for file conflict during mod adding"
+label_tooltip = "What to do when you're adding an ESP/ESM mod, and a conflicting one already exists?"
+
+[node name="ModActivatedConflictSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("9_s1ok2")
+deactivate_enabled = true
+deactivate_text = "Deactivate"
+deactivate_tooltip = "Skips over activating the mod, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing file"
+config_key = 8
+label_text = "Action for file conflict during \"Copy on activation\" mod activation"
+label_tooltip = "What to do when a \"Copy on activation\" ESP/ESM mod gets activated, but copying the files over would replace some other file?"
+
+[node name="ModDeactivatedConflictSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("10_4483j")
+leave_enabled = true
+leave_text = "Leave"
+leave_tooltip = "Leave the file where it is."
+move_back_enabled = true
+move_back_text = "Move back"
+move_back_tooltip = "Move the file to where it was originally copied from"
+remove_enabled = true
+remove_text = "Remove"
+remove_tooltip = "Remove the file"
+config_key = 9
+label_text = "Action for file conflict during \"Copy on activation\" mod deactivation"
+label_tooltip = "What to do when a \"Copy on activation\" ESP/ESM mod gets deactivated, but the original file no longer exists?"
+
+[node name="UnrealPakSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "'UnrealPak' specific settings"
+collapsed_by_default = true
+
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("11_gbo0q")
+true_name = "Yes"
+true_tooltip = ""
+false_name = "No"
+false_tooltip = ""
+config_key = 10
+label_text = "Show"
+label_tooltip = "Show the UnrealPak tab"
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UnrealPakSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 11
+fail_if_path_doesnt_exist = false
+label_text = "'Available' mod folder"
+label_tooltip = "The folder to store 'Available' mods in"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 12
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new UnrealPak mods"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 13
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new UnrealPak mods per default."
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/UnrealPakSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("8_1a0r4")
+skip_enabled = true
+skip_text = "Skip"
+skip_tooltip = "Skips over adding the files, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing files"
+config_key = 14
+label_text = "Action for file conflict during mod adding"
+label_tooltip = "What to do when you're adding an UnrealPak mod, and a conflicting one already exists?"
+
+[node name="ModActivatedConflictSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("9_s1ok2")
+deactivate_enabled = true
+deactivate_text = "Deactivate"
+deactivate_tooltip = "Skips over activating the mod, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing files"
+config_key = 15
+label_text = "Action for file conflict during mod activation"
+label_tooltip = "What to do when an UnrealPak mod gets activated, but moving the files over would replace some other file?"
+
+[node name="RegularModDeactivatedConflictSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("10_4483j")
+leave_enabled = true
+leave_text = "Leave"
+leave_tooltip = "Leave the files where they are.
+
+NOTE: This means that the mod isn't deactivated"
+move_back_enabled = true
+move_back_text = "Move back"
+move_back_tooltip = "Move the files to the \"Available mods\" folder"
+remove_enabled = true
+remove_text = "Remove"
+remove_tooltip = "Remove the files"
+config_key = 16
+label_text = "Action for file conflict during regular mod deactivation"
+label_tooltip = "What to do when a regular UnrealPak mod is deactivated, but there's a conflicting mod in the 'Available mods' folder?"
+
+[node name="CopyOnActivationModDeactivatedConflictSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("10_4483j")
+leave_enabled = true
+leave_text = "Leave"
+leave_tooltip = "Leave the files where they are.
+
+NOTE: This means that the mod isn't deactivated"
+move_back_enabled = true
+move_back_text = "Move back"
+move_back_tooltip = "Move the files to where they were originally copied from"
+remove_enabled = true
+remove_text = "Remove"
+remove_tooltip = "Remove the files"
+config_key = 17
+label_text = "Action for file conflict during \"Copy on activation\" mod deactivation"
+label_tooltip = "What to do when deactivating a \"Copy on activation\" mod, but the original file no longer exists?"
+
+[node name="OBSESettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "'OBSE' specific settings"
+collapsed_by_default = true
+
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("11_gbo0q")
+true_name = "Yes"
+true_tooltip = ""
+false_name = "No"
+false_tooltip = ""
+config_key = 18
+label_text = "Show"
+label_tooltip = "Show the OBSE tab"
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/OBSESettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 19
+fail_if_path_doesnt_exist = false
+label_text = "'Available' mod folder"
+label_tooltip = "The folder to store 'Available' mods in"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 20
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new OBSE mods"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 21
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new OBSE mods per default."
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/OBSESettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("8_1a0r4")
+skip_enabled = true
+skip_text = "Skip"
+skip_tooltip = "Skips over adding the files, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing files"
+config_key = 22
+label_text = "Action for file conflict during mod adding"
+label_tooltip = "What to do when you're adding an OBSE mod, and a conflicting one already exists?"
+
+[node name="ModActivatedConflictSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("9_s1ok2")
+deactivate_enabled = true
+deactivate_text = "Deactivate"
+deactivate_tooltip = "Skips over activating the mod, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing files"
+config_key = 23
+label_text = "Action for file conflict during mod activation"
+label_tooltip = "What to do when an OBSE mod gets activated, but moving the files over would replace some other file?"
+
+[node name="RegularModDeactivatedConflictSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("10_4483j")
+leave_enabled = true
+leave_text = "Leave"
+leave_tooltip = "Leave the files where they are.
+
+NOTE: This means that the mod isn't deactivated"
+move_back_enabled = true
+move_back_text = "Move back"
+move_back_tooltip = "Move the files to the \"Available mods\" folder"
+remove_enabled = true
+remove_text = "Remove"
+remove_tooltip = "Remove the files"
+config_key = 24
+label_text = "Action for file conflict during regular mod deactivation"
+label_tooltip = "What to do when a regular OBSE mod is deactivated, but there's a conflicting mod in the 'Available mods' folder?"
+
+[node name="CopyOnActivationModDeactivatedConflictSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("10_4483j")
+leave_enabled = true
+leave_text = "Leave"
+leave_tooltip = "Leave the files where they are.
+
+NOTE: This means that the mod isn't deactivated"
+move_back_enabled = true
+move_back_text = "Move back"
+move_back_tooltip = "Move the files to where they were originally copied from"
+remove_enabled = true
+remove_text = "Remove"
+remove_tooltip = "Remove the files"
+config_key = 25
+label_text = "Action for file conflict during \"Copy on activation\" mod deactivation"
+label_tooltip = "What to do when deactivating a \"Copy on activation\" mod, but the original file no longer exists?"
+
+[node name="UE4SSSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "'UE4SS' specific settings"
+collapsed_by_default = true
+
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("11_gbo0q")
+true_name = "Yes"
+true_tooltip = ""
+false_name = "No"
+false_tooltip = ""
+config_key = 26
+label_text = "Show"
+label_tooltip = "Show the UE4SS tab"
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UE4SSSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 27
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new UE4SS mods"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 28
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new UE4SS mods per default."
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/UE4SSSettings"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="AddModConflictSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("8_1a0r4")
+skip_enabled = true
+skip_text = "Skip"
+skip_tooltip = "Skips over adding the file, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing file"
+config_key = 29
+label_text = "Action for file conflict during mod adding"
+label_tooltip = "What to do when you're adding a UE4SS mod, and a conflicting one already exists?"
+
+[node name="ModActivatedConflictSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("9_s1ok2")
+deactivate_enabled = true
+deactivate_text = "Deactivate"
+deactivate_tooltip = "Skips over activating the mod, and gives you a warning"
+replace_enabled = true
+replace_text = "Replace"
+replace_tooltip = "Replaces the existing files"
+config_key = 30
+label_text = "Action for file conflict during \"Copy on activation\" mod activation"
+label_tooltip = "What to do when a \"Copy on activation\" UE4SS mod gets activated, but copying the files over would replace some other file?"
+
+[node name="ModDeactivatedConflictSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("10_4483j")
+leave_enabled = true
+leave_text = "Leave"
+leave_tooltip = "Leave the files where they are."
+move_back_enabled = true
+move_back_text = "Move back"
+move_back_tooltip = "Move the files to where they were originally copied from"
+remove_enabled = true
+remove_text = "Remove"
+remove_tooltip = "Remove the files"
+config_key = 31
+label_text = "Action for file conflict during \"Copy on activation\" mod deactivation"
+label_tooltip = "What to do when a \"Copy on activation\" UE4SS mod gets deactivated, but the original file no longer exists?"
