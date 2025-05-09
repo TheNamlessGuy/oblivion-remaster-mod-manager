@@ -8,6 +8,17 @@ Simply download the latest `.exe` from [nexusmods](https://www.nexusmods.com/obl
 
 After having placed the `.exe` somewhere, just double click on it to get started.
 
+### Windows Defender SmartScreen popup
+When you first ran NORMM, some of you may have gotten a popup that looks like this:
+
+!["Windows protected your PC"](/docs/res/windows-protected-your-pc.png)
+
+I understand that this might look scary, as it's designed that way, but I can assure you that this isn't unsafe.
+
+When you download an `.exe` from the internet, Windows may flag it as suspicious. It might be a virus, after all. SmartScreen then checks if the `.exe` is signed or not. Unfortunately, NORMM can't afford signing at the moment, since it costs a _lot_ of money (you can read [here](https://stackoverflow.com/a/66582477) for more information).
+
+While you obviously should take it with a grain of salt (since it _could_ be a virus, and I its creator), I would say that running NORMM is fine, and your PC won't come to harm from it.
+
 ## Setup
 The first thing you'll see on startup is the settings screen:
 

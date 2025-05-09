@@ -12,6 +12,9 @@ We also have a FAQ section below.
 ### Does using NORMM lock me into using it for my mod management?
 No! NORMM is specifically designed to be used as much or as little as you want. You can use it to install one mod, delete it, and you won't even know it was there.
 
+### When I ran NORMM, Windows Smart Defender said it "protected my PC". What gives?
+You can read more about this issue [here](/docs/getting-started.md#windows-defender-smartscreen-popup).
+
 ### Why is the name of one of my mods a different color?
 NORMM uses a few colors for mod names to give you more information about them. Generally, you can hover over them to get a description of why it's a different color, but here's an overlook:
 * Cyan/Blue  
