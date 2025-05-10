@@ -37,8 +37,6 @@ script = ExtResource("3_httsq")
 label_text = "Installation directory"
 label_tooltip = "The directory Oblivion Remastered is installed in"
 dialog_title = "Select the game executable"
-dialog_filters = Array[String](["OblivionRemastered.exe"])
-dialog_filter_descriptions = Array[String](["The executable"])
 
 [node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/GeneralSettings"]
 layout_mode = 2

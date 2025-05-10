@@ -43,15 +43,18 @@ func _ready() -> void:
   _dialog.title = dialog_title
   _dialog.file_mode = dialog_file_mode
   _dialog.access = dialog_access
+  _setup_filters()
+  _dialog.file_selected.connect(_on_file_selected)
+  _dialog.dir_selected.connect(_on_dir_selected)
+
+  _button.button_up.connect(_on_button_pressed)
+
+func _setup_filters() -> void:
   for i in range(dialog_filters.size()):
     if i >= dialog_filter_descriptions.size():
       _dialog.add_filter(dialog_filters[i])
     else:
       _dialog.add_filter(dialog_filters[i], dialog_filter_descriptions[i])
-  _dialog.file_selected.connect(_on_file_selected)
-  _dialog.dir_selected.connect(_on_dir_selected)
-
-  _button.button_up.connect(_on_button_pressed)
 
 func _config_value() -> String:
   var v = Config.get_by_key(config_key)

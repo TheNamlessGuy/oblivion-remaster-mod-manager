@@ -19,12 +19,17 @@ func array_to_string(array: Array) -> String:
     retval += str(item)
   return retval
 
-func install_directory_is_valid() -> bool:
-  var dir = Config.install_directory
+func install_directory_is_valid(dir = null) -> bool:
+  if dir == null: dir = Config.install_directory
+
   if not FileSystem.is_dir(dir):
     return false
-  elif not FileSystem.is_file(FileSystem.path([dir, "OblivionRemastered.exe"])):
+
+  var steam_executable = FileSystem.path([dir, "OblivionRemastered.exe"])
+  var gamepass_executable = FileSystem.path([dir, "gamelaunchhelper.exe"])
+  if not FileSystem.is_file(steam_executable) and not FileSystem.is_file(gamepass_executable):
     return false
+
   return true
 
 func get_project_name() -> String:
