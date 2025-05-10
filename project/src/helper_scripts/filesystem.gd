@@ -31,9 +31,11 @@ static func get_directory_name(path_to_file: String) -> String:
 
 static func mkdir(path_to_directory: String, recursive: bool = true) -> void:
   if recursive:
-    DirAccess.make_dir_recursive_absolute(path_to_directory)
+    var result := DirAccess.make_dir_recursive_absolute(path_to_directory)
+    if result != OK: Global.fatal_error(["Failed to recursively make directory '", path_to_directory, "'. Error code: ", result])
   else:
-    DirAccess.make_dir_absolute(path_to_directory)
+    var result := DirAccess.make_dir_absolute(path_to_directory)
+    if result != OK: Global.fatal_error(["Failed to make directory '", path_to_directory, "'. Error code: ", result])
 
 static func line_separator_format(content: String) -> String:
   if content.contains("\n\r"):
@@ -99,13 +101,32 @@ static func directories_in(path_to_dir: String) -> Array: return Array(DirAccess
 static func directory_contents(path_to_dir: String) -> Array: return directories_in(path_to_dir) + files_in(path_to_dir)
 
 static func trash(path_to_trash: String) -> void: OS.move_to_trash(path_to_trash)
-static func remove(path_to_remove: String) -> void: DirAccess.remove_absolute(path_to_remove)
-static func move(from: String, to: String) -> void: DirAccess.rename_absolute(from, to)
-static func copy(from: String, to: String) -> void:
+static func remove(path_to_remove: String) -> void:
+  var result := DirAccess.remove_absolute(path_to_remove)
+  if result != OK: Global.fatal_error(["Failed to remove '", path_to_remove, "'. Error code: ", result])
+
+static func move(from: String, to: String, create_to_parent_directory_if_doesnt_exist: bool = false) -> void:
+  if create_to_parent_directory_if_doesnt_exist:
+    _create_parent_directory_if_doesnt_exist(to)
+
+  var result := DirAccess.rename_absolute(from, to)
+  if result != OK: Global.fatal_error(["Failed to move '", from, "' to '", to, "'. Error code: ", result])
+
+static func copy(from: String, to: String, create_to_parent_directory_if_doesnt_exist: bool = false) -> void:
+  if create_to_parent_directory_if_doesnt_exist:
+    _create_parent_directory_if_doesnt_exist(to)
+
+  # DirAccess.copy_absolute only works for files, so we have to manually copy the folder over
   if is_dir(from):
-    _copy_dir_recursive(from, to) # DirAccess.copy_absolute only works for files, so we have to manually copy the folder over
+    _copy_dir_recursive(from, to)
   else:
-    DirAccess.copy_absolute(from, to)
+    var result := DirAccess.copy_absolute(from, to)
+    if result != OK: Global.fatal_error(["Failed to copy '", from, "' to '", to, "'. Error code: ", result])
+
+static func _create_parent_directory_if_doesnt_exist(path_to_fix: String) -> void:
+  var parent := get_directory(path_to_fix)
+  if not is_dir(parent):
+    mkdir(parent)
 
 static func _copy_dir_recursive(from: String, to: String) -> void:
   mkdir(to)

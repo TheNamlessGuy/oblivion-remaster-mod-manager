@@ -15,12 +15,6 @@ const LEAVE := ModDeactivatedConflict.Value.LEAVE
 const MOVE_BACK := ModDeactivatedConflict.Value.COPY_BACK
 const REMOVE := ModDeactivatedConflict.Value.REMOVE
 
-const ALL := [
-  LEAVE,
-  MOVE_BACK,
-  REMOVE,
-]
-
 const _ID_TITLE_MAP := {
   LEAVE: "Leave",
   MOVE_BACK: "Move back",

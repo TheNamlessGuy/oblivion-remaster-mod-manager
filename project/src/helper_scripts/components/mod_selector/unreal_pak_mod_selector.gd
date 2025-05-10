@@ -46,77 +46,144 @@ func _read_other_available_mods_from_fs() -> Array:
   var dir := Config.unreal_pak_available_mods_folder
   if not FileSystem.is_dir(dir):
     return []
-  return FileSystem.directories_in(dir)
 
-func _perform_save_on_deactivated_regular_mod(mod: String) -> void:
+  return FileSystem.directories_in(dir).filter(func(d: String) -> bool:
+    return not _active_mod_exists(d, false)
+  )
+
+# START: Save section
+
+func _perform_save_on_deactivated_regular_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var from := _get_active_mod_dir(mod)
   var to := _get_available_mod_dir(mod)
-  var action := Config.unreal_pak_regular_mod_deactivated_conflict_choice_for_mod_type
 
-  if not FileSystem.is_dir(to):
-    FileSystem.move(from, to)
-  elif action == ModDeactivatedConflict.LEAVE:
-    return # Don't do anything
+  var save_type := ModDiffType.DEACTIVATED_REGULAR
+  var remembered_choice: ModDeactivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_deactivated_regular_mod_conflict.bind(from, to)
+
+  if not FileSystem.exists(to): # No conflict
+    FileSystem.move(from, to, true)
+    return false
+  elif remembered_choice != ModDeactivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModDeactivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.REGULAR, mod, to)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_deactivated_regular_mod_conflict(action: ModDeactivatedConflict.Value, from: String, to: String) -> void:
+  if action == ModDeactivatedConflict.LEAVE:
+    pass # Don't do anything
   elif action == ModDeactivatedConflict.MOVE_BACK:
     FileSystem.trash(to)
-    FileSystem.move(from, to)
+    FileSystem.move(from, to, true)
   elif action == ModDeactivatedConflict.REMOVE:
     FileSystem.trash(from)
   else:
-    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in UnrealPakModSelector::_perform_save_on_deactivated_regular_mod"])
+    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in UnrealPakModSelector::_resolve_perform_save_on_deactivated_regular_mod_conflict"])
 
-func _perform_save_on_deactivated_copy_on_activation_mod(mod: String) -> void:
+func _perform_save_on_deactivated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var mod_dir := _get_active_mod_dir(mod)
   var old_file := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
-  var action := Config.unreal_pak_copy_on_activation_mod_deactivated_conflict_choice_for_mod_type
 
-  if FileSystem.is_file(old_file):
+  var save_type := ModDiffType.DEACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModDeactivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict.bind(mod, mod_dir, old_file)
+
+  if FileSystem.exists(old_file): # No conflict
     FileSystem.trash(mod_dir)
-  elif action == ModDeactivatedConflict.LEAVE:
-    return # Don't do anything
+    return false
+  elif remembered_choice != ModDeactivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModDeactivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.COPY_ON_ACTIVATION, mod, old_file)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict(action: ModDeactivatedConflict.Value, mod: String, mod_dir: String, old_file: String) -> void:
+  if action == ModDeactivatedConflict.LEAVE:
+    pass # Don't do anything
   elif action == ModDeactivatedConflict.MOVE_BACK:
     _fs_move_mod_files_to_dir(mod, mod_dir, FileSystem.get_directory(old_file))
     FileSystem.remove(mod_dir)
   elif action == ModDeactivatedConflict.REMOVE:
     FileSystem.trash(mod_dir)
   else:
-    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in UnrealPakModSelector::_perform_save_on_deactivated_copy_on_activation_mod"])
+    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in UnrealPakModSelector::_resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict"])
 
-func _perform_save_on_deactivated_not_found_mod(_mod: String) -> void:
-  pass # There's nothing to do here
+func _perform_save_on_deactivated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # There's nothing to do here
 
-func _perform_save_on_activated_regular_mod(mod: String) -> void:
+func _perform_save_on_activated_regular_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var from := _get_available_mod_dir(mod)
   var to := _get_active_mod_dir(mod)
-  var action := Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
 
-  if not FileSystem.is_dir(to): # No conflict
-    FileSystem.move(from, to)
-  elif action == ModActivatedConflict.DEACTIVATE:
-    return # Don't do anything
+  var save_type := ModDiffType.ACTIVATED_REGULAR
+  var remembered_choice: ModActivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_activated_regular_mod_conflict.bind(from, to)
+
+  if not FileSystem.exists(to): # No conflict
+    FileSystem.move(from, to, true)
+    return false
+  elif remembered_choice != ModActivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModActivatedConflictChoiceDialog.new()
+  prompt.for_mod(mod, to)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_activated_regular_mod_conflict(action: ModActivatedConflict.Value, from: String, to: String) -> void:
+  if action == ModActivatedConflict.DEACTIVATE:
+    pass # Don't do anything
   elif action == ModActivatedConflict.REPLACE:
     FileSystem.trash(to)
-    FileSystem.move(from, to)
+    FileSystem.move(from, to, true)
   else:
-    Global.fatal_error(["Encountered unknown ModActivatedConflict action '", action, "' in UnrealPakModSelector::_perform_save_on_activated_regular_mod"])
+    Global.fatal_error(["Encountered unknown ModActivatedConflict action '", action, "' in UnrealPakModSelector::_resolve_perform_save_on_activated_regular_mod_conflict"])
 
-func _perform_save_on_activated_copy_on_activation_mod(mod: String) -> void:
+func _perform_save_on_activated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var from := FileSystem.get_directory(CopyOnActivationMods.get_path_for_mod(mod_type, mod))
   var to := _get_active_mod_dir(mod)
-  var action := Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
 
-  if not FileSystem.is_dir(to):
+  var save_type := ModDiffType.ACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModActivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_activated_copy_on_activation_mod_conflict.bind(mod, from, to)
+
+  if not FileSystem.exists(to): # No conflict
     _fs_copy_mod_files_to_dir(mod, from, to)
-  elif action == ModActivatedConflict.DEACTIVATE:
-    return # Don't do anything
+    return false
+  elif remembered_choice != ModActivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModActivatedConflictChoiceDialog.new()
+  prompt.for_mod(mod, to)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_activated_copy_on_activation_mod_conflict(action: ModActivatedConflict.Value, mod: String, from: String, to: String) -> void:
+  if action == ModActivatedConflict.DEACTIVATE:
+    pass # Don't do anything
   elif action == ModActivatedConflict.REPLACE:
     FileSystem.trash(to)
     _fs_copy_mod_files_to_dir(mod, from, to)
   else:
-    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in UnrealPakModSelector::_perform_save_on_activated_copy_on_activation_mod"])
+    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in UnrealPakModSelector::_resolve_perform_save_on_activated_copy_on_activation_mod_conflict"])
 
-func _perform_save_on_activated_not_found_mod(_mod: String) -> void:
-  pass # There's nothing to do here - why would you even do this?
+func _perform_save_on_activated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # There's nothing to do here - why would you even do this?
+
+# END: Save section
 
 func _active_mod_is_not_found(mod: String) -> bool:
   return not FileSystem.is_file(_get_full_path_to_mod_file_in_dir(mod, _get_active_mod_dir(mod)))
@@ -161,18 +228,14 @@ func _fs_read_mod_files_from_dir(mod: String, dir: String) -> Array:
 
 ## Moves all the files related to the given mod in from_dir to to_dir
 func _fs_move_mod_files_to_dir(mod: String, from_dir: String, to_dir: String) -> void:
-  FileSystem.mkdir(to_dir) # Just in case
-
   var from_files := _fs_read_mod_files_from_dir(mod, from_dir)
   for from_file in from_files:
     var to_file := FileSystem.path([to_dir, FileSystem.get_filename(from_file)])
-    FileSystem.move(from_file, to_file)
+    FileSystem.move(from_file, to_file, true)
 
 ## Copies all the files related to the given mod in from_dir to to_dir
 func _fs_copy_mod_files_to_dir(mod: String, from_dir: String, to_dir: String) -> void:
-  FileSystem.mkdir(to_dir) # Just in case
-
   var from_files := _fs_read_mod_files_from_dir(mod, from_dir)
   for from_file in from_files:
     var to_file := FileSystem.path([to_dir, FileSystem.get_filename(from_file)])
-    FileSystem.copy(from_file, to_file)
+    FileSystem.copy(from_file, to_file, true)

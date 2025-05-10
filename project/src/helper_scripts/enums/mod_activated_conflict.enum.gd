@@ -13,11 +13,6 @@ const UNKNOWN := ModActivatedConflict.Value.UNKNOWN
 const DEACTIVATE := ModActivatedConflict.Value.DEACTIVATE
 const REPLACE := ModActivatedConflict.Value.REPLACE
 
-const ALL := [
-  DEACTIVATE,
-  REPLACE,
-]
-
 const _ID_TITLE_MAP := {
   DEACTIVATE: "Deactivate",
   REPLACE: "Replace",

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cesi123bshiwn"]
 
 [ext_resource type="Script" uid="uid://ggbyfbe7upnl" path="res://src/components/settings/settings_dropdown.gd" id="1_w1qmo"]
-[ext_resource type="Script" uid="uid://desbvm4xjpq5b" path="res://src/components/alerts/alert_container.gd" id="2_5ea2a"]
+[ext_resource type="Script" uid="uid://desbvm4xjpq5b" path="res://src/components/alert_container.gd" id="2_5ea2a"]
 
 [node name="SettingsDropdown" type="VBoxContainer" node_paths=PackedStringArray("_label", "_dropdown", "_alert_container")]
 offset_right = 133.0

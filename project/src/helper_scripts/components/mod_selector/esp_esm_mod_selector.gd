@@ -64,7 +64,7 @@ func _get_mod_name_from_file(file: String) -> String:
 
 func _persist_mod_file_addition(mod: String, file: String, add_mode: AddMode.Value) -> void:
   if add_mode == AddMode.MOVE_ON_ADD:
-    FileSystem.move(file, FileSystem.path([_get_data_dir_path(), mod]))
+    FileSystem.move(file, FileSystem.path([_get_data_dir_path(), mod]), true)
   elif add_mode == AddMode.COPY_ON_ACTIVATION:
     CopyOnActivationMods.add_for_mod_type(mod_type, mod, file)
   else:
@@ -83,49 +83,82 @@ func _available_copy_on_activation_mod_is_not_found(mod: String) -> bool:
 func _active_mod_is_unmanageable(_mod: String) -> bool:
   return false # There's no such state for ESP/ESM
 
-func _perform_save_on_deactivated_regular_mod(_mod: String) -> void:
-  pass # There's nothing to do here
+# START: Save section
 
-func _perform_save_on_deactivated_copy_on_activation_mod(mod: String) -> void:
+func _perform_save_on_deactivated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # There's nothing to do here
+
+func _perform_save_on_deactivated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var mod_file := FileSystem.path([_get_data_dir_path(), mod])
   var old_file := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
-  var action := Config.get_mod_deactivated_conflict_choice_for_mod_type(mod_type)
 
-  if FileSystem.is_file(old_file):
+  var save_type := ModDiffType.DEACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModDeactivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict.bind(mod_file, old_file)
+
+  if FileSystem.exists(old_file): # No conflict
     FileSystem.trash(mod_file)
-  elif action == ModDeactivatedConflict.LEAVE:
-    return # Don't do anything
+    return false
+  elif remembered_choice != ModDeactivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModDeactivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.COPY_ON_ACTIVATION, mod, old_file)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict(action: ModDeactivatedConflict.Value, mod_file: String, old_file: String) -> void:
+  if action == ModDeactivatedConflict.LEAVE:
+    pass # Don't do anything
   elif action == ModDeactivatedConflict.MOVE_BACK:
-    FileSystem.mkdir(FileSystem.get_directory(old_file))
-    FileSystem.copy(mod_file, old_file)
+    FileSystem.copy(mod_file, old_file, true)
   elif action == ModDeactivatedConflict.REMOVE:
     FileSystem.trash(mod_file)
   else:
-    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in EspEsmModSelector::_perform_save_on_deactivated_copy_on_activation_mod"])
+    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in EspEsmModSelector::_resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict"])
 
-func _perform_save_on_deactivated_not_found_mod(_mod: String) -> void:
-  pass # There's nothing to do here
+func _perform_save_on_deactivated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # There's nothing to do here
 
-func _perform_save_on_activated_regular_mod(_mod: String) -> void:
-  pass # There's nothing to do here
+func _perform_save_on_activated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # There's nothing to do here
 
-func _perform_save_on_activated_copy_on_activation_mod(mod: String) -> void:
+func _perform_save_on_activated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var from := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
   var to := FileSystem.path([_get_data_dir_path(), mod])
-  var action := Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
 
-  if not FileSystem.is_file(to):
-    FileSystem.copy(from, to)
-  elif action == ModActivatedConflict.DEACTIVATE:
-    return # Don't do anything
+  var save_type := ModDiffType.ACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModActivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_activated_copy_on_activation_mod_conflict.bind(from, to)
+
+  if not FileSystem.exists(to): # No conflict
+    FileSystem.copy(from, to, true)
+    return false
+  elif remembered_choice != ModActivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModActivatedConflictChoiceDialog.new()
+  prompt.for_mod(from, to)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_activated_copy_on_activation_mod_conflict(action: ModActivatedConflict.Value, from: String, to: String) -> void:
+  if action == ModActivatedConflict.DEACTIVATE:
+    pass # Don't do anything
   elif action == ModActivatedConflict.REPLACE:
-    FileSystem.copy(from, to)
+    FileSystem.copy(from, to, true)
   else:
-    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in EspEsmModSelector::_perform_save_on_activated_copy_on_activation_mod"])
+    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in EspEsmModSelector::_resolve_perform_save_on_activated_copy_on_activation_mod_conflict"])
 
-func _perform_save_on_activated_not_found_mod(_mod: String) -> void:
-  pass # There's nothing to do here
+func _perform_save_on_activated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # There's nothing to do here
 
 func _custom_post_save_actions() -> void:
   # Write active_mod_list to Plugins.txt
   FileSystem.write_lines(_get_plugin_file_path(), _ACTIVE_INTERNAL_FILES + _mod_list_to_array(active_mods_list))
+
+# END: Save section

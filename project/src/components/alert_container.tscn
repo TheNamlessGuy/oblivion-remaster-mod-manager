@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b753q31qokki8"]
 
-[ext_resource type="Script" uid="uid://desbvm4xjpq5b" path="res://src/components/alerts/alert_container.gd" id="1_rkcem"]
+[ext_resource type="Script" uid="uid://desbvm4xjpq5b" path="res://src/components/alert_container.gd" id="1_rkcem"]
 
 [node name="AlertContainer" type="VBoxContainer"]
 visible = false

@@ -61,48 +61,81 @@ func _read_other_available_mods_from_fs() -> Array:
     return true
   )
 
-func _perform_save_on_deactivated_regular_mod(_mod: String) -> void:
-  pass # Noop - The files should remain where they are, and _custom_post_save_actions will take care of marking it as not active
+# START: Save section
 
-func _perform_save_on_deactivated_copy_on_activation_mod(mod: String) -> void:
+func _perform_save_on_deactivated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # Noop - The files should remain where they are, and _custom_post_save_actions will take care of marking it as not active
+
+func _perform_save_on_deactivated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var mod_dir := _get_active_mod_dir(mod)
   var old_dir := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
-  var action := Config.get_mod_deactivated_conflict_choice_for_mod_type(mod_type)
 
-  if FileSystem.is_dir(old_dir):
+  var save_type := ModDiffType.DEACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModDeactivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict.bind(mod_dir, old_dir)
+
+  if FileSystem.exists(old_dir): # No conflict
     FileSystem.trash(mod_dir)
-  elif action == ModDeactivatedConflict.LEAVE:
-    return # Don't do anything
+  elif remembered_choice != ModDeactivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModDeactivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.COPY_ON_ACTIVATION, mod_dir, old_dir)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict(action: ModDeactivatedConflict.Value, mod_dir: String, old_dir: String) -> void:
+  if action == ModDeactivatedConflict.LEAVE:
+    pass # Don't do anything
   elif action == ModDeactivatedConflict.MOVE_BACK:
     _persist_mod_dir_move(mod_dir, old_dir)
   elif action == ModDeactivatedConflict.REMOVE:
     FileSystem.trash(mod_dir)
   else:
-    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in UE4SSModSelector::_perform_save_on_deactivated_copy_on_activation_mod"])
+    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in UE4SSModSelector::_resolve_perform_save_on_deactivated_copy_on_activation_mod_conflict"])
 
-func _perform_save_on_deactivated_not_found_mod(_mod: String) -> void:
-  pass # Noop
+func _perform_save_on_deactivated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # Noop
 
-func _perform_save_on_activated_regular_mod(_mod: String) -> void:
-  pass # Noop - the mod dir should already be in the correct folder, and _custom_post_save_actions will mark it as active
+func _perform_save_on_activated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # Noop - the mod dir should already be in the correct folder, and _custom_post_save_actions will mark it as active
 
-func _perform_save_on_activated_copy_on_activation_mod(mod: String) -> void:
+func _perform_save_on_activated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
   var from_dir := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
   var to_dir := _get_active_mod_dir(mod)
-  var action := Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
 
-  if not FileSystem.is_dir(to_dir):
+  var save_type := ModDiffType.ACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModActivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_perform_save_on_activated_copy_on_activation_mod_conflict.bind(from_dir, to_dir)
+
+  if not FileSystem.exists(to_dir): # No conflict
     _persist_mod_dir_copy(from_dir, to_dir)
-  elif action == ModActivatedConflict.DEACTIVATE:
-    return # Don't do anything
+    return false
+  elif remembered_choice != ModActivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModActivatedConflictChoiceDialog.new()
+  prompt.for_mod(mod, to_dir)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_perform_save_on_activated_copy_on_activation_mod_conflict(action: ModActivatedConflict.Value, from_dir: String, to_dir: String) -> void:
+  if action == ModActivatedConflict.DEACTIVATE:
+    pass # Don't do anything
   elif action == ModActivatedConflict.REPLACE:
     FileSystem.trash(to_dir)
     _persist_mod_dir_copy(from_dir, to_dir)
   else:
-    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in UE4SSModSelector::_perform_save_on_activated_copy_on_activation_mod"])
+    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in UE4SSModSelector::_resolve_perform_save_on_activated_copy_on_activation_mod_conflict"])
 
-func _perform_save_on_activated_not_found_mod(_mod: String) -> void:
-  pass # Noop
+func _perform_save_on_activated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
+  return false # Noop
+
+# END: Save section
 
 func _custom_post_save_actions() -> void:
   # Write active_mod_list to mods.txt
@@ -165,14 +198,14 @@ func _on_add_selected_dir(dir: String) -> void:
   _on_add_selected_files(PackedStringArray([dir]))
 
 func _persist_mod_dir_move(mod_dir: String, to_dir: String):
-  FileSystem.move(mod_dir, to_dir)
+  FileSystem.move(mod_dir, to_dir, true)
 
   var enabled_txt := FileSystem.path([to_dir, "enabled.txt"])
   if FileSystem.is_file(enabled_txt):
     FileSystem.trash(enabled_txt)
 
 func _persist_mod_dir_copy(mod_dir: String, to_dir: String):
-  FileSystem.copy(mod_dir, to_dir)
+  FileSystem.copy(mod_dir, to_dir, true)
 
   var enabled_txt := FileSystem.path([to_dir, "enabled.txt"])
   if FileSystem.is_file(enabled_txt):

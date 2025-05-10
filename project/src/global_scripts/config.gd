@@ -4,49 +4,35 @@ signal setting_changed(key: Config.Key, old_value, new_value, persisted: bool)
 
 # Note: if you add anything here aside from at the end, you have to update SettingsTab to use the new values
 enum Key {
-  UNKNOWN                                                       = -1,
+  UNKNOWN                          = -1,
 
   # General
-  INSTALL_DIRECTORY                                             = 0,
-  DEFAULT_TAB                                                   = 1,
-  DEFAULT_MODS_FOLDER                                           = 2,
-  DEFAULT_ADD_MODE                                              = 3,
+  INSTALL_DIRECTORY                = 0,
+  DEFAULT_TAB                      = 1,
+  DEFAULT_MODS_FOLDER              = 2,
+  DEFAULT_ADD_MODE                 = 3,
 
   # ESP/ESM
-  SHOW_ESP_ESM                                                  = 4,
-  ESP_ESM_DEFAULT_MODS_FOLDER                                   = 5,
-  ESP_ESM_DEFAULT_ADD_MODE                                      = 6,
-  ESP_ESM_CHOICE_ADD_MOD_CONFLICT                               = 7,
-  ESP_ESM_CHOICE_MOD_ACTIVATED_CONFLICT                         = 8,
-  ESP_ESM_CHOICE_MOD_DEACTIVATED_CONFLICT                       = 9,
+  SHOW_ESP_ESM                     = 4,
+  ESP_ESM_DEFAULT_MODS_FOLDER      = 5,
+  ESP_ESM_DEFAULT_ADD_MODE         = 6,
 
   # UnrealPak
-  SHOW_UNREAL_PAK                                               = 10,
-  UNREAL_PAK_AVAILABLE_MODS_FOLDER                              = 11,
-  UNREAL_PAK_DEFAULT_MODS_FOLDER                                = 12,
-  UNREAL_PAK_DEFAULT_ADD_MODE                                   = 13,
-  UNREAL_PAK_CHOICE_ADD_MOD_CONFLICT                            = 14,
-  UNREAL_PAK_CHOICE_MOD_ACTIVATED_CONFLICT                      = 15,
-  UNREAL_PAK_CHOICE_REGULAR_MOD_DEACTIVATED_CONFLICT            = 16,
-  UNREAL_PAK_CHOICE_COPY_ON_ACTIVATION_MOD_DEACTIVATED_CONFLICT = 17,
+  SHOW_UNREAL_PAK                  = 7,
+  UNREAL_PAK_AVAILABLE_MODS_FOLDER = 8,
+  UNREAL_PAK_DEFAULT_MODS_FOLDER   = 9,
+  UNREAL_PAK_DEFAULT_ADD_MODE      = 10,
 
   # OBSE
-  SHOW_OBSE                                                     = 18,
-  OBSE_AVAILABLE_MODS_FOLDER                                    = 19,
-  OBSE_DEFAULT_MODS_FOLDER                                      = 20,
-  OBSE_DEFAULT_ADD_MODE                                         = 21,
-  OBSE_CHOICE_ADD_MOD_CONFLICT                                  = 22,
-  OBSE_CHOICE_MOD_ACTIVATED_CONFLICT                            = 23,
-  OBSE_CHOICE_REGULAR_MOD_DEACTIVATED_CONFLICT                  = 24,
-  OBSE_CHOICE_COPY_ON_ACTIVATION_MOD_DEACTIVATED_CONFLICT       = 25,
+  SHOW_OBSE                        = 11,
+  OBSE_AVAILABLE_MODS_FOLDER       = 12,
+  OBSE_DEFAULT_MODS_FOLDER         = 13,
+  OBSE_DEFAULT_ADD_MODE            = 14,
 
   # UE4SS
-  SHOW_UE4SS                                                    = 26,
-  UE4SS_DEFAULT_MODS_FOLDER                                     = 27,
-  UE4SS_DEFAULT_ADD_MODE                                        = 28,
-  UE4SS_CHOICE_ADD_MOD_CONFLICT                                 = 29,
-  UE4SS_CHOICE_MOD_ACTIVATED_CONFLICT                           = 30,
-  UE4SS_CHOICE_MOD_DEACTIVATED_CONFLICT                         = 31,
+  SHOW_UE4SS                       = 15,
+  UE4SS_DEFAULT_MODS_FOLDER        = 16,
+  UE4SS_DEFAULT_ADD_MODE           = 17,
 }
 
 func flush() -> void:
@@ -58,18 +44,6 @@ var install_directory: String:
 var default_tab: String:
   get: return get_by_key(Config.Key.DEFAULT_TAB)
 func get_default_tab_id() -> Tab.Value: return Tab.settings_key_to_id(Config.default_tab)
-
-var unreal_pak_regular_mod_deactivated_conflict_choice_for_mod_type: ModDeactivatedConflict.Value:
-  get: return get_by_key(Config.Key.UNREAL_PAK_CHOICE_REGULAR_MOD_DEACTIVATED_CONFLICT)
-
-var unreal_pak_copy_on_activation_mod_deactivated_conflict_choice_for_mod_type: ModDeactivatedConflict.Value:
-  get: return get_by_key(Config.Key.UNREAL_PAK_CHOICE_COPY_ON_ACTIVATION_MOD_DEACTIVATED_CONFLICT)
-
-var obse_regular_mod_deactivated_conflict_choice_for_mod_type: ModDeactivatedConflict.Value:
-  get: return get_by_key(Config.Key.OBSE_CHOICE_REGULAR_MOD_DEACTIVATED_CONFLICT)
-
-var obse_copy_on_activation_mod_deactivated_conflict_choice_for_mod_type: ModDeactivatedConflict.Value:
-  get: return get_by_key(Config.Key.OBSE_CHOICE_COPY_ON_ACTIVATION_MOD_DEACTIVATED_CONFLICT)
 
 func show_tab(tab: Tab.Value) -> bool:
   return {
@@ -96,28 +70,6 @@ func get_default_mods_folder_mod_type(mod_type: ModType.Value) -> String:
     ModType.UE4SS: Config.Key.UE4SS_DEFAULT_MODS_FOLDER,
   })
 
-func get_add_mod_conflict_choice_for_mod_type(mod_type: ModType.Value) -> AddModeConflict.Value:
-  return _generic_get_value_for_mod_type(mod_type, AddModeConflict.UNKNOWN, Config.Key.UNKNOWN, {
-    ModType.ESP_ESM: Config.Key.ESP_ESM_CHOICE_ADD_MOD_CONFLICT,
-    ModType.UNREAL_PAK: Config.Key.UNREAL_PAK_CHOICE_ADD_MOD_CONFLICT,
-    ModType.OBSE: Config.Key.OBSE_CHOICE_ADD_MOD_CONFLICT,
-    ModType.UE4SS: Config.Key.UE4SS_CHOICE_ADD_MOD_CONFLICT,
-  }, [AddModeConflict.UNKNOWN])
-
-func get_mod_activated_conflict_choice_for_mod_type(mod_type: ModType.Value) -> ModActivatedConflict.Value:
-  return _generic_get_value_for_mod_type(mod_type, ModActivatedConflict.UNKNOWN, Config.Key.UNKNOWN, {
-    ModType.ESP_ESM: Config.Key.ESP_ESM_CHOICE_MOD_ACTIVATED_CONFLICT,
-    ModType.UNREAL_PAK: Config.Key.UNREAL_PAK_CHOICE_MOD_ACTIVATED_CONFLICT,
-    ModType.OBSE: Config.Key.OBSE_CHOICE_MOD_ACTIVATED_CONFLICT,
-    ModType.UE4SS: Config.Key.UE4SS_CHOICE_MOD_ACTIVATED_CONFLICT,
-  }, [ModActivatedConflict.UNKNOWN])
-
-func get_mod_deactivated_conflict_choice_for_mod_type(mod_type: ModType.Value) -> ModDeactivatedConflict.Value:
-  return _generic_get_value_for_mod_type(mod_type, ModDeactivatedConflict.UNKNOWN, Config.Key.UNKNOWN, {
-    ModType.ESP_ESM: Config.Key.ESP_ESM_CHOICE_MOD_DEACTIVATED_CONFLICT,
-    ModType.UE4SS: Config.Key.UE4SS_CHOICE_MOD_DEACTIVATED_CONFLICT,
-  }, [ModDeactivatedConflict.UNKNOWN])
-
 var unreal_pak_available_mods_folder: String:
   get: return get_by_key(Config.Key.UNREAL_PAK_AVAILABLE_MODS_FOLDER)
 
@@ -136,37 +88,23 @@ var _DEFAULT: Dictionary = {
   _enum_key_to_str(Config.Key.SHOW_ESP_ESM): true,
   _enum_key_to_str(Config.Key.ESP_ESM_DEFAULT_MODS_FOLDER): null,
   _enum_key_to_str(Config.Key.ESP_ESM_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
-  _enum_key_to_str(Config.Key.ESP_ESM_CHOICE_ADD_MOD_CONFLICT): AddModeConflict.SKIP,
-  _enum_key_to_str(Config.Key.ESP_ESM_CHOICE_MOD_ACTIVATED_CONFLICT): ModActivatedConflict.DEACTIVATE,
-  _enum_key_to_str(Config.Key.ESP_ESM_CHOICE_MOD_DEACTIVATED_CONFLICT): ModDeactivatedConflict.LEAVE,
 
   # UnrealPak
   _enum_key_to_str(Config.Key.SHOW_UNREAL_PAK): true,
   _enum_key_to_str(Config.Key.UNREAL_PAK_AVAILABLE_MODS_FOLDER): Global.get_manager_subpath("Available UnrealPak mods"),
   _enum_key_to_str(Config.Key.UNREAL_PAK_DEFAULT_MODS_FOLDER): null,
   _enum_key_to_str(Config.Key.UNREAL_PAK_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
-  _enum_key_to_str(Config.Key.UNREAL_PAK_CHOICE_ADD_MOD_CONFLICT): AddModeConflict.SKIP,
-  _enum_key_to_str(Config.Key.UNREAL_PAK_CHOICE_MOD_ACTIVATED_CONFLICT): ModActivatedConflict.DEACTIVATE,
-  _enum_key_to_str(Config.Key.UNREAL_PAK_CHOICE_REGULAR_MOD_DEACTIVATED_CONFLICT): ModDeactivatedConflict.MOVE_BACK,
-  _enum_key_to_str(Config.Key.UNREAL_PAK_CHOICE_COPY_ON_ACTIVATION_MOD_DEACTIVATED_CONFLICT): ModDeactivatedConflict.MOVE_BACK,
 
   # OBSE
   _enum_key_to_str(Config.Key.SHOW_OBSE): true,
   _enum_key_to_str(Config.Key.OBSE_AVAILABLE_MODS_FOLDER): Global.get_manager_subpath("Available OBSE mods"),
   _enum_key_to_str(Config.Key.OBSE_DEFAULT_MODS_FOLDER): null,
   _enum_key_to_str(Config.Key.OBSE_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
-  _enum_key_to_str(Config.Key.OBSE_CHOICE_ADD_MOD_CONFLICT): AddModeConflict.SKIP,
-  _enum_key_to_str(Config.Key.OBSE_CHOICE_MOD_ACTIVATED_CONFLICT): ModActivatedConflict.DEACTIVATE,
-  _enum_key_to_str(Config.Key.OBSE_CHOICE_REGULAR_MOD_DEACTIVATED_CONFLICT): ModDeactivatedConflict.MOVE_BACK,
-  _enum_key_to_str(Config.Key.OBSE_CHOICE_COPY_ON_ACTIVATION_MOD_DEACTIVATED_CONFLICT): ModDeactivatedConflict.MOVE_BACK,
 
   # UE4SS
   _enum_key_to_str(Config.Key.SHOW_UE4SS): true,
   _enum_key_to_str(Config.Key.UE4SS_DEFAULT_MODS_FOLDER): null,
   _enum_key_to_str(Config.Key.UE4SS_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
-  _enum_key_to_str(Config.Key.UE4SS_CHOICE_ADD_MOD_CONFLICT): AddModeConflict.SKIP,
-  _enum_key_to_str(Config.Key.UE4SS_CHOICE_MOD_ACTIVATED_CONFLICT): ModActivatedConflict.DEACTIVATE,
-  _enum_key_to_str(Config.Key.UE4SS_CHOICE_MOD_DEACTIVATED_CONFLICT): ModDeactivatedConflict.LEAVE,
 }
 
 func _write(data: Dictionary) -> void:

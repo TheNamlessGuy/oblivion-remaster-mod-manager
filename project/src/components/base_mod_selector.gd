@@ -21,42 +21,15 @@ func can_save(_force_refresh: bool = false) -> bool:
 
 func save() -> void:
   alert_container.clear()
+  _perform_save(_get_active_mod_diffs(), {
+    ModDiffType.DEACTIVATED_REGULAR: ModDeactivatedConflict.UNKNOWN,
+    ModDiffType.DEACTIVATED_COPY_ON_ACTIVATION: ModDeactivatedConflict.UNKNOWN,
+    ModDiffType.DEACTIVATED_NOT_FOUND: ModDeactivatedConflict.UNKNOWN,
 
-  var diffs := _get_active_mod_diffs()
-
-  for mod in diffs["removed"]: # Deactivated mods
-    var status := _get_active_mod_status(mod)
-    if status == ModStatus.REGULAR:
-      _perform_save_on_deactivated_regular_mod(mod)
-    elif status == ModStatus.COPY_ON_ACTIVATION:
-      _perform_save_on_deactivated_copy_on_activation_mod(mod)
-    elif status == ModStatus.NOT_FOUND:
-      _perform_save_on_deactivated_not_found_mod(mod)
-    elif status == ModStatus.UNMANAGEABLE:
-      Global.fatal_error(["Tried to save deactivation of an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
-    else:
-      Global.fatal_error(["Encountered unknown status '", status, "' while handling deactivated mods in BaseModSelector::save"])
-
-  for mod in diffs["added"]: # Activated mods
-    var status := _get_available_mod_status(mod)
-    if status == ModStatus.REGULAR:
-      _perform_save_on_activated_regular_mod(mod)
-    elif status == ModStatus.COPY_ON_ACTIVATION:
-      _perform_save_on_activated_copy_on_activation_mod(mod)
-    elif status == ModStatus.NOT_FOUND:
-      _perform_save_on_activated_not_found_mod(mod)
-    elif status == ModStatus.UNMANAGEABLE:
-      Global.fatal_error(["Tried to save activation of an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
-    else:
-      Global.fatal_error(["Encountered unknown status '", status, "' while handling activated mods in BaseModSelector::save"])
-
-  _custom_post_save_actions()
-
-  # Clean up
-  _populate_active()
-  _populate_available()
-  _check_dirty_status()
-  _check_can_save_status()
+    ModDiffType.ACTIVATED_REGULAR: ModActivatedConflict.UNKNOWN,
+    ModDiffType.ACTIVATED_COPY_ON_ACTIVATION: ModActivatedConflict.UNKNOWN,
+    ModDiffType.ACTIVATED_NOT_FOUND: ModActivatedConflict.UNKNOWN,
+  })
 
 func disable(should_disable: bool = true) -> void:
   in_button.disabled = should_disable
@@ -68,6 +41,16 @@ func disable(should_disable: bool = true) -> void:
   add_button.disabled = should_disable
   remove_button.disabled = should_disable
   add_mode_selector.disabled = should_disable
+
+enum ModDiffType {
+  DEACTIVATED_REGULAR            = 0,
+  DEACTIVATED_COPY_ON_ACTIVATION = 1,
+  DEACTIVATED_NOT_FOUND          = 2,
+
+  ACTIVATED_REGULAR              = 3,
+  ACTIVATED_COPY_ON_ACTIVATION   = 4,
+  ACTIVATED_NOT_FOUND            = 5,
+}
 
 ## What ModType this is. Set from editor
 @export var mod_type: ModType.Value = ModType.UNKNOWN
@@ -367,29 +350,98 @@ func _do_is_dirty_check() -> bool:
 func _do_can_save_check() -> bool:
   return true
 
-## Override in child classes - Some may just pass, but then you've handled it explicitly
-func _perform_save_on_deactivated_regular_mod(_mod: String) -> void:
+func _perform_save(diffs: Dictionary, remember_dict: Dictionary) -> void:
+  if (diffs["removed"] as Array).is_empty() and (diffs["added"] as Array).is_empty():
+    # Saving is finished
+    _custom_post_save_actions()
+
+    _populate_active()
+    _populate_available()
+    _check_dirty_status()
+    _check_can_save_status()
+
+    return
+
+  while not (diffs["removed"] as Array).is_empty():
+    var mod: String = (diffs["removed"] as Array).pop_front()
+    var status := _get_active_mod_status(mod)
+    var should_stop := false
+    if status == ModStatus.REGULAR:
+      should_stop = _perform_save_on_deactivated_regular_mod(mod, diffs, remember_dict)
+    elif status == ModStatus.COPY_ON_ACTIVATION:
+      should_stop = _perform_save_on_deactivated_copy_on_activation_mod(mod, diffs, remember_dict)
+    elif status == ModStatus.NOT_FOUND:
+      should_stop = _perform_save_on_deactivated_not_found_mod(mod, diffs, remember_dict)
+    elif status == ModStatus.UNMANAGEABLE:
+      Global.fatal_error(["Tried to save deactivation of an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
+    else:
+      Global.fatal_error(["Encountered unknown status '", status, "' while handling deactivated mods in BaseModSelector::_perform_save"])
+
+    if should_stop:
+      return
+
+  while not (diffs["added"] as Array).is_empty():
+    var mod: String = (diffs["added"] as Array).pop_front()
+    var status := _get_available_mod_status(mod)
+    var should_stop := false
+    if status == ModStatus.REGULAR:
+      should_stop = _perform_save_on_activated_regular_mod(mod, diffs, remember_dict)
+    elif status == ModStatus.COPY_ON_ACTIVATION:
+      should_stop = _perform_save_on_activated_copy_on_activation_mod(mod, diffs, remember_dict)
+    elif status == ModStatus.NOT_FOUND:
+      should_stop = _perform_save_on_activated_not_found_mod(mod, diffs, remember_dict)
+    elif status == ModStatus.UNMANAGEABLE:
+      Global.fatal_error(["Tried to save activation of an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
+    else:
+      Global.fatal_error(["Encountered unknown status '", status, "' while handling activated mods in BaseModSelector::_perform_save"])
+
+    if should_stop:
+      return
+
+  _perform_save(diffs, remember_dict) # This should end up in the "Saving is finished" if-statement at the top
+
+func _on_save_conflict_prompt_response(action: int, remember: bool, remember_key: ModDiffType, callable: Callable, diffs: Dictionary, remember_dict: Dictionary) -> void:
+  if remember:
+    remember_dict[remember_key] = action
+
+  callable.call(action)
+  _perform_save(diffs, remember_dict)
+
+## Should return whether or not to stop processing the save.
+## Override in child classes - Some may just return false, but then you've handled it explicitly
+func _perform_save_on_deactivated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_deactivated_regular_mod"])
+  return false
 
-## Override in child classes - Some may just pass, but then you've handled it explicitly
-func _perform_save_on_deactivated_copy_on_activation_mod(_mod: String) -> void:
+## Should return whether or not to stop processing the save.
+## Override in child classes - Some may just return false, but then you've handled it explicitly
+func _perform_save_on_deactivated_copy_on_activation_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_deactivated_copy_on_activation_mod"])
+  return false
 
-## Override in child classes - Some may just pass, but then you've handled it explicitly
-func _perform_save_on_deactivated_not_found_mod(_mod: String) -> void:
+## Should return whether or not to stop processing the save.
+## Override in child classes - Some may just return false, but then you've handled it explicitly
+func _perform_save_on_deactivated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_deactivated_not_found_mod"])
+  return false
 
-## Override in child classes - Some may just pass, but then you've handled it explicitly
-func _perform_save_on_activated_regular_mod(_mod: String) -> void:
+## Should return whether or not to stop processing the save.
+## Override in child classes - Some may just return false, but then you've handled it explicitly
+func _perform_save_on_activated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_activated_regular_mod"])
+  return false
 
-## Override in child classes - Some may just pass, but then you've handled it explicitly
-func _perform_save_on_activated_copy_on_activation_mod(_mod: String) -> void:
+## Should return whether or not to stop processing the save.
+## Override in child classes - Some may just return false, but then you've handled it explicitly
+func _perform_save_on_activated_copy_on_activation_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_activated_copy_on_activation_mod"])
+  return false
 
-## Override in child classes - Some may just pass, but then you've handled it explicitly
-func _perform_save_on_activated_not_found_mod(_mod: String) -> void:
+## Should return whether or not to stop processing the save.
+## Override in child classes - Some may just return false, but then you've handled it explicitly
+func _perform_save_on_activated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_activated_not_found_mod"])
+  return false
 
 ## Override in child classes as needed
 func _custom_post_save_actions() -> void:
@@ -422,37 +474,61 @@ func _available_copy_on_activation_mod_is_not_found(mod: String) -> bool:
 
 ## Called when the user has selected some files in add_file_dialog
 func _on_add_selected_files(files: PackedStringArray) -> void:
-  var add_mode := add_mode_selector.selected
-  var conflict_action := Config.get_add_mod_conflict_choice_for_mod_type(mod_type)
+  _perform_mod_addition(Array(files), AddModConflict.UNKNOWN)
 
-  for file in files:
+func _perform_mod_addition(files: Array, remembered_choice: AddModConflict.Value) -> void:
+  if files.size() == 0:
+    # No more mods to add
+    _check_dirty_status()
+    _check_can_save_status()
+    return
+
+  var add_mode := add_mode_selector.selected
+
+  while not files.is_empty():
+    var file: String = files.pop_front()
     var mod := _get_mod_name_from_file(file)
 
     var exists_active := _active_mod_exists(mod, false)
     var exists_available := _available_mod_exists(mod, false)
 
-    if not exists_active and not exists_available:
+    var callback := _resolve_mod_addition_conflict.bind(mod, file, add_mode, exists_active, exists_available)
+
+    if not exists_active and not exists_available: # No conflict
       _persist_mod_file_addition(mod, file, add_mode)
       _add_available_mod(mod, true)
-    elif conflict_action == AddModeConflict.SKIP:
-      alert_container.error(["Skipped adding '", file, "', since it conflicts with an already existing mod"])
-    elif conflict_action == AddModeConflict.REPLACE:
-      if exists_active:
-        _deactivate_mod(mod)
-        _delete_available_mod(mod)
-        _persist_mod_file_addition(mod, file, add_mode)
-        _add_available_mod(mod, true)
-      elif exists_available:
-        _delete_available_mod(mod)
-        _persist_mod_file_addition(mod, file, add_mode)
-        _add_available_mod(mod, true)
-      else:
-        Global.fatal_error(["BaseModSelector::_on_add_selected_files ::: You're not supposed to get here"])
+    elif remembered_choice != AddModConflict.UNKNOWN:
+      callback.call(remembered_choice)
     else:
-      Global.fatal_error(["Encountered unknown AddModeConflict action '", conflict_action, "' in BaseModSelector::_on_add_selected_files"])
+      var prompt := AddModConflictChoiceDialog.new()
+      prompt.for_mod(mod)
+      prompt.choice_made.connect(_on_add_conflict_prompt_response.bind(callback, files))
+      prompt.open(self)
+      return # Stop processing until the user choses an action
 
-  _check_dirty_status()
-  _check_can_save_status()
+  _perform_mod_addition(files, remembered_choice)
+
+func _resolve_mod_addition_conflict(action: AddModConflict.Value, mod: String, file: String, add_mode: AddMode.Value, exists_active: bool, exists_available: bool) -> void:
+  if action == AddModConflict.SKIP:
+    pass # Don't do anything
+  elif action == AddModConflict.REPLACE:
+    if exists_active:
+      _deactivate_mod(mod)
+      _delete_available_mod(mod)
+      _persist_mod_file_addition(mod, file, add_mode)
+      _add_available_mod(mod, true)
+    elif exists_available:
+      _delete_available_mod(mod)
+      _persist_mod_file_addition(mod, file, add_mode)
+      _add_available_mod(mod, true)
+    else:
+      Global.fatal_error(["BaseModSelector::_resolve_mod_addition_conflict ::: You're not supposed to get here"])
+  else:
+    Global.fatal_error(["Encountered unknown AddModConflict action '", action, "' in BaseModSelector::_resolve_mod_addition_conflict"])
+
+func _on_add_conflict_prompt_response(action: AddModConflict.Value, remember: bool, callback: Callable, files: Array) -> void:
+  callback.call(action)
+  _perform_mod_addition(files, action if remember else AddModConflict.UNKNOWN)
 
 ## Given a mod file, return the name of the mod
 ## Override in child classes
@@ -460,7 +536,7 @@ func _get_mod_name_from_file(_file: String) -> String:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_get_mod_name_from_file"])
   return ""
 
-## Called to persist a mod addition when the user has added some new mods. AddModeConflict has already been considered when getting here.
+## Called to persist a mod addition when the user has added some new mods. AddModConflict has already been considered when getting here.
 ## Override in child classes
 func _persist_mod_file_addition(_mod: String, _file: String, _add_mode: AddMode.Value) -> void:
   Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_persist_mod_file_addition"])

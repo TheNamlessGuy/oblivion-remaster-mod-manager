@@ -13,11 +13,6 @@ const UNKNOWN := AddMode.Value.UNKNOWN
 const MOVE_ON_ADD := AddMode.Value.MOVE_ON_ADD
 const COPY_ON_ACTIVATION := AddMode.Value.COPY_ON_ACTIVATION
 
-const ALL := [
-  MOVE_ON_ADD,
-  COPY_ON_ACTIVATION,
-]
-
 const _ID_TITLE_MAP := {
   MOVE_ON_ADD: "Move on add",
   COPY_ON_ACTIVATION: "Copy on activation",
