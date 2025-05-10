@@ -1,14 +1,14 @@
 [gd_scene load_steps=10 format=3 uid="uid://brgqkv5wnpor1"]
 
 [ext_resource type="Script" uid="uid://bsbs8cwyhjsr4" path="res://src/components/mod_selector/base_mod_selector.gd" id="1_m2r1n"]
-[ext_resource type="Texture2D" uid="uid://c1us01kcr72qi" path="res://res/up.png" id="2_5wjti"]
+[ext_resource type="Texture2D" uid="uid://c1us01kcr72qi" path="res://res/icons/up.png" id="2_5wjti"]
 [ext_resource type="PackedScene" uid="uid://b753q31qokki8" path="res://src/components/alerts/alert_container.tscn" id="2_6xcmk"]
-[ext_resource type="Texture2D" uid="uid://caqwkgmokw1r" path="res://res/down.png" id="2_62o63"]
-[ext_resource type="Texture2D" uid="uid://0eu6mbb8e8j7" path="res://res/left.png" id="4_pfgda"]
-[ext_resource type="Texture2D" uid="uid://xjk74h65npas" path="res://res/right.png" id="5_n0qgs"]
+[ext_resource type="Texture2D" uid="uid://caqwkgmokw1r" path="res://res/icons/down.png" id="2_62o63"]
+[ext_resource type="Texture2D" uid="uid://0eu6mbb8e8j7" path="res://res/icons/left.png" id="4_pfgda"]
+[ext_resource type="Texture2D" uid="uid://xjk74h65npas" path="res://res/icons/right.png" id="5_n0qgs"]
 [ext_resource type="Script" uid="uid://cl2exnmo3ppng" path="res://src/helper_scripts/components/option_button/add_mode_option_button.gd" id="6_q7mjq"]
-[ext_resource type="Texture2D" uid="uid://cpj762vd2yvic" path="res://res/add.png" id="6_ux7iu"]
-[ext_resource type="Texture2D" uid="uid://b0r5hq0suqvk3" path="res://res/remove.png" id="7_wgbqt"]
+[ext_resource type="Texture2D" uid="uid://cpj762vd2yvic" path="res://res/icons/add.png" id="6_ux7iu"]
+[ext_resource type="Texture2D" uid="uid://b0r5hq0suqvk3" path="res://res/icons/remove.png" id="7_wgbqt"]
 
 [node name="ModSelector" type="BoxContainer" node_paths=PackedStringArray("alert_container", "in_button", "out_button", "reload_button", "reload_button_dialog", "active_mods_list", "up_button", "down_button", "available_mods_list", "add_button", "remove_button", "add_mode_selector", "add_file_dialog")]
 offset_right = 1149.0

@@ -6,6 +6,7 @@ Hello! We have some fine user guides available for you. If you're new here, we'd
 * [Settings - what do they mean?](/docs/settings.md)
 * [File conflicts](/docs/file-conflicts.md)
 
+You'll find a full list of user guides at the bottom of the page.  
 We also have a FAQ section below.
 
 ## Frequently Asked Questions
@@ -31,3 +32,10 @@ You can read more about file conflicts and how they're handled [here](/docs/file
 NORMM tries its best to never permanently remove data for you. Therefore, it moves things to the trash can instead of permanently deleting files as often as possible.
 
 Note that files _will_ be permanently deleted if you've disabled trash can functionality in your operating system. If you don't understand what that means it won't affect you, so don't worry!
+
+## Full guide list
+* [Getting Started](/docs/getting-started.md)
+* [Add modes - what are they?](/docs/add-modes.md)
+* [Settings - what do they mean?](/docs/settings.md)
+* [File conflicts](/docs/file-conflicts.md)
+* [Custom themes](/docs/custom-theme.md)

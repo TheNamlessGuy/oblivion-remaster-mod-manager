@@ -9,6 +9,10 @@ func warning(msg: Array, stack = null) -> void:
 func error(msg: Array, stack = null) -> void:
   _append(_timestamp() + " ERROR: " + Global.array_to_string(msg + _stack(stack)))
 
+func debug(callback: Callable, msg: Array, stack = null) -> void:
+  if OS.is_debug_build(): # TODO: This should be a config setting
+    callback.call(msg, stack)
+
 var _PATH = Global.get_manager_subpath("log.txt")
 var _first_log = true
 

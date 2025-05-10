@@ -34,5 +34,10 @@ const _ID_COLOR_MAP = {
 static func id_to_tooltip(id: ModStatus.Value) -> String:
   return _ID_TOOLTIP_MAP[id]
 
-static func id_to_color(id: ModStatus.Value) -> Color:
-  return _ID_COLOR_MAP[id]
+static func id_to_color(id: ModStatus.Value, for_node: Control) -> Color:
+  return ThemeManager.color({
+    ModStatus.REGULAR: ThemeManager.MOD_TYPE__REGULAR,
+    ModStatus.COPY_ON_ACTIVATION: ThemeManager.MOD_TYPE__COPY_ON_ACTIVATION,
+    ModStatus.NOT_FOUND: ThemeManager.MOD_TYPE__NOT_FOUND,
+    ModStatus.UNMANAGEABLE: ThemeManager.MOD_TYPE__UNMANAGEABLE,
+  }[id], for_node)

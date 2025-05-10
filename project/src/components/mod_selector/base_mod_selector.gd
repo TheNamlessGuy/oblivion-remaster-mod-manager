@@ -492,7 +492,7 @@ func _add_mod_to_list(mod: String, status: ModStatus.Value, list: ItemList) -> i
   return idx
 
 func _set_mod_status_in_list_by_idx(idx: int, status: ModStatus.Value, list: ItemList) -> void:
-  list.set_item_custom_fg_color(idx, ModStatus.id_to_color(status))
+  list.set_item_custom_fg_color(idx, ModStatus.id_to_color(status, self))
   list.set_item_tooltip(idx, ModStatus.id_to_tooltip(status))
   list.set_item_selectable(idx, status != ModStatus.UNMANAGEABLE)
 

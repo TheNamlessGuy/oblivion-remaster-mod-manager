@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://cpk3pcl78w54u"]
 
 [ext_resource type="Script" uid="uid://4r16padxpaqe" path="res://src/components/settings/collapsible_settings_region.gd" id="1_7pri0"]
-[ext_resource type="Texture2D" uid="uid://c1us01kcr72qi" path="res://res/up.png" id="2_t21qv"]
-[ext_resource type="Texture2D" uid="uid://caqwkgmokw1r" path="res://res/down.png" id="3_yo1b1"]
+[ext_resource type="Texture2D" uid="uid://c1us01kcr72qi" path="res://res/icons/up.png" id="2_t21qv"]
+[ext_resource type="Texture2D" uid="uid://caqwkgmokw1r" path="res://res/icons/down.png" id="3_yo1b1"]
 
 [node name="CollapsibleSettingsRegion" type="VBoxContainer" node_paths=PackedStringArray("_header", "_node_to_hide", "_child_container")]
 offset_right = 104.0
