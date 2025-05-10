@@ -10,24 +10,24 @@ enum Value {
 }
 
 # For use
-const UNKNOWN = ModDeactivatedConflict.Value.UNKNOWN
-const LEAVE = ModDeactivatedConflict.Value.LEAVE
-const MOVE_BACK = ModDeactivatedConflict.Value.COPY_BACK
-const REMOVE = ModDeactivatedConflict.Value.REMOVE
+const UNKNOWN := ModDeactivatedConflict.Value.UNKNOWN
+const LEAVE := ModDeactivatedConflict.Value.LEAVE
+const MOVE_BACK := ModDeactivatedConflict.Value.COPY_BACK
+const REMOVE := ModDeactivatedConflict.Value.REMOVE
 
-const ALL = [
+const ALL := [
   LEAVE,
   MOVE_BACK,
   REMOVE,
 ]
 
-const _ID_TITLE_MAP = {
+const _ID_TITLE_MAP := {
   LEAVE: "Leave",
   MOVE_BACK: "Move back",
   REMOVE: "Remove",
 }
 
-const _ID_TOOLTIP_MAP = {
+const _ID_TOOLTIP_MAP := {
   LEAVE: "Leave the file(s) where they are.\n\nNOTE: For some mod types, this may mean that the mod isn't deactivated",
   MOVE_BACK: "Move the file(s) to where they should be",
   REMOVE: "Remove the file(s)",

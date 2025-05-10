@@ -1,7 +1,7 @@
 class_name WindowTabContainer
 extends TabContainer
 
-func tab_node(id: Tab.Value):
+func tab_node(id: Tab.Value) -> Control:
   return {
     Tab.SETTINGS: settings_node,
     Tab.ESP_ESM: esp_esm_node,
@@ -26,7 +26,7 @@ func _ready() -> void:
     set_tab_hidden(id, not Config.show_tab(id))
 
 func _set_title(id: Tab.Value) -> void:
-  var title = Tab.id_to_title(id)
+  var title := Tab.id_to_title(id)
   if tab_node(id).is_dirty():
     title += " (*)"
   set_tab_title(id, title)

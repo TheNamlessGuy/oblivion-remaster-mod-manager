@@ -17,13 +17,13 @@ func _on_save_button_pressed() -> void:
   tab_container.tab_node(tab_container.current_tab).save()
 
 func _on_tab_changed(to: int) -> void:
-  var from = tab_container.get_previous_tab()
+  var from := tab_container.get_previous_tab()
 
-  var from_node = tab_container.tab_node(from)
+  var from_node := tab_container.tab_node(from)
   if from_node.can_save_status_changed.is_connected(_can_save_status_changed):
     from_node.can_save_status_changed.disconnect(_can_save_status_changed)
 
-  var to_node = tab_container.tab_node(to)
+  var to_node := tab_container.tab_node(to)
   to_node.can_save_status_changed.connect(_can_save_status_changed)
   _can_save_status_changed(to_node.can_save())
 

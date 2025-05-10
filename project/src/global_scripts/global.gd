@@ -4,7 +4,7 @@ func _ready() -> void:
   get_viewport().get_window().min_size = Vector2i(640, 480) # TODO: This seemingly doesn't do anything
 
 func exit(exit_code) -> void:
-  var tree = get_tree()
+  var tree := get_tree()
   tree.root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
   tree.quit(exit_code)
 
@@ -14,7 +14,7 @@ func fatal_error(msg: Array) -> void:
   exit(1)
 
 func array_to_string(array: Array) -> String:
-  var retval = ""
+  var retval := ""
   for item in array:
     retval += str(item)
   return retval
@@ -25,8 +25,8 @@ func install_directory_is_valid(dir = null) -> bool:
   if not FileSystem.is_dir(dir):
     return false
 
-  var steam_executable = FileSystem.path([dir, "OblivionRemastered.exe"])
-  var gamepass_executable = FileSystem.path([dir, "gamelaunchhelper.exe"])
+  var steam_executable := FileSystem.path([dir, "OblivionRemastered.exe"])
+  var gamepass_executable := FileSystem.path([dir, "gamelaunchhelper.exe"])
   if not FileSystem.is_file(steam_executable) and not FileSystem.is_file(gamepass_executable):
     return false
 
@@ -59,7 +59,7 @@ func arrays_diff(arr1: Array, arr2: Array) -> bool:
   return false
 
 func diff_arrays(arr1: Array, arr2: Array) -> Array:
-  var retval = []
+  var retval := []
 
   for entry in arr1:
     if entry not in arr2:
@@ -68,7 +68,7 @@ func diff_arrays(arr1: Array, arr2: Array) -> Array:
   return retval
 
 func clear_unchanged_dict_keys(dict: Dictionary, default: Dictionary, ignore_subdict_changes: bool = false) -> Dictionary:
-  var keys = dict.keys()
+  var keys := dict.keys()
 
   for key in keys:
     if key not in default:

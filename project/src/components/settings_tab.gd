@@ -56,16 +56,16 @@ func _fill_nodes(parent: Node = self) -> void:
 
     _fill_nodes(child)
 
-var _cached_dirty_status = null
+var _cached_dirty_status: Variant = null
 func _check_dirty_status() -> void:
-  var dirty = is_dirty(true)
+  var dirty := is_dirty(true)
   if dirty != _cached_dirty_status:
     _cached_dirty_status = dirty
     dirty_status_changed.emit(dirty)
 
-var _cached_can_save_status = null
+var _cached_can_save_status: Variant = null
 func _check_can_save_status() -> void:
-  var saveable = can_save(true)
+  var saveable := can_save(true)
   if saveable != _cached_can_save_status:
     _cached_can_save_status = saveable
     can_save_status_changed.emit(saveable)

@@ -5,13 +5,13 @@ extends VBoxContainer
 func clear() -> void:
   hide()
 
-  var children = get_children()
+  var children := get_children()
   for child in children:
     remove_child(child)
 
 func empty() -> bool: return get_child_count() == 0
 func has_errors() -> bool:
-  var children = get_children()
+  var children := get_children()
   for child in children:
     if child is ErrorLabel:
       return true

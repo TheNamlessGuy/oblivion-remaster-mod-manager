@@ -22,10 +22,10 @@ func can_save(_force_refresh: bool = false) -> bool:
 func save() -> void:
   alert_container.clear()
 
-  var diffs = _get_active_mod_diffs()
+  var diffs := _get_active_mod_diffs()
 
   for mod in diffs["removed"]: # Deactivated mods
-    var status = _get_active_mod_status(mod)
+    var status := _get_active_mod_status(mod)
     if status == ModStatus.REGULAR:
       _perform_save_on_deactivated_regular_mod(mod)
     elif status == ModStatus.COPY_ON_ACTIVATION:
@@ -38,7 +38,7 @@ func save() -> void:
       Global.fatal_error(["Encountered unknown status '", status, "' while handling deactivated mods in BaseModSelector::save"])
 
   for mod in diffs["added"]: # Activated mods
-    var status = _get_available_mod_status(mod)
+    var status := _get_available_mod_status(mod)
     if status == ModStatus.REGULAR:
       _perform_save_on_activated_regular_mod(mod)
     elif status == ModStatus.COPY_ON_ACTIVATION:
@@ -114,7 +114,7 @@ func _on_visibility_changed() -> void:
   if is_visible_in_tree():
     _initialize()
 
-var _initialized = false
+var _initialized := false
 ## Initialize the state of the mod selector
 func _initialize(force: bool = false) -> void:
   if _initialized and not force:
@@ -166,13 +166,13 @@ func _custom_add_file_dialog_setup() -> void:
 
 ## Move a mod from available to active
 func _activate_mod(mod: String) -> void:
-  var status = _get_available_mod_status(mod) if _available_mod_exists(mod, true) else _get_active_mod_status(mod)
+  var status := _get_available_mod_status(mod) if _available_mod_exists(mod, true) else _get_active_mod_status(mod)
   _remove_mod_from_list(mod, available_mods_list)
   _add_mod_to_list(mod, status, active_mods_list)
 
 ## Move all the selected mods in the available list to the active list
 func _activate_selected_available_mods() -> void:
-  var selected = available_mods_list.get_selected_items()
+  var selected := available_mods_list.get_selected_items()
   if selected.size() == 0:
     return
 
@@ -181,10 +181,10 @@ func _activate_selected_available_mods() -> void:
     _activate_mod(available_mods_list.get_item_text(idx))
 
   # Unreverse the moved mods
-  var offset = selected.size() - 1
-  var last_idx = active_mods_list.item_count - 1
+  var offset := selected.size() - 1
+  var last_idx := active_mods_list.item_count - 1
   while offset > 0:
-    var new_idx = last_idx - offset
+    var new_idx := last_idx - offset
     active_mods_list.move_item(last_idx, new_idx)
     offset -= 1
 
@@ -193,7 +193,7 @@ func _activate_selected_available_mods() -> void:
 
 ## Move a mod from active to available
 func _deactivate_mod(mod: String) -> void:
-  var status = _get_active_mod_status(mod) if _active_mod_exists(mod, true) else _get_available_mod_status(mod)
+  var status := _get_active_mod_status(mod) if _active_mod_exists(mod, true) else _get_available_mod_status(mod)
   if status == ModStatus.UNMANAGEABLE:
     Global.fatal_error(["Tried to deactivate an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
 
@@ -203,7 +203,7 @@ func _deactivate_mod(mod: String) -> void:
 
 ## Move all the selected mods in the active list to the available list
 func _deactivate_selected_active_mods() -> void:
-  var selected = active_mods_list.get_selected_items()
+  var selected := active_mods_list.get_selected_items()
   if selected.size() == 0:
     return
 
@@ -238,22 +238,22 @@ func _get_available_mod_status(mod: String) -> ModStatus.Value:
   return ModStatus.REGULAR
 
 ## Caches the persisted state of the active mod list
-var _persisted_active_mod_cache = []
+var _persisted_active_mod_cache: Array = []
 func _populate_active() -> void:
   active_mods_list.clear()
 
-  var mods = _read_active_mods_from_fs()
+  var mods := _read_active_mods_from_fs()
   for mod in mods:
     _add_mod_to_list(mod, _get_active_mod_status(mod), active_mods_list)
 
   _persisted_active_mod_cache = _mod_list_to_array(active_mods_list)
 
 ## Caches the persisted state of the available mod list. You cannot rely on the order of mods in this list
-var _persisted_available_mod_cache = []
+var _persisted_available_mod_cache: Array = []
 func _populate_available() -> void:
   available_mods_list.clear()
 
-  var mods = _read_available_mods_from_fs()
+  var mods := _read_available_mods_from_fs()
   for mod in mods:
     _add_available_mod(mod, false)
 
@@ -270,7 +270,7 @@ func _delete_available_mod(mod: String) -> void:
   if mod.length() == 0:
     Global.fatal_error(["Tried to delete available mod with empty name - this is bad"])
 
-  var status = _get_available_mod_status(mod)
+  var status := _get_available_mod_status(mod)
   if status == ModStatus.REGULAR:
     _on_regular_mod_deletion(mod)
   elif status == ModStatus.COPY_ON_ACTIVATION:
@@ -286,7 +286,7 @@ func _delete_available_mod(mod: String) -> void:
 func _open_add_available_mods_dialog() -> void:
   alert_container.clear()
 
-  var folder = Config.get_default_mods_folder_mod_type(mod_type)
+  var folder := Config.get_default_mods_folder_mod_type(mod_type)
   if folder != null and folder.length() > 0 and FileSystem.is_dir(folder):
     add_file_dialog.current_dir = folder
   else:
@@ -312,7 +312,7 @@ func _on_not_found_mod_deletion(mod: String) -> void:
 func _delete_selected_available_mods() -> void:
   alert_container.clear()
 
-  var selected = available_mods_list.get_selected_items()
+  var selected := available_mods_list.get_selected_items()
   if selected.size() == 0:
     return
 
@@ -337,8 +337,8 @@ func _read_other_available_mods_from_fs() -> Array:
 
 ## Read the available ModStatus.COPY_ON_ACTIVATION mods from the file system.
 func _read_available_copy_on_activation_mods_from_fs() -> Array:
-  var active_mods = _mod_list_to_array(active_mods_list)
-  var other_mods = _read_other_available_mods_from_fs()
+  var active_mods := _mod_list_to_array(active_mods_list)
+  var other_mods := _read_other_available_mods_from_fs()
   return CopyOnActivationMods.get_mods_for_mod_type(mod_type).filter(func (mod: String) -> bool:
     return mod not in other_mods and not mod in active_mods
   )
@@ -422,14 +422,14 @@ func _available_copy_on_activation_mod_is_not_found(mod: String) -> bool:
 
 ## Called when the user has selected some files in add_file_dialog
 func _on_add_selected_files(files: PackedStringArray) -> void:
-  var add_mode = add_mode_selector.selected
-  var conflict_action = Config.get_add_mod_conflict_choice_for_mod_type(mod_type)
+  var add_mode := add_mode_selector.selected
+  var conflict_action := Config.get_add_mod_conflict_choice_for_mod_type(mod_type)
 
   for file in files:
-    var mod = _get_mod_name_from_file(file)
+    var mod := _get_mod_name_from_file(file)
 
-    var exists_active = _active_mod_exists(mod, false)
-    var exists_available = _available_mod_exists(mod, false)
+    var exists_active := _active_mod_exists(mod, false)
+    var exists_available := _available_mod_exists(mod, false)
 
     if not exists_active and not exists_available:
       _persist_mod_file_addition(mod, file, add_mode)
@@ -467,7 +467,7 @@ func _persist_mod_file_addition(_mod: String, _file: String, _add_mode: AddMode.
 
 ## Called when the user presses the up/down arrows on the active mod list
 func _on_move_active_mods(offset: int) -> void:
-  var selected = active_mods_list.get_selected_items()
+  var selected := active_mods_list.get_selected_items()
   if selected.size() == 0:
     return
 
@@ -481,13 +481,13 @@ func _on_move_active_mods(offset: int) -> void:
   _check_can_save_status()
 
 func _mod_list_to_array(list: ItemList) -> Array:
-  var retval = []
+  var retval := []
   for i in range(list.item_count):
     retval.push_back(list.get_item_text(i))
   return retval
 
 func _add_mod_to_list(mod: String, status: ModStatus.Value, list: ItemList) -> int:
-  var idx = list.add_item(mod)
+  var idx := list.add_item(mod)
   _set_mod_status_in_list_by_idx(idx, status, list)
   return idx
 
@@ -511,7 +511,7 @@ func _remove_mod_from_list(mod: String, list: ItemList) -> void:
 
 ## Returns what changes have been made to the active mod list since the last save in the format {"added": ["mod_name", ...], "removed": [...]}
 func _get_active_mod_diffs() -> Dictionary:
-  var active_mods = _mod_list_to_array(active_mods_list)
+  var active_mods := _mod_list_to_array(active_mods_list)
   return {
     "added": Global.diff_arrays(active_mods, _persisted_active_mod_cache),
     "removed": Global.diff_arrays(_persisted_active_mod_cache, active_mods)
@@ -523,16 +523,16 @@ func _on_reload_button_pressed() -> void:
   else:
     _initialize(true)
 
-var _cached_dirty_status = null
+var _cached_dirty_status: Variant = null
 func _check_dirty_status() -> void:
-  var dirty = is_dirty(true)
+  var dirty := is_dirty(true)
   if dirty != _cached_dirty_status:
     _cached_dirty_status = dirty
     dirty_status_changed.emit(dirty)
 
-var _cached_can_save_status = null
+var _cached_can_save_status: Variant = null
 func _check_can_save_status() -> void:
-  var saveable = can_save(true)
+  var saveable := can_save(true)
   if saveable != _cached_can_save_status:
     _cached_can_save_status = saveable
     can_save_status_changed.emit(saveable)

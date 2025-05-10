@@ -57,7 +57,7 @@ func _setup_filters() -> void:
       _dialog.add_filter(dialog_filters[i], dialog_filter_descriptions[i])
 
 func _config_value() -> String:
-  var v = Config.get_by_key(config_key)
+  var v: Variant = Config.get_by_key(config_key)
   if v == null:
     return ""
   return v
@@ -87,7 +87,7 @@ func _on_dir_selected(dir: String) -> void: _set_input_text(dir)
 func _check_for_errors() -> void:
   _alert_container.clear()
 
-  var v = value()
+  var v := value()
   if v.length() == 0:
     return
 

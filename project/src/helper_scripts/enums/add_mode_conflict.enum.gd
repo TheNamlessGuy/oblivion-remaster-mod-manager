@@ -9,21 +9,21 @@ enum Value {
 }
 
 # For use
-const UNKNOWN = AddModeConflict.Value.UNKNOWN
-const SKIP = AddModeConflict.Value.SKIP
-const REPLACE = AddModeConflict.Value.REPLACE
+const UNKNOWN := AddModeConflict.Value.UNKNOWN
+const SKIP := AddModeConflict.Value.SKIP
+const REPLACE := AddModeConflict.Value.REPLACE
 
-const ALL = [
+const ALL := [
   SKIP,
   REPLACE,
 ]
 
-const _ID_TITLE_MAP = {
+const _ID_TITLE_MAP := {
   SKIP: "Skip",
   REPLACE: "Replace",
 }
 
-const _ID_TOOLTIP_MAP = {
+const _ID_TOOLTIP_MAP := {
   SKIP: "Skips over adding the file(s), and gives you a warning",
   REPLACE: "Replaces the existing file(s)",
 }

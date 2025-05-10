@@ -8,7 +8,7 @@ func _add_items() -> void:
     _dropdown.add_item(Tab.id_to_title(id))
 
 func _config_value() -> int:
-  var v = Config.get_by_key(config_key)
+  var v: Variant = Config.get_by_key(config_key)
   if v == null:
     return -1
   return Tab.settings_key_to_id(v)

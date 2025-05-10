@@ -11,20 +11,20 @@ enum Value {
 }
 
 # For use
-const UNKNOWN = ModStatus.Value.UNKNOWN
-const REGULAR = ModStatus.Value.REGULAR
-const COPY_ON_ACTIVATION = ModStatus.Value.COPY_ON_ACTIVATION
-const NOT_FOUND = ModStatus.Value.NOT_FOUND
-const UNMANAGEABLE = ModStatus.Value.UNMANAGEABLE
+const UNKNOWN := ModStatus.Value.UNKNOWN
+const REGULAR := ModStatus.Value.REGULAR
+const COPY_ON_ACTIVATION := ModStatus.Value.COPY_ON_ACTIVATION
+const NOT_FOUND := ModStatus.Value.NOT_FOUND
+const UNMANAGEABLE := ModStatus.Value.UNMANAGEABLE
 
-const _ID_TOOLTIP_MAP = {
+const _ID_TOOLTIP_MAP := {
   REGULAR: "",
   COPY_ON_ACTIVATION: "This mod has been imported as 'Copy on activation'",
   NOT_FOUND: "This mod seemingly no longer exists",
   UNMANAGEABLE: "This mod can't be managed by the mod manager.\n\nIt's probably been manually activated in a way the mod manager can't handle.\nManually uninstalling, then reinstalling using the manager should fix this.",
 }
 
-const _ID_COLOR_MAP = {
+const _ID_COLOR_MAP := {
   REGULAR: Color.WHITE,
   COPY_ON_ACTIVATION: Color.CYAN,
   NOT_FOUND: Color.RED,

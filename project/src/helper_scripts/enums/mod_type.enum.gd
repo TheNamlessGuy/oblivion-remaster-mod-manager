@@ -11,13 +11,13 @@ enum Value {
 }
 
 # For use
-const UNKNOWN = ModType.Value.UNKNOWN
-const ESP_ESM = ModType.Value.ESP_ESM
-const UNREAL_PAK = ModType.Value.UNREAL_PAK
-const OBSE = ModType.Value.OBSE
-const UE4SS = ModType.Value.UE4SS
+const UNKNOWN := ModType.Value.UNKNOWN
+const ESP_ESM := ModType.Value.ESP_ESM
+const UNREAL_PAK := ModType.Value.UNREAL_PAK
+const OBSE := ModType.Value.OBSE
+const UE4SS := ModType.Value.UE4SS
 
-const ALL = [
+const ALL := [
   ESP_ESM,
   UNREAL_PAK,
   OBSE,

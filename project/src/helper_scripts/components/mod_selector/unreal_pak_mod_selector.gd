@@ -14,19 +14,19 @@ func _activate_mod(mod: String) -> void:
   active_mods_list.sort_items_by_text()
 
 func _on_regular_mod_deletion(mod: String) -> void:
-  var dir = _get_available_mod_dir(mod)
+  var dir := _get_available_mod_dir(mod)
   if FileSystem.is_dir(dir):
     FileSystem.trash(dir)
 
-var _unmanageable_mods_cache = []
+var _unmanageable_mods_cache := []
 func _read_active_mods_from_fs() -> Array:
-  var base_dir = _get_active_mods_base_dir()
+  var base_dir := _get_active_mods_base_dir()
 
-  var mods_with_mismatched_dir_names = FileSystem.directories_in(base_dir).filter(func(dir: String) -> bool:
+  var mods_with_mismatched_dir_names := FileSystem.directories_in(base_dir).filter(func(dir: String) -> bool:
     return not FileSystem.is_file(FileSystem.path([base_dir, dir, FileSystem.get_filename(dir) + "_P.pak"]))
   )
 
-  var mods_outside_dirs = FileSystem.files_in(base_dir).filter(func(file: String) -> bool:
+  var mods_outside_dirs := FileSystem.files_in(base_dir).filter(func(file: String) -> bool:
     return file.ends_with("_P.pak")
   ).map(func(file: String) -> String:
     return _get_mod_name_from_file(file)
@@ -34,24 +34,24 @@ func _read_active_mods_from_fs() -> Array:
 
   _unmanageable_mods_cache = mods_with_mismatched_dir_names + mods_outside_dirs
 
-  var manageable_mods = FileSystem.directories_in(_get_active_mods_base_dir()).filter(func(dir: String) -> bool:
+  var manageable_mods := FileSystem.directories_in(_get_active_mods_base_dir()).filter(func(dir: String) -> bool:
     return dir not in _unmanageable_mods_cache
   )
 
-  var mods = _unmanageable_mods_cache + manageable_mods
+  var mods := _unmanageable_mods_cache + manageable_mods
   mods.sort()
   return mods
 
 func _read_other_available_mods_from_fs() -> Array:
-  var dir = Config.unreal_pak_available_mods_folder
+  var dir := Config.unreal_pak_available_mods_folder
   if not FileSystem.is_dir(dir):
     return []
   return FileSystem.directories_in(dir)
 
 func _perform_save_on_deactivated_regular_mod(mod: String) -> void:
-  var from = _get_active_mod_dir(mod)
-  var to = _get_available_mod_dir(mod)
-  var action = Config.unreal_pak_regular_mod_deactivated_conflict_choice_for_mod_type
+  var from := _get_active_mod_dir(mod)
+  var to := _get_available_mod_dir(mod)
+  var action := Config.unreal_pak_regular_mod_deactivated_conflict_choice_for_mod_type
 
   if not FileSystem.is_dir(to):
     FileSystem.move(from, to)
@@ -66,9 +66,9 @@ func _perform_save_on_deactivated_regular_mod(mod: String) -> void:
     Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in UnrealPakModSelector::_perform_save_on_deactivated_regular_mod"])
 
 func _perform_save_on_deactivated_copy_on_activation_mod(mod: String) -> void:
-  var mod_dir = _get_active_mod_dir(mod)
-  var old_file = CopyOnActivationMods.get_path_for_mod(mod_type, mod)
-  var action = Config.unreal_pak_copy_on_activation_mod_deactivated_conflict_choice_for_mod_type
+  var mod_dir := _get_active_mod_dir(mod)
+  var old_file := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
+  var action := Config.unreal_pak_copy_on_activation_mod_deactivated_conflict_choice_for_mod_type
 
   if FileSystem.is_file(old_file):
     FileSystem.trash(mod_dir)
@@ -86,9 +86,9 @@ func _perform_save_on_deactivated_not_found_mod(_mod: String) -> void:
   pass # There's nothing to do here
 
 func _perform_save_on_activated_regular_mod(mod: String) -> void:
-  var from = _get_available_mod_dir(mod)
-  var to = _get_active_mod_dir(mod)
-  var action = Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
+  var from := _get_available_mod_dir(mod)
+  var to := _get_active_mod_dir(mod)
+  var action := Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
 
   if not FileSystem.is_dir(to): # No conflict
     FileSystem.move(from, to)
@@ -101,9 +101,9 @@ func _perform_save_on_activated_regular_mod(mod: String) -> void:
     Global.fatal_error(["Encountered unknown ModActivatedConflict action '", action, "' in UnrealPakModSelector::_perform_save_on_activated_regular_mod"])
 
 func _perform_save_on_activated_copy_on_activation_mod(mod: String) -> void:
-  var from = FileSystem.get_directory(CopyOnActivationMods.get_path_for_mod(mod_type, mod))
-  var to = _get_active_mod_dir(mod)
-  var action = Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
+  var from := FileSystem.get_directory(CopyOnActivationMods.get_path_for_mod(mod_type, mod))
+  var to := _get_active_mod_dir(mod)
+  var action := Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
 
   if not FileSystem.is_dir(to):
     _fs_copy_mod_files_to_dir(mod, from, to)
@@ -129,7 +129,7 @@ func _active_mod_is_unmanageable(mod: String) -> bool:
 
 func _persist_mod_file_addition(mod: String, file: String, add_mode: AddMode.Value) -> void:
   if add_mode == AddMode.MOVE_ON_ADD:
-    var to_path = _get_available_mod_dir(mod)
+    var to_path := _get_available_mod_dir(mod)
     _fs_move_mod_files_to_dir(mod, FileSystem.get_directory(file), to_path)
   elif add_mode == AddMode.COPY_ON_ACTIVATION:
     CopyOnActivationMods.add_for_mod_type(mod_type, mod, file)
@@ -163,16 +163,16 @@ func _fs_read_mod_files_from_dir(mod: String, dir: String) -> Array:
 func _fs_move_mod_files_to_dir(mod: String, from_dir: String, to_dir: String) -> void:
   FileSystem.mkdir(to_dir) # Just in case
 
-  var from_files = _fs_read_mod_files_from_dir(mod, from_dir)
+  var from_files := _fs_read_mod_files_from_dir(mod, from_dir)
   for from_file in from_files:
-    var to_file = FileSystem.path([to_dir, FileSystem.get_filename(from_file)])
+    var to_file := FileSystem.path([to_dir, FileSystem.get_filename(from_file)])
     FileSystem.move(from_file, to_file)
 
 ## Copies all the files related to the given mod in from_dir to to_dir
 func _fs_copy_mod_files_to_dir(mod: String, from_dir: String, to_dir: String) -> void:
   FileSystem.mkdir(to_dir) # Just in case
 
-  var from_files = _fs_read_mod_files_from_dir(mod, from_dir)
+  var from_files := _fs_read_mod_files_from_dir(mod, from_dir)
   for from_file in from_files:
-    var to_file = FileSystem.path([to_dir, FileSystem.get_filename(from_file)])
+    var to_file := FileSystem.path([to_dir, FileSystem.get_filename(from_file)])
     FileSystem.copy(from_file, to_file)

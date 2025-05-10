@@ -12,14 +12,14 @@ enum Value {
 }
 
 # For use
-const UNKNOWN = Value.UNKNOWN
-const SETTINGS = Value.SETTINGS
-const ESP_ESM = Value.ESP_ESM
-const UNREAL_PAK = Value.UNREAL_PAK
-const OBSE = Value.OBSE
-const UE4SS = Value.UE4SS
+const UNKNOWN := Value.UNKNOWN
+const SETTINGS := Value.SETTINGS
+const ESP_ESM := Value.ESP_ESM
+const UNREAL_PAK := Value.UNREAL_PAK
+const OBSE := Value.OBSE
+const UE4SS := Value.UE4SS
 
-const ALL = [
+const ALL := [
   SETTINGS,
   ESP_ESM,
   UNREAL_PAK,
@@ -36,7 +36,7 @@ static func id_to_title(id: Tab.Value) -> String:
     UE4SS: "UE4SS",
   }[id]
 
-const _ID_SETTINGS_KEY_MAP = {
+const _ID_SETTINGS_KEY_MAP := {
     SETTINGS: "settings",
     ESP_ESM: "esp_esm",
     UNREAL_PAK: "unreal_pak",

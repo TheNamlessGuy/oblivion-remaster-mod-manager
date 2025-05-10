@@ -9,21 +9,21 @@ enum Value {
 }
 
 # For use
-const UNKNOWN = AddMode.Value.UNKNOWN
-const MOVE_ON_ADD = AddMode.Value.MOVE_ON_ADD
-const COPY_ON_ACTIVATION = AddMode.Value.COPY_ON_ACTIVATION
+const UNKNOWN := AddMode.Value.UNKNOWN
+const MOVE_ON_ADD := AddMode.Value.MOVE_ON_ADD
+const COPY_ON_ACTIVATION := AddMode.Value.COPY_ON_ACTIVATION
 
-const ALL = [
+const ALL := [
   MOVE_ON_ADD,
   COPY_ON_ACTIVATION,
 ]
 
-const _ID_TITLE_MAP = {
+const _ID_TITLE_MAP := {
   MOVE_ON_ADD: "Move on add",
   COPY_ON_ACTIVATION: "Copy on activation",
 }
 
-const _ID_TOOLTIP_MAP = {
+const _ID_TOOLTIP_MAP := {
   MOVE_ON_ADD: "Moves the file(s) of the selected mod as soon as it's added",
   COPY_ON_ACTIVATION: "Copies the file(s) of the selected mod when it's activated (and saved)",
 }

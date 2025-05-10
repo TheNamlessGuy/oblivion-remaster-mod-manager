@@ -36,7 +36,7 @@ func _add_items() -> void:
     _dropdown.add_item(v)
 
 func _config_value() -> int:
-  var v = Config.get_by_key(config_key)
+  var v: Variant = Config.get_by_key(config_key)
   if v == null:
     return -1
   return v

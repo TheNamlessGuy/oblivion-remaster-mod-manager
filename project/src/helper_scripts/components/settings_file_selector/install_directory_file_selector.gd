@@ -7,7 +7,7 @@ func _setup_filters() -> void:
 func _check_for_errors() -> void:
   super._check_for_errors()
 
-  var v = value()
+  var v := value()
   if v.length() == 0:
     return
 

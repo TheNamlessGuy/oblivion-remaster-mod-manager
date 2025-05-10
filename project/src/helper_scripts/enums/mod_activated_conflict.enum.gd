@@ -9,21 +9,21 @@ enum Value {
 }
 
 # For use
-const UNKNOWN = ModActivatedConflict.Value.UNKNOWN
-const DEACTIVATE = ModActivatedConflict.Value.DEACTIVATE
-const REPLACE = ModActivatedConflict.Value.REPLACE
+const UNKNOWN := ModActivatedConflict.Value.UNKNOWN
+const DEACTIVATE := ModActivatedConflict.Value.DEACTIVATE
+const REPLACE := ModActivatedConflict.Value.REPLACE
 
-const ALL = [
+const ALL := [
   DEACTIVATE,
   REPLACE,
 ]
 
-const _ID_TITLE_MAP = {
+const _ID_TITLE_MAP := {
   DEACTIVATE: "Deactivate",
   REPLACE: "Replace",
 }
 
-const _ID_TOOLTIP_MAP = {
+const _ID_TOOLTIP_MAP := {
   DEACTIVATE: "Skips over activating the mod, and gives you a warning",
   REPLACE: "Replaces the existing file(s)",
 }

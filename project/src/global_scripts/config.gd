@@ -124,7 +124,7 @@ var unreal_pak_available_mods_folder: String:
 var obse_available_mods_folder: String:
   get: return get_by_key(Config.Key.OBSE_AVAILABLE_MODS_FOLDER)
 
-var _PATH = Global.get_manager_subpath("config.json")
+var _PATH := Global.get_manager_subpath("config.json")
 var _DEFAULT: Dictionary = {
   # General
   _enum_key_to_str(Config.Key.INSTALL_DIRECTORY): "C:/Program Files (x86)/Steam/steamapps/common/Oblivion Remastered",
@@ -182,27 +182,27 @@ func _read() -> Dictionary:
   if not FileSystem.exists(_PATH):
     return {}
 
-  var data = FileSystem.read_json(_PATH)
+  var data := FileSystem.read_json(_PATH)
   data = Global.clear_unchanged_dict_keys(data, _DEFAULT)
   return data
 
-var _CACHE = null
+var _CACHE: Variant = null
 func _cache() -> Dictionary:
   if _CACHE == null:
     _CACHE = _read()
 
   return _CACHE
 
-func get_by_key(key: Config.Key):
-  var key_str = _enum_key_to_str(key)
+func get_by_key(key: Config.Key) -> Variant:
+  var key_str := _enum_key_to_str(key)
 
-  var cache = _cache()
+  var cache := _cache()
   if cache.has(key_str):
     return cache[key_str]
   return _DEFAULT[key_str]
 
 func set_by_key(key: Config.Key, value, write: bool = true) -> void:
-  var old_value = get_by_key(key)
+  var old_value: Variant = get_by_key(key)
   if old_value == value:
     return
 
@@ -214,7 +214,7 @@ func _generic_get_value_for_mod_type(mod_type: ModType.Value, default, base, mod
   if not mod_type_map.has(mod_type):
     Global.fatal_error(["Encountered unknown mod type '", mod_type, "' in Config::_generic_get_value_for_mod_type"])
 
-  var value = get_by_key(mod_type_map[mod_type])
+  var value: Variant = get_by_key(mod_type_map[mod_type])
   if value not in invalid_values:
     return value
 

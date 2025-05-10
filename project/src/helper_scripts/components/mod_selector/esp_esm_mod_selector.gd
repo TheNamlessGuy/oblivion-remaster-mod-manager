@@ -1,7 +1,7 @@
 class_name EspEsmModSelector
 extends BaseModSelector
 
-const _ACTIVE_INTERNAL_FILES = [
+const _ACTIVE_INTERNAL_FILES := [
   "Oblivion.esm",
   "DLCBattlehornCastle.esp",
   "DLCFrostcrag.esp",
@@ -18,12 +18,12 @@ const _ACTIVE_INTERNAL_FILES = [
   "AltarESPLocal.esp",
 ]
 
-const _INACTIVE_INTERNAL_FILES = [
+const _INACTIVE_INTERNAL_FILES := [
   "AltarGymNavigation.esp",
   "TamrielLeveledRegion.esp",
 ]
 
-const _INTERNAL_FILES = _ACTIVE_INTERNAL_FILES + _INACTIVE_INTERNAL_FILES
+const _INTERNAL_FILES := _ACTIVE_INTERNAL_FILES + _INACTIVE_INTERNAL_FILES
 
 func _custom_add_file_dialog_setup() -> void:
   add_file_dialog.add_filter("*.esp, *.esm", "Mod files")
@@ -71,13 +71,13 @@ func _persist_mod_file_addition(mod: String, file: String, add_mode: AddMode.Val
     Global.fatal_error(["Encountered unknown AddMode '", add_mode, "' in EspEsmModSelector::_persist_file_addition"])
 
 func _on_regular_mod_deletion(mod: String) -> void:
-  var path = FileSystem.path([_get_data_dir_path(), mod])
+  var path := FileSystem.path([_get_data_dir_path(), mod])
   if FileSystem.is_file(path):
     FileSystem.trash(path)
 
 func _available_copy_on_activation_mod_is_not_found(mod: String) -> bool:
-  var copy_from_path_exists = CopyOnActivationMods.path_for_mod_exists(mod_type, mod)
-  var copied_to_path_exists = FileSystem.is_file(FileSystem.path([_get_data_dir_path(), mod]))
+  var copy_from_path_exists := CopyOnActivationMods.path_for_mod_exists(mod_type, mod)
+  var copied_to_path_exists := FileSystem.is_file(FileSystem.path([_get_data_dir_path(), mod]))
   return not copy_from_path_exists and not copied_to_path_exists
 
 func _active_mod_is_unmanageable(_mod: String) -> bool:
@@ -87,9 +87,9 @@ func _perform_save_on_deactivated_regular_mod(_mod: String) -> void:
   pass # There's nothing to do here
 
 func _perform_save_on_deactivated_copy_on_activation_mod(mod: String) -> void:
-  var mod_file = FileSystem.path([_get_data_dir_path(), mod])
-  var old_file = CopyOnActivationMods.get_path_for_mod(mod_type, mod)
-  var action = Config.get_mod_deactivated_conflict_choice_for_mod_type(mod_type)
+  var mod_file := FileSystem.path([_get_data_dir_path(), mod])
+  var old_file := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
+  var action := Config.get_mod_deactivated_conflict_choice_for_mod_type(mod_type)
 
   if FileSystem.is_file(old_file):
     FileSystem.trash(mod_file)
@@ -110,9 +110,9 @@ func _perform_save_on_activated_regular_mod(_mod: String) -> void:
   pass # There's nothing to do here
 
 func _perform_save_on_activated_copy_on_activation_mod(mod: String) -> void:
-  var from = CopyOnActivationMods.get_path_for_mod(mod_type, mod)
-  var to = FileSystem.path([_get_data_dir_path(), mod])
-  var action = Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
+  var from := CopyOnActivationMods.get_path_for_mod(mod_type, mod)
+  var to := FileSystem.path([_get_data_dir_path(), mod])
+  var action := Config.get_mod_activated_conflict_choice_for_mod_type(mod_type)
 
   if not FileSystem.is_file(to):
     FileSystem.copy(from, to)

@@ -3,10 +3,10 @@ class_name FileSystem
 static func path(arr: Array) -> String:
   if arr.size() == 0: return ""
 
-  var retval = arr.pop_front()
+  var retval: String = arr.pop_front()
   for entry in arr:
-    var begins = entry.begins_with("/")
-    var ends = retval.ends_with("/")
+    var begins: bool = entry.begins_with("/")
+    var ends: bool = retval.ends_with("/")
     if begins != ends:
       pass # No-op
     elif not begins: # and not ends
@@ -50,11 +50,11 @@ static func split_into_lines(content: String) -> Array:
   return Array(content.split(line_separator_format(content)))
 
 static func read(path_to_file: String) -> String:
-  var file = FileAccess.open(path_to_file, FileAccess.READ)
+  var file := FileAccess.open(path_to_file, FileAccess.READ)
   if file == null:
     Global.fatal_error(["Failed to open file '", path_to_file, "' for read"])
 
-  var content = file.get_as_text()
+  var content := file.get_as_text()
   file.close()
   return content
 
@@ -65,7 +65,7 @@ static func read_json(path_to_file: String) -> Dictionary:
   return JSON.parse_string(read(path_to_file))
 
 static func write(path_to_file: String, content: String) -> void:
-  var file = FileAccess.open(path_to_file, FileAccess.WRITE)
+  var file := FileAccess.open(path_to_file, FileAccess.WRITE)
   if file == null:
     Global.fatal_error(["Failed to open file '", path_to_file, "' for write"])
 
@@ -73,7 +73,7 @@ static func write(path_to_file: String, content: String) -> void:
   file.close()
 
 static func append(path_to_file: String, content: String, create_if_nonexistant: bool = false) -> void:
-  var file = FileAccess.open(path_to_file, FileAccess.READ_WRITE)
+  var file := FileAccess.open(path_to_file, FileAccess.READ_WRITE)
   if file == null:
     if create_if_nonexistant and not is_file(path_to_file):
       file = FileAccess.open(path_to_file, FileAccess.WRITE)
@@ -110,10 +110,10 @@ static func copy(from: String, to: String) -> void:
 static func _copy_dir_recursive(from: String, to: String) -> void:
   mkdir(to)
 
-  var dirs = directories_in(from)
+  var dirs := directories_in(from)
   for dir in dirs:
     _copy_dir_recursive(path([from, dir]), path([to, dir]))
 
-  var files = files_in(from)
+  var files := files_in(from)
   for file in files:
     copy(path([from, file]), path([to, file]))

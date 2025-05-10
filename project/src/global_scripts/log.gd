@@ -13,8 +13,8 @@ func debug(callback: Callable, msg: Array, stack = null) -> void:
   if OS.is_debug_build(): # TODO: This should be a config setting
     callback.call(msg, stack)
 
-var _PATH = Global.get_manager_subpath("log.txt")
-var _first_log = true
+var _PATH := Global.get_manager_subpath("log.txt")
+var _first_log := true
 
 func _append(content: String) -> void:
   if _first_log:
@@ -34,7 +34,7 @@ func _stack(stack) -> Array:
   if stack == null:
     return []
 
-  var retval = []
+  var retval := []
   for entry in stack:
     retval += ["\n    " + entry["source"] + " @ " + entry["function"] + " # " + str(entry["line"])]
 
