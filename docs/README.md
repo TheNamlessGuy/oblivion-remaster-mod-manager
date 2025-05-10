@@ -34,6 +34,7 @@ NORMM tries its best to never permanently remove data for you. Therefore, it mov
 Note that files _will_ be permanently deleted if you've disabled trash can functionality in your operating system. If you don't understand what that means it won't affect you, so don't worry!
 
 ## Full guide list
+* [Changelog](/docs/changelog.md)
 * [Getting Started](/docs/getting-started.md)
 * [Add modes - what are they?](/docs/add-modes.md)
 * [Settings - what do they mean?](/docs/settings.md)

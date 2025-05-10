@@ -1,7 +1,7 @@
 # File conflicts
-Since this mod manager copies, moves, and puts files in the trashcan, there's a possibility that there might exist conflicts every once in a while. This should only really happen if you're managing mods yourself while simultaneously also managing mods using NORMM, so the vast majority of users shouldn't encounter these issues.
+Since this mod manager copies, moves, and puts files in the trashcan, there's a possibility that there might exist conflicts every once in a while. This should only really happen if you're managing mods yourself while simultaneously also managing mods using NORMM, so the vast majority of users shouldn't encounter these issues. But they still can happen, and NORMM takes that into account.
 
-But they still can happen, and NORMM takes that into account. Each type of possible conflict has a setting associated with it. You can read more about those [here](/docs/settings.md).
+When a file conflict is encountered, NORMM will give you a prompt with your choices.
 
 Let's go through each scenario, why it could happend, and what NORMM can do in those cases.
 
