@@ -4,6 +4,7 @@ extends Control
 @export var save_button: Button
 @export var tab_container: WindowTabContainer
 @export var background: ColorRect
+@export var version_label: Label
 
 func _ready() -> void:
   save_button.button_up.connect(_on_save_button_pressed)
@@ -12,6 +13,7 @@ func _ready() -> void:
   _on_tab_changed(tab_container.current_tab)
 
   background.color = ThemeManager.color(ThemeManager.BACKGROUND_COLOR, self)
+  version_label.add_theme_color_override("font_color", ThemeManager.color(ThemeManager.VERSION_TEXT_COLOR, self))
 
 func _on_save_button_pressed() -> void:
   tab_container.tab_node(tab_container.current_tab).save()

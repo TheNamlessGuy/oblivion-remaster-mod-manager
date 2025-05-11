@@ -10,6 +10,7 @@ ErrorLabel/colors/foreground_color = Color(1, 0, 0, 1)
 HSeparator/constants/separation = 15
 InfoLabel/colors/foreground_color = Color(0, 1, 1, 1)
 MainWindow/colors/background_color = Color(0, 0, 0.4, 1)
+MainWindow/colors/version_text_color = Color(0.277528, 0.277528, 0.277528, 1)
 MarginContainer/constants/margin_bottom = 5
 MarginContainer/constants/margin_left = 5
 MarginContainer/constants/margin_right = 5

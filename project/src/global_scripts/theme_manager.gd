@@ -11,6 +11,8 @@ enum Key {
   MOD_TYPE__NOT_FOUND          = 3,
   MOD_TYPE__REGULAR            = 4,
   MOD_TYPE__UNMANAGEABLE       = 5,
+
+  VERSION_TEXT_COLOR           = 6,
 }
 
 # For usage
@@ -21,6 +23,7 @@ const MOD_TYPE__COPY_ON_ACTIVATION := ThemeManager.Key.MOD_TYPE__COPY_ON_ACTIVAT
 const MOD_TYPE__NOT_FOUND := ThemeManager.Key.MOD_TYPE__NOT_FOUND
 const MOD_TYPE__REGULAR := ThemeManager.Key.MOD_TYPE__REGULAR
 const MOD_TYPE__UNMANAGEABLE := ThemeManager.Key.MOD_TYPE__UNMANAGEABLE
+const VERSION_TEXT_COLOR := ThemeManager.Key.VERSION_TEXT_COLOR
 
 func color(key: ThemeManager.Key, for_node: Control) -> Color:
   var key_str := _enum_key_to_str(key)
