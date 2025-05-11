@@ -21,7 +21,7 @@ func _custom_prerequisites_checks() -> void:
   elif not FileSystem.is_dir(ue4ss_folder):
     alert_container.info(["Couldn't find the UE4SS mods folder. Please make sure UE4SS is installed correctly"])
 
-func _custom_add_file_dialog_setup() -> void:
+func _custom_setup() -> void:
   add_file_dialog.title = "Select the mod to add"
   add_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
   add_file_dialog.dir_selected.connect(_on_add_selected_dir)

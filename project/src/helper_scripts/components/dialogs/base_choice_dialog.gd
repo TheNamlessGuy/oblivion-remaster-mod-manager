@@ -29,7 +29,7 @@ func _init() -> void:
   _container.add_child(HSeparator.new())
 
   _button_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  _button_container.add_child(_expanded_h_split_container())
+  _button_container.add_child(ExpandedHSplitContainer.new())
   _container.add_child(_button_container)
 
 func _set_text(text: Array) -> void:
@@ -42,12 +42,7 @@ func _add_button(value: int, text: String, tooltip: String = "") -> void:
   button.button_up.connect(_on_button_pressed.bind(value))
 
   _button_container.add_child(button)
-  _button_container.add_child(_expanded_h_split_container())
-
-func _expanded_h_split_container() -> HSplitContainer:
-  var container := HSplitContainer.new()
-  container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  return container
+  _button_container.add_child(ExpandedHSplitContainer.new())
 
 func _on_button_pressed(value: int) -> void:
   choice_made.emit(value, _remember_checkbox.button_pressed)

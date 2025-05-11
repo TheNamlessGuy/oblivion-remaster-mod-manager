@@ -1,12 +1,11 @@
 class_name OBSEModSelector
 extends BaseModSelector
 
-func _custom_initialization() -> void:
+func _custom_setup() -> void:
   # Hide up/down arrows, they make no sense here
   up_button.visible = false
   down_button.visible = false
 
-func _custom_add_file_dialog_setup() -> void:
   add_file_dialog.add_filter("*.dll", "Mod files")
 
 func _custom_prerequisites_checks() -> void:

@@ -25,7 +25,7 @@ const _INACTIVE_INTERNAL_FILES := [
 
 const _INTERNAL_FILES := _ACTIVE_INTERNAL_FILES + _INACTIVE_INTERNAL_FILES
 
-func _custom_add_file_dialog_setup() -> void:
+func _custom_setup() -> void:
   add_file_dialog.add_filter("*.esp, *.esm", "Mod files")
 
 ## Returns the full path of the Plugins.txt file

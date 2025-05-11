@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://brgqkv5wnpor1"]
+[gd_scene load_steps=11 format=3 uid="uid://brgqkv5wnpor1"]
 
 [ext_resource type="Script" uid="uid://bsbs8cwyhjsr4" path="res://src/components/base_mod_selector.gd" id="1_m2r1n"]
 [ext_resource type="Texture2D" uid="uid://c1us01kcr72qi" path="res://res/icons/up.png" id="2_5wjti"]
@@ -9,8 +9,9 @@
 [ext_resource type="Script" uid="uid://cl2exnmo3ppng" path="res://src/helper_scripts/components/option_button/add_mode_option_button.gd" id="6_q7mjq"]
 [ext_resource type="Texture2D" uid="uid://cpj762vd2yvic" path="res://res/icons/add.png" id="6_ux7iu"]
 [ext_resource type="Texture2D" uid="uid://b0r5hq0suqvk3" path="res://res/icons/remove.png" id="7_wgbqt"]
+[ext_resource type="Script" uid="uid://ji36rqi6vcvo" path="res://src/helper_scripts/components/split_containers/expanded_h_split_container.gd" id="10_571wt"]
 
-[node name="ModSelector" type="BoxContainer" node_paths=PackedStringArray("alert_container", "in_button", "out_button", "active_mods_list", "up_button", "down_button", "available_mods_list", "add_button", "remove_button", "add_mode_selector", "add_file_dialog")]
+[node name="ModSelector" type="BoxContainer" node_paths=PackedStringArray("alert_container", "in_button", "out_button", "custom_button_container", "active_mods_list", "up_button", "down_button", "available_mods_list", "add_button", "remove_button", "add_mode_selector", "add_file_dialog")]
 offset_right = 1149.0
 offset_bottom = 645.0
 size_flags_horizontal = 3
@@ -19,6 +20,7 @@ script = ExtResource("1_m2r1n")
 alert_container = NodePath("MarginContainer/ScrollContainer/VBoxContainer/AlertContainer")
 in_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/MoverButtons/ActivateButton")
 out_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/MoverButtons/DeactivateButton")
+custom_button_container = NodePath("MarginContainer/ScrollContainer/VBoxContainer/CustomButtonContainer")
 active_mods_list = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/ActiveModsList")
 up_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/Header/UpButton")
 down_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/Header/DownButton")
@@ -162,3 +164,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 select_mode = 1
+
+[node name="CustomButtonContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ExpandedHSplitContainer" type="HSplitContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/CustomButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("10_571wt")
+metadata/_custom_type_script = "uid://ji36rqi6vcvo"

@@ -32,7 +32,7 @@ func save() -> void:
   })
 
 func reload() -> void:
-  _initialize(true)
+  _load(true)
 
 func disable(should_disable: bool = true) -> void:
   in_button.disabled = should_disable
@@ -62,6 +62,7 @@ enum ModDiffType {
 @export var alert_container: AlertContainer
 @export var in_button: Button
 @export var out_button: Button
+@export var custom_button_container: HBoxContainer
 
 @export_subgroup("Active mods")
 @export var active_mods_list: ItemList
@@ -90,23 +91,26 @@ func _ready() -> void:
   visibility_changed.connect(_on_visibility_changed)
   _on_visibility_changed()
 
+  _custom_setup()
+
 ## Called when the visibility state of the entire mod selector changes
 func _on_visibility_changed() -> void:
   if is_visible_in_tree():
-    _initialize()
+    _load()
 
-var _initialized := false
+var _loaded := false
 ## Initialize the state of the mod selector
-func _initialize(force: bool = false) -> void:
-  if _initialized and not force:
+func _load(force: bool = false) -> void:
+  if _loaded and not force:
     return
 
   if not _prerequisites_met():
     disable(true)
     return
+
   disable(false)
 
-  _initialized = true
+  _loaded = true
 
   alert_container.clear()
   add_mode_selector.select(Config.get_default_add_mode_for_mod_type(mod_type))
@@ -114,8 +118,6 @@ func _initialize(force: bool = false) -> void:
   _populate_available()
   _check_dirty_status()
   _check_can_save_status()
-
-  _custom_initialization()
 
 func _prerequisites_met() -> bool:
   alert_container.clear()
@@ -131,9 +133,8 @@ func _prerequisites_met() -> bool:
 func _custom_prerequisites_checks() -> void:
   pass
 
-## Called during initialization.
 ## Override in child classes as needed
-func _custom_initialization() -> void:
+func _custom_setup() -> void:
   pass
 
 func _setup_add_file_dialog() -> void:
@@ -141,12 +142,6 @@ func _setup_add_file_dialog() -> void:
   add_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
   add_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
   add_file_dialog.files_selected.connect(_on_add_selected_files)
-  _custom_add_file_dialog_setup()
-
-## Called during add_file_dialog setup.
-## Override in child classes as needed
-func _custom_add_file_dialog_setup() -> void:
-  pass
 
 ## Move a mod from available to active
 func _activate_mod(mod: String) -> void:
@@ -197,6 +192,20 @@ func _deactivate_selected_active_mods() -> void:
 
   _check_dirty_status()
   _check_can_save_status()
+
+## Creates and adds a custom button. Call in child classes' _custom_setup
+func _add_custom_button(text: String) -> Button:
+  var button := Button.new()
+  button.text = text
+
+  var split := ExpandedHSplitContainer.new()
+
+  custom_button_container.add_child(button)
+  custom_button_container.add_child(split)
+
+  button.visibility_changed.connect(func() -> void: split.visible = button.visible)
+
+  return button
 
 func _get_active_mod_status(mod: String) -> ModStatus.Value:
   if _active_mod_is_unmanageable(mod):
