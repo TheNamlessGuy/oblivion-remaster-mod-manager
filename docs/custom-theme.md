@@ -1,5 +1,8 @@
 # Custom themes
-NORMM has support for custom themes. They use Godots built-in [themes](https://docs.godotengine.org/en/stable/tutorials/ui/gui_using_theme_editor.html). Saving such a theme as `theme.tres` and storing it in the NORMM folder (same place as it saves settings and such), it will be loaded on startup.
+NORMM has support for custom themes. They use Godots built-in [themes](https://docs.godotengine.org/en/stable/tutorials/ui/gui_using_theme_editor.html).
+
+## Installing a custom theme
+When you start using NORMM, you have to set the Oblivion Remastered installation directory (unless NORMM guessed for you!). This will generate a directory next to the NORMM executable with the same name as the executable. If you haven't changed the name of the file, this will be `namless-oblivion-remastered-mod-manager`. Simply drop the theme file (which should be named `theme.tres`) into that folder, and restart NORMM if it's running. After that, your custom theme should be up and running!
 
 ## Creating your own theme
 1) Download [Godot](https://godotengine.org/)
