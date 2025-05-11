@@ -31,6 +31,9 @@ func save() -> void:
     ModDiffType.ACTIVATED_NOT_FOUND: ModActivatedConflict.UNKNOWN,
   })
 
+func reload() -> void:
+  _initialize(true)
+
 func disable(should_disable: bool = true) -> void:
   in_button.disabled = should_disable
   out_button.disabled = should_disable
@@ -59,8 +62,6 @@ enum ModDiffType {
 @export var alert_container: AlertContainer
 @export var in_button: Button
 @export var out_button: Button
-@export var reload_button: Button
-@export var reload_button_dialog: ConfirmationDialog
 
 @export_subgroup("Active mods")
 @export var active_mods_list: ItemList
@@ -75,9 +76,6 @@ enum ModDiffType {
 @export var add_file_dialog: FileDialog
 
 func _ready() -> void:
-  reload_button.button_up.connect(_on_reload_button_pressed)
-  reload_button_dialog.confirmed.connect(_initialize.bind(true))
-
   in_button.button_up.connect(_activate_selected_available_mods)
   out_button.button_up.connect(_deactivate_selected_active_mods)
 
@@ -114,13 +112,16 @@ func _initialize(force: bool = false) -> void:
   add_mode_selector.select(Config.get_default_add_mode_for_mod_type(mod_type))
   _populate_active()
   _populate_available()
+  _check_dirty_status()
+  _check_can_save_status()
+
   _custom_initialization()
 
 func _prerequisites_met() -> bool:
   alert_container.clear()
 
   if not Game.install_directory_is_valid():
-    alert_container.info(["The installation directory is not valid. Please go to the 'Settings' tab and set it, then come back and hit 'Reload'"])
+    alert_container.info(["The installation directory is not valid. Please go to the 'Settings' tab and set it, then come back and press 'Reload'"])
 
   _custom_prerequisites_checks()
 
@@ -592,12 +593,6 @@ func _get_active_mod_diffs() -> Dictionary:
     "added": Global.diff_arrays(active_mods, _persisted_active_mod_cache),
     "removed": Global.diff_arrays(_persisted_active_mod_cache, active_mods)
   }
-
-func _on_reload_button_pressed() -> void:
-  if is_dirty():
-    reload_button_dialog.popup_centered()
-  else:
-    _initialize(true)
 
 var _cached_dirty_status: Variant = null
 func _check_dirty_status() -> void:

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cpj762vd2yvic" path="res://res/icons/add.png" id="6_ux7iu"]
 [ext_resource type="Texture2D" uid="uid://b0r5hq0suqvk3" path="res://res/icons/remove.png" id="7_wgbqt"]
 
-[node name="ModSelector" type="BoxContainer" node_paths=PackedStringArray("alert_container", "in_button", "out_button", "reload_button", "reload_button_dialog", "active_mods_list", "up_button", "down_button", "available_mods_list", "add_button", "remove_button", "add_mode_selector", "add_file_dialog")]
+[node name="ModSelector" type="BoxContainer" node_paths=PackedStringArray("alert_container", "in_button", "out_button", "active_mods_list", "up_button", "down_button", "available_mods_list", "add_button", "remove_button", "add_mode_selector", "add_file_dialog")]
 offset_right = 1149.0
 offset_bottom = 645.0
 size_flags_horizontal = 3
@@ -19,8 +19,6 @@ script = ExtResource("1_m2r1n")
 alert_container = NodePath("MarginContainer/ScrollContainer/VBoxContainer/AlertContainer")
 in_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/MoverButtons/ActivateButton")
 out_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/MoverButtons/DeactivateButton")
-reload_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ReloadFromFileSystemButtonContainer/ReloadFromFileSystemButtonContainer")
-reload_button_dialog = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ReloadFromFileSystemButtonContainer/ReloadFromFileSystemButtonContainer/ConfirmationDialog")
 active_mods_list = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/ActiveModsList")
 up_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/Header/UpButton")
 down_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/Header/DownButton")
@@ -164,18 +162,3 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 select_mode = 1
-
-[node name="ReloadFromFileSystemButtonContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="ReloadFromFileSystemButtonContainer" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/ReloadFromFileSystemButtonContainer"]
-layout_mode = 2
-size_flags_horizontal = 6
-tooltip_text = "Set the state of the tab to how it would have been if you'd restarted the program"
-text = "Reload"
-
-[node name="ConfirmationDialog" type="ConfirmationDialog" parent="MarginContainer/ScrollContainer/VBoxContainer/ReloadFromFileSystemButtonContainer/ReloadFromFileSystemButtonContainer"]
-title = "Reload?"
-ok_button_text = "Yes"
-dialog_text = "This will undo any changes made. Are you sure?"
-cancel_button_text = "No"

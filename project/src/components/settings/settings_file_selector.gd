@@ -6,6 +6,7 @@ signal changed()
 func value() -> String: return _input.text
 func is_valid() -> bool: return not _alert_container.has_errors()
 func is_dirty() -> bool: return value() != _config_value()
+func reload() -> void: _set_input_text(_config_value(), true)
 func save(write: bool = true) -> void:
   if is_dirty():
     Config.set_by_key(config_key, value(), write)

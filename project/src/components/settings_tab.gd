@@ -36,6 +36,12 @@ func save() -> void:
   Config.flush()
   _check_statuses()
 
+func reload() -> void:
+  for node in _nodes:
+    node.reload()
+
+  _check_statuses()
+
 func _ready() -> void:
   _fill_nodes()
 

@@ -1,14 +1,18 @@
 class_name MainWindow
 extends Control
 
-@export var save_button: Button
+@export var save_button: BaseButton
 @export var tab_container: WindowTabContainer
 @export var background: ColorRect
 @export var version_label: Label
+@export var reload_button: Button
+@export var reload_confirmation_dialog: ConfirmationDialog
 
 func _ready() -> void:
   save_button.button_up.connect(_on_save_button_pressed)
   tab_container.tab_changed.connect(_on_tab_changed)
+  reload_button.button_up.connect(_on_reload_button_pressed)
+  reload_confirmation_dialog.confirmed.connect(_perform_reload)
 
   _on_tab_changed(tab_container.current_tab)
 
@@ -17,6 +21,15 @@ func _ready() -> void:
 
 func _on_save_button_pressed() -> void:
   tab_container.tab_node(tab_container.current_tab).save()
+
+func _perform_reload() -> void:
+  tab_container.tab_node(tab_container.current_tab).reload()
+
+func _on_reload_button_pressed() -> void:
+  if tab_container.tab_node(tab_container.current_tab).is_dirty():
+    reload_confirmation_dialog.popup_centered()
+  else:
+    _perform_reload()
 
 func _on_tab_changed(to: int) -> void:
   var from := tab_container.get_previous_tab()

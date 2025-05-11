@@ -6,7 +6,10 @@ signal changed()
 func value() -> int: return _dropdown.selected
 func is_valid() -> bool: return not _alert_container.has_errors()
 func is_dirty() -> bool: return value() != _config_value()
-func save(write: bool = true) -> void: Config.set_by_key(config_key, value(), write)
+func reload() -> void: _set_dropdown_value(_config_value(), true)
+func save(write: bool = true) -> void:
+  if is_dirty():
+    Config.set_by_key(config_key, value(), write)
 
 @export var config_key: Config.Key = Config.Key.UNKNOWN
 
