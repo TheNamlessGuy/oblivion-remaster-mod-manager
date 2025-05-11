@@ -119,7 +119,7 @@ func _initialize(force: bool = false) -> void:
 func _prerequisites_met() -> bool:
   alert_container.clear()
 
-  if not Global.install_directory_is_valid():
+  if not Game.install_directory_is_valid():
     alert_container.info(["The installation directory is not valid. Please go to the 'Settings' tab and set it, then come back and hit 'Reload'"])
 
   _custom_prerequisites_checks()

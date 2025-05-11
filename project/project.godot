@@ -21,6 +21,7 @@ config/windows_native_icon="res://res/icon.ico"
 Global="*res://src/global_scripts/global.gd"
 Log="*res://src/global_scripts/log.gd"
 Config="*res://src/global_scripts/config.gd"
+Game="*res://src/global_scripts/game.gd"
 CopyOnActivationMods="*res://src/global_scripts/copy_on_activation_mods.gd"
 ThemeManager="*res://src/global_scripts/theme_manager.gd"
 

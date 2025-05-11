@@ -88,8 +88,8 @@ func _check_for_errors() -> void:
   _alert_container.clear()
 
   var v := value()
-  if v.length() == 0:
-    return
+  if v.length() == 0 and Config.get_by_key(config_key) == null:
+    return # The config has said that it's fine that this is empty, so don't warn the user
 
   if not FileSystem.exists(v):
     if fail_if_path_doesnt_exist:

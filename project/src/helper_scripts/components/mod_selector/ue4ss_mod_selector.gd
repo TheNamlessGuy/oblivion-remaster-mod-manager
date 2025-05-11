@@ -14,7 +14,7 @@ const _PREINSTALLED_MODS := _ACTIVE_PREINSTALLED_MODS + _INACTIVE_PREINSTALLED_M
 
 func _custom_prerequisites_checks() -> void:
   # Is UE4SS installed?
-  var ue4ss_activator := FileSystem.path([Config.install_directory, "OblivionRemastered", "Binaries", "Win64", "dwmapi.dll"])
+  var ue4ss_activator := FileSystem.path([Game.get_bin_path(), "dwmapi.dll"])
   var ue4ss_folder := _get_ue4ss_mods_dir()
   if not FileSystem.is_file(ue4ss_activator):
     alert_container.info(["Couldn't find the file 'dwmapi.dll'. Please make sure UE4SS is installed correctly"])
@@ -170,7 +170,7 @@ func _persist_mod_file_addition(mod: String, dir: String, add_mode: AddMode.Valu
     Global.fatal_error(["Encountered unknown AddMode '", add_mode, "' in UE4SSModSelector::_persist_mod_file_addition"])
 
 func _get_ue4ss_mods_dir() -> String:
-  return FileSystem.path([Config.install_directory, "OblivionRemastered", "Binaries", "Win64", "ue4ss", "Mods"])
+  return FileSystem.path([Game.get_bin_path(), "ue4ss", "Mods"])
 
 func _get_ue4ss_mods_file() -> String:
   return FileSystem.path([_get_ue4ss_mods_dir(), "mods.txt"])

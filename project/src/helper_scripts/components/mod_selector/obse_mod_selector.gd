@@ -10,9 +10,9 @@ func _custom_add_file_dialog_setup() -> void:
   add_file_dialog.add_filter("*.dll", "Mod files")
 
 func _custom_prerequisites_checks() -> void:
-  var obse_loader_path := FileSystem.path([Config.install_directory, "OblivionRemastered", "Binaries", "Win64", "obse64_loader.exe"])
+  var obse_loader_path := FileSystem.path([Game.get_bin_path(), "obse64_loader.exe"])
   if not FileSystem.is_file(obse_loader_path):
-    alert_container.info(["Could not find 'obse64_loader.exe'. Please make sure OBSE is installed correctly"])
+    alert_container.info(["Couldn't find 'obse64_loader.exe'. Please make sure OBSE is installed correctly"])
 
 func _activate_mod(mod: String) -> void:
   super._activate_mod(mod)
@@ -192,7 +192,7 @@ func _persist_mod_file_addition(mod: String, file: String, add_mode: AddMode.Val
     Global.fatal_error(["Encountered unknown AddMode '", add_mode, "' in OBSEModSelector::_persist_mod_file_addition"])
 
 func _get_obse_plugin_folder() -> String:
-  return FileSystem.path([Config.install_directory, "OblivionRemastered", "Binaries", "Win64", "OBSE", "Plugins"])
+  return FileSystem.path([Game.get_bin_path(), "OBSE", "Plugins"])
 
 func _get_mods_in_dir(dir: String) -> Array:
   return FileSystem.files_in(dir).filter(func(file: String) -> bool:

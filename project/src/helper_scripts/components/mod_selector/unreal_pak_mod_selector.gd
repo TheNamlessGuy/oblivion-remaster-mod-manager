@@ -204,7 +204,7 @@ func _persist_mod_file_addition(mod: String, file: String, add_mode: AddMode.Val
     Global.fatal_error(["Encountered unknown AddMode '", add_mode, "' in UnrealPakModSelector::_persist_mod_file_addition"])
 
 func _get_active_mods_base_dir() -> String:
-  return FileSystem.path([Config.install_directory, "OblivionRemastered", "Content", "Paks", "~mods"])
+  return FileSystem.path([Game.get_pak_dir(), "~mods"])
 
 func _get_active_mod_dir(mod: String) -> String:
   return FileSystem.path([_get_active_mods_base_dir(), mod])

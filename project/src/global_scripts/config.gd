@@ -40,6 +40,7 @@ func flush() -> void:
 
 var install_directory: String:
   get: return get_by_key(Config.Key.INSTALL_DIRECTORY)
+func set_install_directory(value: String, write: bool = true): set_by_key(Config.Key.INSTALL_DIRECTORY, value, write)
 
 var default_tab: String:
   get: return get_by_key(Config.Key.DEFAULT_TAB)
