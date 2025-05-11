@@ -44,6 +44,23 @@ func get_bin_path(install_dir: String = "", type: InstallType = InstallType.UNKN
 
   return ""
 
+func _ready() -> void:
+  _guess_install_dir()
+
+var _DEFAULT_INSTALL_DIRS := {
+  InstallType.STEAM: "C:/Program Files (x86)/Steam/steamapps/common/Oblivion Remastered",
+  InstallType.GAMEPASS: "C:/XboxGames/The Elder Scrolls IV- Oblivion Remastered/Content",
+}
+
+func _guess_install_dir() -> void:
+  if Config.get_by_key(Config.Key.INSTALL_DIRECTORY) != Config.get_default_by_key(Config.Key.INSTALL_DIRECTORY):
+    return # No guessing if the user has set the installation directory themselves
+
+  if _directory_is_steam_install(_DEFAULT_INSTALL_DIRS[InstallType.STEAM]):
+    Config.set_install_directory(_DEFAULT_INSTALL_DIRS[InstallType.STEAM])
+  elif _directory_is_steam_install(_DEFAULT_INSTALL_DIRS[InstallType.GAMEPASS]):
+    Config.set_install_directory(_DEFAULT_INSTALL_DIRS[InstallType.GAMEPASS])
+
 func _directory_is_steam_install(dir: String) -> bool:
   return FileSystem.is_file(FileSystem.path([dir, "OblivionRemastered.exe"]))
 

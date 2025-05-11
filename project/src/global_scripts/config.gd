@@ -80,7 +80,7 @@ var obse_available_mods_folder: String:
 var _PATH := Global.get_manager_subpath("config.json")
 var _DEFAULT: Dictionary = {
   # General
-  _enum_key_to_str(Config.Key.INSTALL_DIRECTORY): "C:/Program Files (x86)/Steam/steamapps/common/Oblivion Remastered",
+  _enum_key_to_str(Config.Key.INSTALL_DIRECTORY): "",
   _enum_key_to_str(Config.Key.DEFAULT_TAB): Tab.id_to_settings_key(Tab.SETTINGS),
   _enum_key_to_str(Config.Key.DEFAULT_MODS_FOLDER): OS.get_system_dir(OS.SystemDir.SYSTEM_DIR_DOWNLOADS),
   _enum_key_to_str(Config.Key.DEFAULT_ADD_MODE): AddMode.MOVE_ON_ADD,
@@ -139,6 +139,9 @@ func get_by_key(key: Config.Key) -> Variant:
   if cache.has(key_str):
     return cache[key_str]
   return _DEFAULT[key_str]
+
+func get_default_by_key(key: Config.Key) -> Variant:
+  return _DEFAULT[_enum_key_to_str(key)]
 
 func set_by_key(key: Config.Key, value, write: bool = true) -> void:
   var old_value: Variant = get_by_key(key)
