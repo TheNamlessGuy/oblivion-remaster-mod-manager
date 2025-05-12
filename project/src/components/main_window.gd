@@ -6,13 +6,11 @@ extends Control
 @export var background: ColorRect
 @export var version_label: Label
 @export var reload_button: Button
-@export var reload_confirmation_dialog: ConfirmationDialog
 
 func _ready() -> void:
   save_button.button_up.connect(_on_save_button_pressed)
   tab_container.tab_changed.connect(_on_tab_changed)
   reload_button.button_up.connect(_on_reload_button_pressed)
-  reload_confirmation_dialog.confirmed.connect(_perform_reload)
 
   _on_tab_changed(tab_container.current_tab)
 
@@ -27,7 +25,9 @@ func _perform_reload() -> void:
 
 func _on_reload_button_pressed() -> void:
   if tab_container.tab_node(tab_container.current_tab).is_dirty():
-    reload_confirmation_dialog.popup_centered()
+    var popup := ReloadConfirmationDialog.new()
+    popup.confirmed.connect(_perform_reload)
+    popup.open(self)
   else:
     _perform_reload()
 

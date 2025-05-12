@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://c10b6gwhnjmvi" path="res://res/default_theme.tres" id="2_bkkg0"]
 [ext_resource type="PackedScene" uid="uid://0po52glch3w" path="res://src/components/window_tab_container.tscn" id="2_l4bt5"]
 
-[node name="MainWindow" type="Control" node_paths=PackedStringArray("save_button", "tab_container", "background", "version_label", "reload_button", "reload_confirmation_dialog")]
+[node name="MainWindow" type="Control" node_paths=PackedStringArray("save_button", "tab_container", "background", "version_label", "reload_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +18,6 @@ tab_container = NodePath("MarginContainer/WindowContent/WindowTabContainer")
 background = NodePath("Background")
 version_label = NodePath("MarginContainer/WindowContent/ButtonContainer/VersionLabel")
 reload_button = NodePath("MarginContainer/WindowContent/ButtonContainer/ReloadButton")
-reload_confirmation_dialog = NodePath("MarginContainer/WindowContent/ButtonContainer/ReloadButton/ReloadConfirmationDialog")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -58,12 +57,6 @@ size_flags_horizontal = 3
 layout_mode = 2
 tooltip_text = "Reloads this tab to how it would be on NORMM startup"
 text = "Reload"
-
-[node name="ReloadConfirmationDialog" type="ConfirmationDialog" parent="MarginContainer/WindowContent/ButtonContainer/ReloadButton"]
-size = Vector2i(405, 100)
-ok_button_text = "Yes, reload"
-dialog_text = "This will undo any unsaved changes. Are you sure?"
-cancel_button_text = "No, let me save first"
 
 [node name="SaveButton" type="Button" parent="MarginContainer/WindowContent/ButtonContainer"]
 layout_mode = 2
