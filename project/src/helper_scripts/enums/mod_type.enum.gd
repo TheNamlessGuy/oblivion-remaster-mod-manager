@@ -8,6 +8,7 @@ enum Value {
   UNREAL_PAK = Tab.UNREAL_PAK,
   OBSE = Tab.OBSE,
   UE4SS = Tab.UE4SS,
+  MAGIC_LOADER = Tab.MAGIC_LOADER,
 }
 
 # For use
@@ -16,10 +17,12 @@ const ESP_ESM := ModType.Value.ESP_ESM
 const UNREAL_PAK := ModType.Value.UNREAL_PAK
 const OBSE := ModType.Value.OBSE
 const UE4SS := ModType.Value.UE4SS
+const MAGIC_LOADER := ModType.Value.MAGIC_LOADER
 
 const ALL := [
   ESP_ESM,
   UNREAL_PAK,
   OBSE,
   UE4SS,
+  MAGIC_LOADER,
 ]

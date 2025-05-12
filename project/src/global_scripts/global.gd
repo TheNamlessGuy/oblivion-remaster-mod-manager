@@ -72,3 +72,21 @@ func clear_unchanged_dict_keys(dict: Dictionary, default: Dictionary, ignore_sub
       dict.erase(key)
 
   return dict
+
+class _RunProgramResponse:
+  var exit_code: int = -1
+  var stdout: String = ""
+  var stderr: String = ""
+
+func run_program(path_to_exe: String, args: Array = []) -> _RunProgramResponse:
+  var retval := _RunProgramResponse.new()
+
+  var output := []
+  retval.exit_code = OS.execute(path_to_exe, PackedStringArray(args), output, true)
+  if retval.exit_code == -1:
+    fatal_error(["Failed to execute '", path_to_exe, "' with arguments '", "', '".join(args), "'"])
+    return retval
+
+  if output.size() > 0: retval.stdout = output[0]
+  if output.size() > 1: retval.stderr = output[1]
+  return retval

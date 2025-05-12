@@ -9,6 +9,7 @@ enum Value {
   UNREAL_PAK = 2,
   OBSE = 3,
   UE4SS = 4,
+  MAGIC_LOADER = 5,
 }
 
 # For use
@@ -18,6 +19,7 @@ const ESP_ESM := Value.ESP_ESM
 const UNREAL_PAK := Value.UNREAL_PAK
 const OBSE := Value.OBSE
 const UE4SS := Value.UE4SS
+const MAGIC_LOADER := Value.MAGIC_LOADER
 
 const ALL := [
   SETTINGS,
@@ -25,6 +27,7 @@ const ALL := [
   UNREAL_PAK,
   OBSE,
   UE4SS,
+  MAGIC_LOADER,
 ]
 
 static func id_to_title(id: Tab.Value) -> String:
@@ -34,6 +37,7 @@ static func id_to_title(id: Tab.Value) -> String:
     UNREAL_PAK: "UnrealPak",
     OBSE: "OBSE",
     UE4SS: "UE4SS",
+    MAGIC_LOADER: "MagicLoader",
   }[id]
 
 const _ID_SETTINGS_KEY_MAP := {
@@ -42,6 +46,7 @@ const _ID_SETTINGS_KEY_MAP := {
     UNREAL_PAK: "unreal_pak",
     OBSE: "obse",
     UE4SS: "ue4ss",
+    MAGIC_LOADER: "magic_loader",
   }
 
 static func id_to_settings_key(id: Tab.Value) -> String:

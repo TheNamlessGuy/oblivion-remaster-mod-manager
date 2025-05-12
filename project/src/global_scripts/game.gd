@@ -44,6 +44,12 @@ func get_bin_path(install_dir: String = "", type: InstallType = InstallType.UNKN
 
   return ""
 
+func magic_loader_is_installed() -> bool:
+  return FileSystem.exists(get_magic_loader_cli())
+
+func get_magic_loader_cli() -> String:
+  return FileSystem.path([Config.install_directory, "MagicLoader", "mlcli.exe"])
+
 func _ready() -> void:
   _guess_install_dir()
 

@@ -6,12 +6,12 @@ signal closing()
 func open(parent: Node) -> void:
   parent.add_child(self)
 
-  var decoration_size = get_size_with_decorations() - size
+  var decoration_size := get_size_with_decorations() - size
   max_size = DisplayServer.window_get_size() - (decoration_size * 2)
 
   popup_centered()
 
-  var _on_container_resized = func(listener: Callable) -> void:
+  var _on_container_resized := func(listener: Callable) -> void:
     if _container.resized.is_connected(listener):
       _container.resized.disconnect(listener)
 
@@ -62,7 +62,7 @@ func _add_container_children() -> void:
 func _close() -> void:
   closing.emit()
 
-  var parent = get_parent()
+  var parent := get_parent()
   if parent:
     parent.remove_child(self)
 

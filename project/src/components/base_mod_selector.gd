@@ -45,6 +45,11 @@ func disable(should_disable: bool = true) -> void:
   remove_button.disabled = should_disable
   add_mode_selector.disabled = should_disable
 
+  var custom_buttons := custom_button_container.get_children()
+  for child in custom_buttons:
+    if child is Button:
+      child.disabled = should_disable
+
 enum ModDiffType {
   DEACTIVATED_REGULAR            = 0,
   DEACTIVATED_COPY_ON_ACTIVATION = 1,

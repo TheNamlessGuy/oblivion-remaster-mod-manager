@@ -20,8 +20,12 @@ func _on_regular_mod_deletion(mod: String) -> void:
 var _unmanageable_mods_cache := []
 func _read_active_mods_from_fs() -> Array:
   var base_dir := _get_active_mods_base_dir()
+  var magic_loader_is_installed := Game.magic_loader_is_installed()
 
   var mods_with_mismatched_dir_names := FileSystem.directories_in(base_dir).filter(func(dir: String) -> bool:
+    if magic_loader_is_installed and dir == "MagicLoader": # We should ignore this folders entire existence if MagicLoader is installed
+      return false
+
     return not FileSystem.is_file(FileSystem.path([base_dir, dir, FileSystem.get_filename(dir) + "_P.pak"]))
   )
 
@@ -33,7 +37,10 @@ func _read_active_mods_from_fs() -> Array:
 
   _unmanageable_mods_cache = mods_with_mismatched_dir_names + mods_outside_dirs
 
-  var manageable_mods := FileSystem.directories_in(_get_active_mods_base_dir()).filter(func(dir: String) -> bool:
+  var manageable_mods := FileSystem.directories_in(base_dir).filter(func(dir: String) -> bool:
+    if magic_loader_is_installed and dir == "MagicLoader": # We should ignore this folders entire existence if MagicLoader is installed
+      return false
+
     return dir not in _unmanageable_mods_cache
   )
 

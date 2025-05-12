@@ -8,6 +8,7 @@ func tab_node(id: Tab.Value) -> Control:
     Tab.UNREAL_PAK: unreal_pak_node,
     Tab.OBSE: obse_node,
     Tab.UE4SS: ue4ss_node,
+    Tab.MAGIC_LOADER: magic_loader_node,
   }[id]
 
 @export var settings_node: SettingsTab
@@ -15,6 +16,7 @@ func tab_node(id: Tab.Value) -> Control:
 @export var unreal_pak_node: UnrealPakModSelector
 @export var obse_node: OBSEModSelector
 @export var ue4ss_node: UE4SSModSelector
+@export var magic_loader_node: MagicLoaderModSelector
 
 func _ready() -> void:
   Config.setting_changed.connect(_on_settings_changed)
@@ -43,3 +45,5 @@ func _on_settings_changed(key: Config.Key, _old_value, new_value, _persisted: bo
     set_tab_hidden(Tab.OBSE, not new_value)
   elif key == Config.Key.SHOW_UE4SS:
     set_tab_hidden(Tab.UE4SS, not new_value)
+  elif key == Config.Key.SHOW_MAGIC_LOADER:
+    set_tab_hidden(Tab.MAGIC_LOADER, not new_value)

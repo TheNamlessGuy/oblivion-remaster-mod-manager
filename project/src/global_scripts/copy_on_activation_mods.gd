@@ -51,6 +51,7 @@ var _DEFAULT: Dictionary = {
   _mod_type_to_key(ModType.UNREAL_PAK): {},
   _mod_type_to_key(ModType.OBSE): {},
   _mod_type_to_key(ModType.UE4SS): {},
+  _mod_type_to_key(ModType.MAGIC_LOADER): {},
 }
 
 func _read() -> Dictionary:
@@ -83,4 +84,5 @@ func _mod_type_to_key(mod_type: ModType.Value) -> String:
     ModType.UNREAL_PAK: "unreal_pak",
     ModType.OBSE: "obse",
     ModType.UE4SS: "ue4ss",
+    ModType.MAGIC_LOADER: "magic_loader",
   }[mod_type]

@@ -247,3 +247,52 @@ copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's a
 config_key = 17
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new UE4SS mods per default."
+
+[node name="MagicLoaderSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "'MagicLoader' specific settings"
+collapsed_by_default = true
+
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("11_gbo0q")
+true_name = "Yes"
+true_tooltip = ""
+false_name = "No"
+false_tooltip = ""
+config_key = 18
+label_text = "Show"
+label_tooltip = "Show the MagicLoader tab"
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings"]
+layout_mode = 2
+
+[node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 19
+fail_if_path_doesnt_exist = false
+label_text = "'Available' mod folder"
+label_tooltip = "The folder to store 'Available' mods in"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 20
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new MagicLoader mods"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 21
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new MagicLoader mods per default."
