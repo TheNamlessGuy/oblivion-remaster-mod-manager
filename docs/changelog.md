@@ -1,5 +1,19 @@
 # Changelog
 
+## Version 0.2.0
+Features:
+* MagicLoader support
+* Rudimentary "Guess installation path" feature
+* Made things more GamePass friendly (should now work?)
+
+Fixes:
+* Moved "Reload" button down next to "Save" button
+* Added version number display in the bottom left
+
+Internal improvements:
+* Added custom dialog system for more flexibility
+* Added support for custom buttons in ModSelector
+
 ## Version 0.1.0
 Features:
 * Removed "choice" settings, added prompting system on file conflict
