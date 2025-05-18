@@ -6,6 +6,7 @@ func _custom_prerequisites_checks() -> void:
     alert_container.info(["Couldn't find MagicLoader installation. Please make sure it's properly installed, then come back and press Reload"])
 
 var _fix_unmanageable_button: Button = null
+var _magic_button: Button = null
 func _custom_setup() -> void:
   up_button.visible = false
   down_button.visible = false
@@ -18,9 +19,16 @@ func _custom_setup() -> void:
   _fix_unmanageable_button.button_up.connect(_fix_unmanageable_mods)
   dirty_status_changed.connect(func(to: bool) -> void: _fix_unmanageable_button.disabled = to)
 
-  var magic_button := _add_custom_button("Do magic")
-  magic_button.tooltip_text = "This will be done automatically on save, but if you want to do it manually, click here"
-  magic_button.button_up.connect(_do_magic)
+  _magic_button = _add_custom_button("Do magic")
+  _magic_button.button_up.connect(_do_magic)
+  if Global.get_os() != Global.OperatingSystem.WINDOWS:
+    _magic_button.tooltip_text += "\n\nThis operation is currently not supported on non-windows installations"
+
+func _custom_disabled_actions() -> void:
+  _magic_button.tooltip_text = "This will be done automatically on save, but if you want to do it manually, click here"
+  if Global.get_os() != Global.OperatingSystem.WINDOWS:
+    _magic_button.tooltip_text += "\n\nThis operation is currently not supported on non-windows installations"
+    _magic_button.disabled = true
 
 func _activate_mod(mod: String) -> void:
   super._activate_mod(mod)
@@ -265,6 +273,10 @@ func _get_magic_loader_mod_directory() -> String:
 ## Calls MagicLoader
 func _do_magic() -> void:
   alert_container.clear()
+
+  if Global.get_os() != Global.OperatingSystem.WINDOWS:
+    alert_container.warning(["Can't run MagicLoader automatically, since NORMM isn't running on Windows. Please run it manually"])
+    return
 
   var response := Global.run_program(Game.get_magic_loader_cli())
   if response.exit_code != 0:

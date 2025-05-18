@@ -50,6 +50,8 @@ func disable(should_disable: bool = true) -> void:
     if child is Button:
       child.disabled = should_disable
 
+  _custom_disabled_actions()
+
 enum ModDiffType {
   DEACTIVATED_REGULAR            = 0,
   DEACTIVATED_COPY_ON_ACTIVATION = 1,
@@ -140,6 +142,10 @@ func _custom_prerequisites_checks() -> void:
 
 ## Override in child classes as needed
 func _custom_setup() -> void:
+  pass
+
+## Override in child classes as needed
+func _custom_disabled_actions() -> void:
   pass
 
 func _setup_add_file_dialog() -> void:

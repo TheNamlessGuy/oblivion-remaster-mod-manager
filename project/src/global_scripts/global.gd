@@ -1,5 +1,11 @@
 extends Node
 
+enum OperatingSystem {
+  UNKNOWN = -1,
+  WINDOWS = 0,
+  LINUX   = 1,
+}
+
 func _ready() -> void:
   get_viewport().get_window().min_size = Vector2i(640, 480) # TODO: This seemingly doesn't do anything
 
@@ -25,7 +31,7 @@ func get_project_name() -> String:
 func get_executable_name() -> String:
   if OS.is_debug_build():
     return "namless-oblivion-remaster-mod-manager"
-  return FileSystem.get_filename(OS.get_executable_path(), [".exe"])
+  return FileSystem.get_filename(OS.get_executable_path(), [".exe", ".x86_64"])
 
 func get_executable_directory() -> String:
   if OS.is_debug_build():
@@ -34,6 +40,12 @@ func get_executable_directory() -> String:
 
 func get_manager_folder() -> String: return FileSystem.path([get_executable_directory(), get_executable_name()])
 func get_manager_subpath(file: String) -> String: return FileSystem.path([get_manager_folder(), file])
+
+func get_os() -> OperatingSystem:
+  match OS.get_name():
+    "Windows": return OperatingSystem.WINDOWS
+    "Linux": return OperatingSystem.LINUX
+    _: return OperatingSystem.UNKNOWN
 
 func arrays_diff(arr1: Array, arr2: Array) -> bool:
   if arr1.size() != arr2.size():
