@@ -4,41 +4,47 @@ signal setting_changed(key: Config.Key, old_value, new_value, persisted: bool)
 
 # Note: if you add anything here aside from at the end, you have to update SettingsTab to use the new values
 enum Key {
-  UNKNOWN                            = -1,
+  UNKNOWN                                     = -1,
 
   # General
-  INSTALL_DIRECTORY                  = 0,
-  DEFAULT_TAB                        = 1,
-  DEFAULT_MODS_FOLDER                = 2,
-  DEFAULT_ADD_MODE                   = 3,
+  INSTALL_DIRECTORY                           = 0,
+  DEFAULT_TAB                                 = 1,
+  DEFAULT_MODS_FOLDER                         = 2,
+  DEFAULT_ADD_MODE                            = 3,
 
   # ESP/ESM
-  SHOW_ESP_ESM                       = 4,
-  ESP_ESM_DEFAULT_MODS_FOLDER        = 5,
-  ESP_ESM_DEFAULT_ADD_MODE           = 6,
+  SHOW_ESP_ESM                                = 4,
+  ESP_ESM_DEFAULT_MODS_FOLDER                 = 5,
+  ESP_ESM_DEFAULT_ADD_MODE                    = 6,
 
   # UnrealPak
-  SHOW_UNREAL_PAK                    = 7,
-  UNREAL_PAK_AVAILABLE_MODS_FOLDER   = 8,
-  UNREAL_PAK_DEFAULT_MODS_FOLDER     = 9,
-  UNREAL_PAK_DEFAULT_ADD_MODE        = 10,
+  SHOW_UNREAL_PAK                             = 7,
+  UNREAL_PAK_AVAILABLE_MODS_FOLDER            = 8,
+  UNREAL_PAK_DEFAULT_MODS_FOLDER              = 9,
+  UNREAL_PAK_DEFAULT_ADD_MODE                 = 10,
 
   # OBSE
-  SHOW_OBSE                          = 11,
-  OBSE_AVAILABLE_MODS_FOLDER         = 12,
-  OBSE_DEFAULT_MODS_FOLDER           = 13,
-  OBSE_DEFAULT_ADD_MODE              = 14,
+  SHOW_OBSE                                   = 11,
+  OBSE_AVAILABLE_MODS_FOLDER                  = 12,
+  OBSE_DEFAULT_MODS_FOLDER                    = 13,
+  OBSE_DEFAULT_ADD_MODE                       = 14,
 
   # UE4SS
-  SHOW_UE4SS                         = 15,
-  UE4SS_DEFAULT_MODS_FOLDER          = 16,
-  UE4SS_DEFAULT_ADD_MODE             = 17,
+  SHOW_UE4SS                                  = 15,
+  UE4SS_DEFAULT_MODS_FOLDER                   = 16,
+  UE4SS_DEFAULT_ADD_MODE                      = 17,
 
   # MagicLoader
-  SHOW_MAGIC_LOADER                  = 18,
-  MAGIC_LOADER_AVAILABLE_MODS_FOLDER = 19,
-  MAGIC_LOADER_DEFAULT_MODS_FOLDER   = 20,
-  MAGIC_LOADER_DEFAULT_ADD_MODE      = 21,
+  SHOW_MAGIC_LOADER                           = 18,
+  MAGIC_LOADER_AVAILABLE_MODS_FOLDER          = 19,
+  MAGIC_LOADER_DEFAULT_MODS_FOLDER            = 20,
+  MAGIC_LOADER_DEFAULT_ADD_MODE               = 21,
+
+  # TesSyncMapInjector
+  SHOW_TES_SYNC_MAP_INJECTOR                  = 22,
+  TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER = 23,
+  TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER   = 24,
+  TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE      = 25,
 }
 
 func flush() -> void:
@@ -60,6 +66,7 @@ func show_tab(tab: Tab.Value) -> bool:
     Tab.OBSE: get_by_key(Config.Key.SHOW_OBSE),
     Tab.UE4SS: get_by_key(Config.Key.SHOW_UE4SS),
     Tab.MAGIC_LOADER: get_by_key(Config.Key.SHOW_MAGIC_LOADER),
+    Tab.TES_SYNC_MAP_INJECTOR: get_by_key(Config.Key.SHOW_TES_SYNC_MAP_INJECTOR),
   }[tab]
 
 func get_default_add_mode_for_mod_type(mod_type: ModType.Value) -> AddMode.Value:
@@ -69,6 +76,7 @@ func get_default_add_mode_for_mod_type(mod_type: ModType.Value) -> AddMode.Value
     ModType.OBSE: Config.Key.OBSE_DEFAULT_ADD_MODE,
     ModType.UE4SS: Config.Key.UE4SS_DEFAULT_ADD_MODE,
     ModType.MAGIC_LOADER: Config.Key.MAGIC_LOADER_DEFAULT_ADD_MODE,
+    ModType.TES_SYNC_MAP_INJECTOR: Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE,
   }, [AddMode.UNKNOWN])
 
 func get_default_mods_folder_mod_type(mod_type: ModType.Value) -> String:
@@ -78,6 +86,7 @@ func get_default_mods_folder_mod_type(mod_type: ModType.Value) -> String:
     ModType.OBSE: Config.Key.OBSE_DEFAULT_MODS_FOLDER,
     ModType.UE4SS: Config.Key.UE4SS_DEFAULT_MODS_FOLDER,
     ModType.MAGIC_LOADER: Config.Key.MAGIC_LOADER_DEFAULT_MODS_FOLDER,
+    ModType.TES_SYNC_MAP_INJECTOR: Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER,
   })
 
 var unreal_pak_available_mods_folder: String:
@@ -88,6 +97,9 @@ var obse_available_mods_folder: String:
 
 var magic_loader_available_mods_folder: String:
   get: return get_by_key(Config.Key.MAGIC_LOADER_AVAILABLE_MODS_FOLDER)
+
+var tes_sync_map_injector_available_mods_folder: String:
+  get: return get_by_key(Config.Key.TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER)
 
 var _PATH := Global.get_manager_subpath("config.json")
 var _DEFAULT: Dictionary = {
@@ -124,6 +136,12 @@ var _DEFAULT: Dictionary = {
   _enum_key_to_str(Config.Key.MAGIC_LOADER_AVAILABLE_MODS_FOLDER): Global.get_manager_subpath("Available MagicLoader mods"),
   _enum_key_to_str(Config.Key.MAGIC_LOADER_DEFAULT_MODS_FOLDER): null,
   _enum_key_to_str(Config.Key.MAGIC_LOADER_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
+
+  # TesSyncMapInjector
+  _enum_key_to_str(Config.Key.SHOW_TES_SYNC_MAP_INJECTOR): true,
+  _enum_key_to_str(Config.Key.TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER): Global.get_manager_subpath("Available TesSyncMapInjector mods"),
+  _enum_key_to_str(Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER): null,
+  _enum_key_to_str(Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
 }
 
 func _write(data: Dictionary) -> void:

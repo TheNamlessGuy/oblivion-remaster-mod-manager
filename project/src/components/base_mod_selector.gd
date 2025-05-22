@@ -660,10 +660,14 @@ func _fs_sort_deepest_first(fileA: String, fileB: String) -> bool:
 # END: FileSystem section
 
 ## Check whether the given mod would have ModStatus.NOT_FOUND, if it were active.
-## Override in child classes
-func _active_mod_is_not_found(_mod: String) -> bool:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_active_mod_is_not_found"])
-  return false
+## Override in child classes as needed
+func _active_mod_is_not_found(mod: String) -> bool:
+  var files := _get_active_paths_for_mod(mod)
+  for file in files:
+    if not FileSystem.exists(file):
+      return true
+
+  return files.size() == 0
 
 ## Check whether the given mod would have ModStatus.NOT_FOUND, if it were an available non-ModStatus.COPY_ON_ACTIVATION mod.
 ## Override in child classes

@@ -52,9 +52,6 @@ func _read_other_available_mods_from_fs() -> Array:
     return not _active_mod_exists(d, false)
   )
 
-func _active_mod_is_not_found(mod: String) -> bool:
-  return not FileSystem.is_file(FileSystem.path([_get_active_mod_dir(mod), mod + "_P.pak"]))
-
 func _other_available_mod_is_not_found(mod: String) -> bool:
   return not FileSystem.is_dir(_get_available_mod_dir(mod))
 

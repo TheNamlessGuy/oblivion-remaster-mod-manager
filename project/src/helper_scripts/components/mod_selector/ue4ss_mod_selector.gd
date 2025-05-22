@@ -79,9 +79,6 @@ func _custom_post_save_actions() -> void:
 
   FileSystem.write_lines(_get_ue4ss_mods_file(), mods)
 
-func _active_mod_is_not_found(mod: String) -> bool:
-  return not FileSystem.is_dir(_get_active_mod_dir(mod))
-
 func _other_available_mod_is_not_found(mod: String) -> bool:
   return not FileSystem.is_dir(_get_active_mod_dir(mod))
 

@@ -10,6 +10,7 @@ enum Value {
   OBSE = 3,
   UE4SS = 4,
   MAGIC_LOADER = 5,
+  TES_SYNC_MAP_INJECTOR = 6,
 }
 
 # For use
@@ -20,6 +21,7 @@ const UNREAL_PAK := Value.UNREAL_PAK
 const OBSE := Value.OBSE
 const UE4SS := Value.UE4SS
 const MAGIC_LOADER := Value.MAGIC_LOADER
+const TES_SYNC_MAP_INJECTOR := Value.TES_SYNC_MAP_INJECTOR
 
 const ALL := [
   SETTINGS,
@@ -28,6 +30,7 @@ const ALL := [
   OBSE,
   UE4SS,
   MAGIC_LOADER,
+  TES_SYNC_MAP_INJECTOR,
 ]
 
 static func id_to_title(id: Tab.Value) -> String:
@@ -38,6 +41,7 @@ static func id_to_title(id: Tab.Value) -> String:
     OBSE: "OBSE",
     UE4SS: "UE4SS",
     MAGIC_LOADER: "MagicLoader",
+    TES_SYNC_MAP_INJECTOR: "TesSyncMapInjector",
   }[id]
 
 const _ID_SETTINGS_KEY_MAP := {
@@ -47,6 +51,7 @@ const _ID_SETTINGS_KEY_MAP := {
     OBSE: "obse",
     UE4SS: "ue4ss",
     MAGIC_LOADER: "magic_loader",
+    TES_SYNC_MAP_INJECTOR: "tes_sync_map_injector",
   }
 
 static func id_to_settings_key(id: Tab.Value) -> String:

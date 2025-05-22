@@ -9,6 +9,7 @@ enum Value {
   OBSE = Tab.OBSE,
   UE4SS = Tab.UE4SS,
   MAGIC_LOADER = Tab.MAGIC_LOADER,
+  TES_SYNC_MAP_INJECTOR = Tab.TES_SYNC_MAP_INJECTOR,
 }
 
 # For use
@@ -18,6 +19,7 @@ const UNREAL_PAK := ModType.Value.UNREAL_PAK
 const OBSE := ModType.Value.OBSE
 const UE4SS := ModType.Value.UE4SS
 const MAGIC_LOADER := ModType.Value.MAGIC_LOADER
+const TES_SYNC_MAP_INJECTOR := ModType.Value.TES_SYNC_MAP_INJECTOR
 
 const ALL := [
   ESP_ESM,
@@ -25,4 +27,5 @@ const ALL := [
   OBSE,
   UE4SS,
   MAGIC_LOADER,
+  TES_SYNC_MAP_INJECTOR,
 ]

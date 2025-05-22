@@ -87,6 +87,7 @@ func _read_other_available_mods_from_fs() -> Array:
   var files := FileSystem.files_in(dir)
   for file in files:
     if not file.ends_with(".json"): continue
+
     var mod := _get_mod_name_from_file(file)
     if not _active_mod_exists(mod, false):
       mods.push_back(mod)
@@ -95,9 +96,6 @@ func _read_other_available_mods_from_fs() -> Array:
 
 func _custom_post_save_actions() -> void:
   _do_magic()
-
-func _active_mod_is_not_found(mod: String) -> bool:
-  return not FileSystem.is_file(_get_active_path_for_mod(mod))
 
 func _other_available_mod_is_not_found(mod: String) -> bool:
   return not FileSystem.is_file(_get_available_regular_path_for_mod(mod))
@@ -120,7 +118,7 @@ func _get_available_regular_path_for_mod(mod: String) -> String:
 func _persist_mod_file_addition(mod: String, file: String, add_mode: AddMode.Value) -> void:
   if add_mode == AddMode.MOVE_ON_ADD:
     var to_path := FileSystem.path([Config.magic_loader_available_mods_folder, FileSystem.get_filename(file)])
-    FileSystem.move(file, to_path)
+    FileSystem.move(file, to_path, true)
   elif add_mode == AddMode.COPY_ON_ACTIVATION:
     CopyOnActivationMods.add_for_mod_type(mod_type, mod, file)
   else:

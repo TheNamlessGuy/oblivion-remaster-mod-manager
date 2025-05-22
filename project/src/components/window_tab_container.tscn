@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://0po52glch3w"]
+[gd_scene load_steps=10 format=3 uid="uid://0po52glch3w"]
 
 [ext_resource type="Script" uid="uid://by1lj3ryk104a" path="res://src/components/window_tab_container.gd" id="1_1layt"]
 [ext_resource type="PackedScene" uid="uid://bq3enopddrsdl" path="res://src/components/settings_tab.tscn" id="2_1od4f"]
@@ -8,8 +8,9 @@
 [ext_resource type="Script" uid="uid://ctdmjvbxd51es" path="res://src/helper_scripts/components/mod_selector/obse_mod_selector.gd" id="5_dy8p3"]
 [ext_resource type="Script" uid="uid://cece1bqc5i51n" path="res://src/helper_scripts/components/mod_selector/ue4ss_mod_selector.gd" id="6_a5vv3"]
 [ext_resource type="Script" uid="uid://hsykbyd7s2n7" path="res://src/helper_scripts/components/mod_selector/magic_loader_mod_selector.gd" id="8_4aywa"]
+[ext_resource type="Script" uid="uid://bajeargn7xqxa" path="res://src/helper_scripts/components/mod_selector/tes_sync_map_injector_mod_selector.gd" id="9_t3cdb"]
 
-[node name="WindowTabContainer" type="TabContainer" node_paths=PackedStringArray("settings_node", "esp_esm_node", "unreal_pak_node", "obse_node", "ue4ss_node", "magic_loader_node")]
+[node name="WindowTabContainer" type="TabContainer" node_paths=PackedStringArray("settings_node", "esp_esm_node", "unreal_pak_node", "obse_node", "ue4ss_node", "magic_loader_node", "tes_sync_map_injector_node")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -25,6 +26,7 @@ unreal_pak_node = NodePath("UnrealPak/UnrealPakModSelector")
 obse_node = NodePath("OBSE/OBSEModSelector")
 ue4ss_node = NodePath("UE4SS/UE4SSModSelector")
 magic_loader_node = NodePath("MagicLoader/MagicLoaderModSelector")
+tes_sync_map_injector_node = NodePath("TesSyncMapInjector/TesSyncMapInjectorModSelector")
 
 [node name="Settings" type="Control" parent="."]
 layout_mode = 2
@@ -117,3 +119,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_4aywa")
 mod_type = 5
+
+[node name="TesSyncMapInjector" type="Control" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 6
+
+[node name="TesSyncMapInjectorModSelector" parent="TesSyncMapInjector" instance=ExtResource("2_yr0b0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("9_t3cdb")
+mod_type = 6

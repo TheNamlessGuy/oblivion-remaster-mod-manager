@@ -6,7 +6,7 @@ func add_for_mod_type(mod_type: ModType.Value, mod: String, path: String, write:
 
   if not cache.has(key):
     cache[key] = {}
-  elif cache[key][mod] == path:
+  elif cache[key].has(mod) and cache[key][mod] == path:
     return # No need if it hasn't changed
 
   cache[key][mod] = path
@@ -55,6 +55,7 @@ var _DEFAULT: Dictionary = {
   _mod_type_to_key(ModType.OBSE): {},
   _mod_type_to_key(ModType.UE4SS): {},
   _mod_type_to_key(ModType.MAGIC_LOADER): {},
+  _mod_type_to_key(ModType.TES_SYNC_MAP_INJECTOR): {},
 }
 
 func _read() -> Dictionary:
@@ -88,4 +89,5 @@ func _mod_type_to_key(mod_type: ModType.Value) -> String:
     ModType.OBSE: "obse",
     ModType.UE4SS: "ue4ss",
     ModType.MAGIC_LOADER: "magic_loader",
+    ModType.TES_SYNC_MAP_INJECTOR: "tes_sync_map_injector",
   }[mod_type]

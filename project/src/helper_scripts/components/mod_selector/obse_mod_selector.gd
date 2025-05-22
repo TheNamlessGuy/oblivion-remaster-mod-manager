@@ -29,9 +29,6 @@ func _read_other_available_mods_from_fs() -> Array:
     return not _active_mod_exists(mod, false)
   )
 
-func _active_mod_is_not_found(mod: String) -> bool:
-  return not FileSystem.is_file(_get_full_path_to_mod_file_in_dir(mod, _get_obse_plugin_folder()))
-
 func _other_available_mod_is_not_found(mod: String) -> bool:
   return not FileSystem.is_file(_get_full_path_to_mod_file_in_dir(mod, Config.obse_available_mods_folder))
 

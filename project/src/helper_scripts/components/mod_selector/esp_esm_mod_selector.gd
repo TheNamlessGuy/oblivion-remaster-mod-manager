@@ -37,9 +37,6 @@ func _read_active_mods_from_fs() -> Array:
     return mod not in _INTERNAL_FILES
   )
 
-func _active_mod_is_not_found(mod: String) -> bool:
-  return not FileSystem.exists(FileSystem.path([Game.get_data_dir(), mod]))
-
 func _other_available_mod_is_not_found(_mod: String) -> bool:
   return false # Can't be, since they're all fetched directly from the file system
 
