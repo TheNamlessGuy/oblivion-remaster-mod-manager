@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 0.3.0
+Features:
+* Linux support (cannot run MagicLoader automatically yet!)
+* TesSyncMapLoader support
+
+Internal improvements:
+* Restructured a lot. DRY and for ease of adding new mod types in the future
+
 ## Version 0.2.0
 Features:
 * MagicLoader support
