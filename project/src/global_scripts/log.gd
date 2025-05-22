@@ -13,6 +13,21 @@ func debug(callback: Callable, msg: Array, stack = null) -> void:
   if OS.is_debug_build(): # TODO: This should be a config setting
     callback.call(msg, stack)
 
+func function_call(prefix: String, params: Array) -> void:
+  var msg := [prefix, "("]
+
+  for i in range(params.size()):
+    if i > 0: msg += [", "]
+
+    var param: Variant = params[i]
+    if param is String:
+      msg += ["'", param, "'"]
+    else:
+      msg += [param]
+
+  msg += [")"]
+  info(msg, get_stack())
+
 var _PATH := Global.get_manager_subpath("log.txt")
 var _first_log := true
 
@@ -24,8 +39,8 @@ func _append(content: String) -> void:
   if not content.ends_with("\n"):
     content += "\n"
 
-  FileSystem.mkdir(FileSystem.get_directory(_PATH))
-  FileSystem.append(_PATH, content, true)
+  FileSystem.ensure_dir_exists(FileSystem.get_directory(_PATH), false, true)
+  FileSystem.append(_PATH, content, true, true)
 
 func _timestamp() -> String:
   return "[" + Time.get_datetime_string_from_system(true, true) + "]"

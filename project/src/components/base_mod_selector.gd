@@ -299,9 +299,9 @@ func _open_add_available_mods_dialog() -> void:
   add_file_dialog.popup_centered()
 
 ## Called when a ModStatus.REGULAR mod is deleted.
-## Override in child classes
-func _on_regular_mod_deletion(_mod: String) -> void:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_on_regular_mod_deletion"])
+## Override in child classes as needed
+func _on_regular_mod_deletion(mod: String) -> void:
+  _fs_trash_mod_files(mod, _get_available_paths_for_mod(mod, ModStatus.REGULAR))
 
 ## Called when a ModStatus.COPY_ON_ACTIVATION mod is deleted.
 func _on_copy_on_activation_mod_deletion(mod: String) -> void:
@@ -371,7 +371,33 @@ func _do_is_dirty_check() -> bool:
 func _do_can_save_check() -> bool:
   return true
 
-func _perform_save(diffs: Dictionary, remember_dict: Dictionary) -> void:
+## Should return all the existing active paths that relate exclusively to the given mod.
+## Override in child classes
+func _get_active_paths_for_mod(_mod: String) -> Array:
+  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_get_active_paths_for_mod"])
+  return []
+
+## Should return the paths that the active files of the mod would have were it to be deactivated.
+## Override in child classes
+func _convert_active_paths_to_available(_mod: String, _active_paths: Array, _status: ModStatus.Value) -> Array:
+  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_convert_active_paths_to_available"])
+  return []
+
+## Should return all the existing available paths that relate exclusively to the given mod.
+## Override in child classes
+func _get_available_paths_for_mod(_mod: String, _status: ModStatus.Value) -> Array:
+  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_get_available_paths_for_mod"])
+  return []
+
+## Should return the paths that the active files of the mod would have were it to be deactivated.
+## Override in child classes
+func _convert_available_paths_to_active(_mod: String, _available_paths: Array, _status: ModStatus.Value) -> Array:
+  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_convert_available_paths_to_active"])
+  return []
+
+# START: Save section
+
+func _perform_save(diffs: Dictionary, remembered_choices: Dictionary) -> void:
   if (diffs["removed"] as Array).is_empty() and (diffs["added"] as Array).is_empty():
     # Saving is finished
     _custom_post_save_actions()
@@ -388,11 +414,11 @@ func _perform_save(diffs: Dictionary, remember_dict: Dictionary) -> void:
     var status := _get_active_mod_status(mod)
     var should_stop := false
     if status == ModStatus.REGULAR:
-      should_stop = _perform_save_on_deactivated_regular_mod(mod, diffs, remember_dict)
+      should_stop = _perform_save_on_deactivated_regular_mod(mod, diffs, remembered_choices)
     elif status == ModStatus.COPY_ON_ACTIVATION:
-      should_stop = _perform_save_on_deactivated_copy_on_activation_mod(mod, diffs, remember_dict)
+      should_stop = _perform_save_on_deactivated_copy_on_activation_mod(mod, diffs, remembered_choices)
     elif status == ModStatus.NOT_FOUND:
-      should_stop = _perform_save_on_deactivated_not_found_mod(mod, diffs, remember_dict)
+      should_stop = _perform_save_on_deactivated_not_found_mod(mod, diffs, remembered_choices)
     elif status == ModStatus.UNMANAGEABLE:
       Global.fatal_error(["Tried to save deactivation of an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
     else:
@@ -406,11 +432,11 @@ func _perform_save(diffs: Dictionary, remember_dict: Dictionary) -> void:
     var status := _get_available_mod_status(mod)
     var should_stop := false
     if status == ModStatus.REGULAR:
-      should_stop = _perform_save_on_activated_regular_mod(mod, diffs, remember_dict)
+      should_stop = _perform_save_on_activated_regular_mod(mod, diffs, remembered_choices)
     elif status == ModStatus.COPY_ON_ACTIVATION:
-      should_stop = _perform_save_on_activated_copy_on_activation_mod(mod, diffs, remember_dict)
+      should_stop = _perform_save_on_activated_copy_on_activation_mod(mod, diffs, remembered_choices)
     elif status == ModStatus.NOT_FOUND:
-      should_stop = _perform_save_on_activated_not_found_mod(mod, diffs, remember_dict)
+      should_stop = _perform_save_on_activated_not_found_mod(mod, diffs, remembered_choices)
     elif status == ModStatus.UNMANAGEABLE:
       Global.fatal_error(["Tried to save activation of an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
     else:
@@ -419,54 +445,219 @@ func _perform_save(diffs: Dictionary, remember_dict: Dictionary) -> void:
     if should_stop:
       return
 
-  _perform_save(diffs, remember_dict) # This should end up in the "Saving is finished" if-statement at the top
+  _perform_save(diffs, remembered_choices) # This should end up in the "Saving is finished" if-statement at the top
 
-func _on_save_conflict_prompt_response(action: int, remember: bool, remember_key: ModDiffType, callable: Callable, diffs: Dictionary, remember_dict: Dictionary) -> void:
+func _on_save_conflict_prompt_response(action: int, remember: bool, remember_key: ModDiffType, callable: Callable, diffs: Dictionary, remembered_choices: Dictionary) -> void:
   if remember:
-    remember_dict[remember_key] = action
+    remembered_choices[remember_key] = action
 
   callable.call(action)
-  _perform_save(diffs, remember_dict)
+  _perform_save(diffs, remembered_choices)
+
+## Should return whether or not to stop processing the save
+func _perform_save_on_deactivated_regular_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
+  var from := _get_active_paths_for_mod(mod)
+  var to := _convert_active_paths_to_available(mod, from, ModStatus.REGULAR)
+
+  var differing_paths := from.filter(func(from_path: String) -> bool: return from_path not in to)
+  if differing_paths.size() == 0:
+    return false # From and to paths are the same - don't do anything
+  elif differing_paths.size() != from.size():
+    Global.fatal_error(["Tried to perform deactivation on regular '", mod, "', but there were a weird number of differing paths.\nFrom:\n", "\n".join(from), "\nTo:\n", "\n".join(to)])
+
+  var save_type := ModDiffType.DEACTIVATED_REGULAR
+  var remembered_choice: ModDeactivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_deactivated_regular_mod_file_conflict.bind(mod, from, to)
+
+  var existing_to_files := to.filter(func(to_path: String) -> bool: return FileSystem.exists(to_path))
+  if existing_to_files.size() == 0:
+    _fs_move_mod_files(mod, from, to)
+    return false
+  elif remembered_choice != ModDeactivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModDeactivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.REGULAR, mod, existing_to_files)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_deactivated_regular_mod_file_conflict(action: ModDeactivatedConflict.Value, mod: String, from: Array, to: Array) -> void:
+  if action == ModDeactivatedConflict.LEAVE:
+    pass # Don't do anything
+  elif action == ModDeactivatedConflict.MOVE_BACK:
+    _fs_trash_mod_files(mod, to)
+    _fs_move_mod_files(mod, from, to)
+  elif action == ModDeactivatedConflict.REMOVE:
+    _fs_trash_mod_files(mod, from)
+  else:
+    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in BaseModSelector::_resolve_deactivated_regular_mod_file_conflict"])
+
+## Should return whether or not to stop processing the save
+func _perform_save_on_deactivated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
+  var from := _get_active_paths_for_mod(mod)
+  var to := _convert_active_paths_to_available(mod, from, ModStatus.COPY_ON_ACTIVATION)
+
+  var differing_paths := from.filter(func(from_path: String) -> bool: return from_path not in to)
+  if differing_paths.size() == 0:
+    return false # From and to paths are the same - don't do anything
+  elif differing_paths.size() != from.size():
+    Global.fatal_error(["Tried to perform deactivation on copy on activation '", mod, "', but there were a weird number of differing paths.\nFrom:\n", "\n".join(from), "\nTo:\n", "\n".join(to)])
+
+  var save_type := ModDiffType.DEACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModDeactivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_deactivated_copy_on_activation_mod_file_conflict.bind(mod, from, to)
+
+  var nonexistant_to_files := to.filter(func(to_path: String) -> bool: return not FileSystem.exists(to_path))
+  if nonexistant_to_files.size() == 0: # No conflict
+    _fs_trash_mod_files(mod, from)
+    return false
+  elif remembered_choice != ModDeactivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModDeactivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.COPY_ON_ACTIVATION, mod, nonexistant_to_files)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_deactivated_copy_on_activation_mod_file_conflict(action: ModDeactivatedConflict.Value, mod: String, from: Array, to: Array) -> void:
+  if action == ModDeactivatedConflict.LEAVE:
+    pass # Don't do anything
+  elif action == ModDeactivatedConflict.MOVE_BACK:
+    _fs_trash_mod_files(mod, to)
+    _fs_move_mod_files(mod, from, to)
+  elif action == ModDeactivatedConflict.REMOVE:
+    _fs_trash_mod_files(mod, from)
+  else:
+    Global.fatal_error(["Encountered unknown ModDeactivatedConflict '", action, "' in BaseModSelector::_resolve_deactivated_copy_on_activation_mod_file_conflict"])
 
 ## Should return whether or not to stop processing the save.
-## Override in child classes - Some may just return false, but then you've handled it explicitly
-func _perform_save_on_deactivated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_deactivated_regular_mod"])
-  return false
-
-## Should return whether or not to stop processing the save.
-## Override in child classes - Some may just return false, but then you've handled it explicitly
-func _perform_save_on_deactivated_copy_on_activation_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_deactivated_copy_on_activation_mod"])
-  return false
-
-## Should return whether or not to stop processing the save.
-## Override in child classes - Some may just return false, but then you've handled it explicitly
 func _perform_save_on_deactivated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_deactivated_not_found_mod"])
-  return false
+  return false # Noop
+
+## Should return whether or not to stop processing the save
+func _perform_save_on_activated_regular_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
+  var from := _get_available_paths_for_mod(mod, ModStatus.REGULAR)
+  var to := _convert_available_paths_to_active(mod, from, ModStatus.REGULAR)
+
+  var differing_paths := from.filter(func(from_path: String) -> bool: return from_path not in to)
+  if differing_paths.size() == 0:
+    return false # From and to paths are the same - don't do anything
+  elif differing_paths.size() != from.size():
+    Global.fatal_error(["Tried to perform activation on regular mod '", mod, "', but there were a weird number of differing paths.\nFrom:\n", ", ".join(from), "\nTo:\n", ", ".join(to)])
+
+  var save_type := ModDiffType.ACTIVATED_REGULAR
+  var remembered_choice: ModActivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_activated_regular_mod_file_conflict.bind(mod, from, to)
+
+  var existing_to_files := to.filter(func(to_path: String) -> bool: return FileSystem.exists(to_path))
+  if existing_to_files.size() == 0: # No conflict
+    _fs_move_mod_files(mod, from, to)
+    return false
+  elif remembered_choice != ModActivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModActivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.REGULAR, mod, existing_to_files)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_activated_regular_mod_file_conflict(action: ModActivatedConflict.Value, mod: String, from: Array, to: Array) -> void:
+  if action == ModActivatedConflict.DEACTIVATE:
+    pass # Don't do anything
+  elif action == ModActivatedConflict.REPLACE:
+    _fs_trash_mod_files(mod, to)
+    _fs_move_mod_files(mod, from, to)
+  else:
+    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in BaseModSelector::_resolve_activated_regular_mod_file_conflict"])
 
 ## Should return whether or not to stop processing the save.
-## Override in child classes - Some may just return false, but then you've handled it explicitly
-func _perform_save_on_activated_regular_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_activated_regular_mod"])
-  return false
+func _perform_save_on_activated_copy_on_activation_mod(mod: String, diffs: Dictionary, remembered_choices: Dictionary) -> bool:
+  var from := _get_available_paths_for_mod(mod, ModStatus.COPY_ON_ACTIVATION)
+  var to := _convert_available_paths_to_active(mod, from, ModStatus.COPY_ON_ACTIVATION)
 
-## Should return whether or not to stop processing the save.
-## Override in child classes - Some may just return false, but then you've handled it explicitly
-func _perform_save_on_activated_copy_on_activation_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_activated_copy_on_activation_mod"])
-  return false
+  var differing_paths := from.filter(func(from_path: String) -> bool: return from_path not in to)
+  if differing_paths.size() == 0:
+    return false # From and to paths are the same - don't do anything
+  elif differing_paths.size() != from.size():
+    Global.fatal_error(["Tried to perform activation on copy on activation mod '", mod, "', but there were a weird number of differing paths.\nFrom:\n", ", ".join(from), "\nTo:\n", ", ".join(to)])
 
-## Should return whether or not to stop processing the save.
-## Override in child classes - Some may just return false, but then you've handled it explicitly
+  var save_type := ModDiffType.ACTIVATED_COPY_ON_ACTIVATION
+  var remembered_choice: ModActivatedConflict.Value = remembered_choices[save_type]
+  var callback := _resolve_activated_copy_on_activation_mod_file_conflict.bind(mod, from, to)
+
+  var existing_to_files := to.filter(func(to_path: String) -> bool: return FileSystem.exists(to_path))
+  if existing_to_files.size() == 0: # No conflict
+    _fs_copy_mod_files(mod, from, to)
+    return false
+  elif remembered_choice != ModActivatedConflict.UNKNOWN:
+    callback.call(remembered_choice)
+    return false
+
+  var prompt := ModActivatedConflictChoiceDialog.new()
+  prompt.for_mod(ModStatus.COPY_ON_ACTIVATION, mod, existing_to_files)
+  prompt.choice_made.connect(_on_save_conflict_prompt_response.bind(save_type, callback, diffs, remembered_choices))
+  prompt.open(self)
+  return true
+
+func _resolve_activated_copy_on_activation_mod_file_conflict(action: ModActivatedConflict.Value, mod: String, from: Array, to: Array) -> void:
+  if action == ModActivatedConflict.DEACTIVATE:
+    pass # Don't do anything
+  elif action == ModActivatedConflict.REPLACE:
+    _fs_trash_mod_files(mod, to)
+    _fs_copy_mod_files(mod, from, to)
+  else:
+    Global.fatal_error(["Encountered unknown ModActivatedConflict '", action, "' in BaseModSelector::_resolve_activated_copy_on_activation_mod_file_conflict"])
+
+## Should return whether or not to stop processing the save
 func _perform_save_on_activated_not_found_mod(_mod: String, _diffs: Dictionary, _remembered_choices: Dictionary) -> bool:
-  Global.fatal_error([get_name(), " has not overloaded BaseModSelector::_perform_save_on_activated_not_found_mod"])
-  return false
+  return false # Noop
 
 ## Override in child classes as needed
 func _custom_post_save_actions() -> void:
   pass
+
+# END: Save section
+
+# START: FileSystem section
+
+func _fs_copy_mod_files(mod: String, from: Array, to: Array) -> void:
+  if from.size() != to.size():
+    Global.fatal_error(["Tried to copy the files of mod '", mod, "', but the from and to arrays diffed in length.\nFrom:\n", ", ".join(from), "\nTo:\n", ", ".join(to)])
+
+  for i in range(from.size()):
+    var from_path: String = from[i]
+    var to_path: String = to[i]
+
+    FileSystem.copy(from_path, to_path, true)
+
+func _fs_move_mod_files(mod: String, from: Array, to: Array) -> void:
+  if from.size() != to.size():
+    Global.fatal_error(["Tried to move the files of mod '", mod, "', but the from and to arrays diffed in length.\nFrom:\n", ", ".join(from), "\nTo:\n", ", ".join(to)])
+
+  for i in range(from.size()):
+    var from_path: String = from[i]
+    var to_path: String = to[i]
+
+    FileSystem.move(from_path, to_path, true)
+
+func _fs_trash_mod_files(_mod: String, files: Array) -> void:
+  files = files.duplicate()
+  files.sort_custom(_fs_sort_deepest_first)
+
+  for file in files:
+    FileSystem.trash(file)
+
+## Sorts files so that the ones deepest down come first - that way we can see if we've moved/trashed all files in a directory
+func _fs_sort_deepest_first(fileA: String, fileB: String) -> bool:
+  return FileSystem.path_depth(fileA) > FileSystem.path_depth(fileB)
+
+# END: FileSystem section
 
 ## Check whether the given mod would have ModStatus.NOT_FOUND, if it were active.
 ## Override in child classes
@@ -493,9 +684,18 @@ func _active_copy_on_activation_mod_is_not_found(mod: String) -> bool:
 func _available_copy_on_activation_mod_is_not_found(mod: String) -> bool:
   return not CopyOnActivationMods.path_for_mod_exists(mod_type, mod)
 
+## Override in child classes as needed. Is expected to show its own error message
+func _attempted_added_mod_is_valid(_file: String) -> bool:
+  return true
+
 ## Called when the user has selected some files in add_file_dialog
-func _on_add_selected_files(files: PackedStringArray) -> void:
-  _perform_mod_addition(Array(files), AddModConflict.UNKNOWN)
+func _on_add_selected_files(packed_files: PackedStringArray) -> void:
+  var files := []
+  for packed_file in packed_files:
+    if _attempted_added_mod_is_valid(packed_file):
+      files.push_back(packed_file)
+
+  _perform_mod_addition(files, AddModConflict.UNKNOWN)
 
 func _perform_mod_addition(files: Array, remembered_choice: AddModConflict.Value) -> void:
   if files.size() == 0:

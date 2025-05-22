@@ -132,7 +132,7 @@ func _write(data: Dictionary) -> void:
   if data.is_empty():
     if FileSystem.is_file(_PATH): FileSystem.remove(_PATH)
   else:
-    FileSystem.mkdir(FileSystem.get_directory(_PATH))
+    FileSystem.ensure_dir_exists(FileSystem.get_directory(_PATH))
     FileSystem.write_json(_PATH, data)
 
 func _read() -> Dictionary:

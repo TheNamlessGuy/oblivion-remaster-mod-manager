@@ -26,6 +26,9 @@ func get_mods_for_mod_type(mod_type: ModType.Value) -> Array:
 func get_path_for_mod(mod_type: ModType.Value, mod: String) -> String:
   return get_all_for_mod_type(mod_type)[mod]
 
+func get_parent_dir_for_mod(mod_type: ModType.Value, mod: String) -> String:
+  return FileSystem.get_directory(get_path_for_mod(mod_type, mod))
+
 func path_for_mod_exists(mod_type: ModType.Value, mod: String) -> bool:
   return FileSystem.exists(get_path_for_mod(mod_type, mod))
 
@@ -75,7 +78,7 @@ func _write(data: Dictionary) -> void:
   if data.is_empty():
     if FileSystem.is_file(_PATH): FileSystem.remove(_PATH)
   else:
-    FileSystem.mkdir(FileSystem.get_directory(_PATH))
+    FileSystem.ensure_dir_exists(FileSystem.get_directory(_PATH))
     FileSystem.write_json(_PATH, data)
 
 func _mod_type_to_key(mod_type: ModType.Value) -> String:

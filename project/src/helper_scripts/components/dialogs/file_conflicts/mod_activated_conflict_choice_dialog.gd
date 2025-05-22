@@ -1,9 +1,9 @@
 class_name ModActivatedConflictChoiceDialog
 extends BaseFileConflictChoiceDialog
 
-func for_mod(mod: String, conflicting_path: String) -> void:
-  _set_text(["Tried to activate '", mod, "', but there's already something at path:"])
-  _path_label.text = conflicting_path
+func for_mod(_status: ModStatus.Value, mod: String, conflicting_path: Array) -> void:
+  _set_text(["Tried to activate '", mod, "', but there's already things at the following paths:"])
+  _path_label.text = "\n".join(conflicting_path)
 
 func _init() -> void:
   super._init()

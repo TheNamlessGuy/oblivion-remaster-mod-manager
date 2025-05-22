@@ -1,12 +1,12 @@
 class_name ModDeactivatedConflictChoiceDialog
 extends BaseFileConflictChoiceDialog
 
-func for_mod(mod_status: ModStatus.Value, mod: String, conflicting_path: String) -> void:
+func for_mod(mod_status: ModStatus.Value, mod: String, conflicting_path: Array) -> void:
   if mod_status == ModStatus.REGULAR:
-    _set_text(["Tried to deactivate '", mod, "', but there's already something at path:"])
-    _path_label.text = conflicting_path
+    _set_text(["Tried to deactivate '", mod, "', but there's already something at the following paths:"])
+    _path_label.text = "\n".join(conflicting_path)
   elif mod_status == ModStatus.COPY_ON_ACTIVATION:
-    _set_text(["Tried to deactivate '", mod, "', but the original copied from file no longer exists"])
+    _set_text(["Tried to deactivate '", mod, "', but the original copied from file(s) no longer exists"])
 
 func _init() -> void:
   super._init()
