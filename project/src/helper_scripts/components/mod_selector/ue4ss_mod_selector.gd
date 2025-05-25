@@ -145,6 +145,7 @@ func _get_active_paths_for_mod(mod: String) -> Array:
 
   if FileSystem.is_dir(mod_dir):
     paths.push_back(mod_dir)
+
   return paths
 
 func _convert_active_paths_to_available(mod: String, active_paths: Array, status: ModStatus.Value) -> Array:
@@ -183,34 +184,20 @@ func _convert_available_paths_to_active(mod: String, available_paths: Array, sta
 
 ## Returns null if it is valid, or an array of values explaining what's wrong with the directory if it isn't
 func _is_valid_mod_directory(mod_dir: String) -> Variant:
-  var contents = FileSystem.directory_contents(mod_dir)
-  if contents.size() == 0:
-    return ["The directory '", mod_dir, "' is invalid since it's empty"]
+  var script_folder_name := ""
+  var dll_folder_name := ""
 
-  var valid_contents = contents.filter(func(content: String) -> bool:
-    var full_path = FileSystem.path([mod_dir, content])
+  var dirs := FileSystem.directories_in(mod_dir)
+  for dir in dirs:
+    if dir.to_lower() == "scripts": script_folder_name = dir
+    elif dir.to_lower() == "dlls": dll_folder_name = dir
 
-    if FileSystem.is_file(full_path) and content == "enabled.txt":
-      return true
-    elif FileSystem.is_dir(full_path) and content.to_lower() in ["dlls", "scripts"]:
-      return true
+  var main_script_exists := false if script_folder_name.length() == 0 else FileSystem.exists(FileSystem.path([mod_dir, script_folder_name, "main.lua"]))
+  var main_dll_exists := false if dll_folder_name.length() == 0 else FileSystem.exists(FileSystem.path([mod_dir, dll_folder_name, "main.dll"]))
 
-    return false
-  )
-
-  if contents.size() != valid_contents.size():
-    return ["The directory '", mod_dir, "' is invalid since it contains things other than the folders 'dlls' and 'scripts', and the file 'enabled.txt'"]
-
-  if "scripts" in contents:
-    var dir = FileSystem.path([mod_dir, "scripts"])
-    var dir_files = FileSystem.files_in(dir)
-    if "main.lua" not in dir_files:
-      return ["The directory '", mod_dir, "' is invalid since the 'scripts' folder doesn't contain 'main.lua'"]
-
-  if "dlls" in contents:
-    var dir = FileSystem.path([mod_dir, "dlls"])
-    var dir_files = FileSystem.files_in(dir)
-    if "main.dll" not in dir_files:
-      return ["The directory '", mod_dir, "' is invalid since the 'dlls' folder doesn't contain 'main.dll'"]
+  if not main_script_exists and not main_dll_exists:
+    if script_folder_name.length() == 0: script_folder_name = 'scripts'
+    if dll_folder_name.length() == 0: dll_folder_name = 'dlls'
+    return ["The directory '", mod_dir, "' is invalid, since it doesn't contain '", script_folder_name, "/main.lua' nor '", dll_folder_name, "/main.dll'"]
 
   return null

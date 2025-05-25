@@ -240,6 +240,6 @@ static func _directory_contents_recursive(path_to_dir: String, root: String) -> 
   for dir in dirs:
     var full_path := path([path_to_dir, dir])
     retval += [rootify.call(dir)]
-    retval += _directory_contents_recursive(full_path, root).map(rootify)
+    retval += _directory_contents_recursive(full_path, root)
 
   return retval

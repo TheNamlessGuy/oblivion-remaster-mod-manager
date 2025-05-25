@@ -13,7 +13,7 @@ func debug(callback: Callable, msg: Array, stack = null) -> void:
   if OS.is_debug_build(): # TODO: This should be a config setting
     callback.call(msg, stack)
 
-func function_call(prefix: String, params: Array) -> void:
+func function_call(prefix: String, params: Array, extra: Dictionary = {}) -> void:
   var msg := [prefix, "("]
 
   for i in range(params.size()):
@@ -26,6 +26,11 @@ func function_call(prefix: String, params: Array) -> void:
       msg += [param]
 
   msg += [")"]
+
+  if extra.size() > 0:
+    for key in extra:
+      msg += [" ::: ", key, " => ", extra[key]]
+
   info(msg, get_stack())
 
 var _PATH := Global.get_manager_subpath("log.txt")
