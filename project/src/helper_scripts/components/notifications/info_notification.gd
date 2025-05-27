@@ -10,4 +10,5 @@ func _initialize() -> void:
   _label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 func _add_container_children() -> void:
+  super._add_container_children()
   _container.add_child(_label)
