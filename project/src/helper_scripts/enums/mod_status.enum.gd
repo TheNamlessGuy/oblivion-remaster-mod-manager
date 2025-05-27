@@ -36,8 +36,8 @@ static func id_to_tooltip(id: ModStatus.Value) -> String:
 
 static func id_to_color(id: ModStatus.Value, for_node: Control) -> Color:
   return ThemeManager.color({
-    ModStatus.REGULAR: ThemeManager.MOD_TYPE__REGULAR,
-    ModStatus.COPY_ON_ACTIVATION: ThemeManager.MOD_TYPE__COPY_ON_ACTIVATION,
-    ModStatus.NOT_FOUND: ThemeManager.MOD_TYPE__NOT_FOUND,
-    ModStatus.UNMANAGEABLE: ThemeManager.MOD_TYPE__UNMANAGEABLE,
+    ModStatus.REGULAR: "mod_type__regular",
+    ModStatus.COPY_ON_ACTIVATION: "mod_type__copy_on_activation",
+    ModStatus.NOT_FOUND: "mod_type__not_found",
+    ModStatus.UNMANAGEABLE: "mod_type__unmanageable",
   }[id], for_node)

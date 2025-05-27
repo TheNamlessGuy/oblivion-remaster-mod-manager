@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjwv31s6dex8a"]
+[gd_scene load_steps=5 format=3 uid="uid://bjwv31s6dex8a"]
 
 [ext_resource type="Script" uid="uid://ygkki874fl4x" path="res://src/components/main_window.gd" id="1_8yauh"]
 [ext_resource type="Theme" uid="uid://c10b6gwhnjmvi" path="res://res/default_theme.tres" id="2_bkkg0"]
 [ext_resource type="PackedScene" uid="uid://0po52glch3w" path="res://src/components/window_tab_container.tscn" id="2_l4bt5"]
+[ext_resource type="Script" uid="uid://c68k5ytx3rybd" path="res://src/helper_scripts/components/notifications/notification_container.gd" id="4_2tw30"]
 
 [node name="MainWindow" type="Control" node_paths=PackedStringArray("save_button", "tab_container", "background", "version_label", "reload_button")]
 layout_mode = 3
@@ -34,7 +35,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_bkkg0")
 
 [node name="WindowContent" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -61,3 +61,11 @@ text = "Reload"
 [node name="SaveButton" type="Button" parent="MarginContainer/WindowContent/ButtonContainer"]
 layout_mode = 2
 text = "Save"
+
+[node name="NotificationContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+horizontal_scroll_mode = 0
+script = ExtResource("4_2tw30")
+metadata/_custom_type_script = "uid://c68k5ytx3rybd"

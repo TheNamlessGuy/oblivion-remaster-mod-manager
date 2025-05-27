@@ -14,8 +14,8 @@ func _ready() -> void:
 
   _on_tab_changed(tab_container.current_tab)
 
-  background.color = ThemeManager.color(ThemeManager.BACKGROUND_COLOR, self)
-  version_label.add_theme_color_override("font_color", ThemeManager.color(ThemeManager.VERSION_TEXT_COLOR, self))
+  background.color = ThemeManager.color("background_color", self)
+  version_label.add_theme_color_override("font_color", ThemeManager.color("version_text_color", self))
 
 func _on_save_button_pressed() -> void:
   tab_container.tab_node(tab_container.current_tab).save()
