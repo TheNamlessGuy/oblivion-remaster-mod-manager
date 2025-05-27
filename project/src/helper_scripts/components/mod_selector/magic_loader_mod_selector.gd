@@ -132,7 +132,7 @@ func _do_magic() -> void:
   alert_container.clear()
 
   if Global.get_os() != Global.OperatingSystem.WINDOWS:
-    alert_container.warning(["Can't run MagicLoader automatically, since NORMM isn't running on Windows. Please run it manually"])
+    Notification.warning(["Can't run MagicLoader automatically, since NORMM isn't running on Windows. Please run it manually"])
     return
 
   var response := Global.run_program(Game.get_magic_loader_cli())
