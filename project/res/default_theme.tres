@@ -1,10 +1,13 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://c10b6gwhnjmvi"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://c10b6gwhnjmvi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6n0th"]
 bg_color = Color(0.2, 0, 0.2, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joxn1"]
 bg_color = Color(0.533333, 0, 0.533333, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwart"]
+bg_color = Color(0, 0, 0, 1)
 
 [resource]
 BaseModSelector/colors/mod_type__copy_on_activation = Color(0, 1, 1, 1)
@@ -25,4 +28,5 @@ MarginContainer/constants/margin_right = 5
 MarginContainer/constants/margin_top = 5
 ProgressBar/styles/background = SubResource("StyleBoxFlat_6n0th")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_joxn1")
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_vwart")
 WarningLabel/colors/foreground_color = Color(1, 1, 0, 1)
