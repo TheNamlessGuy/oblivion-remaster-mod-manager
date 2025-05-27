@@ -27,6 +27,13 @@ const _INTERNAL_FILES := _ACTIVE_INTERNAL_FILES + _INACTIVE_INTERNAL_FILES
 
 func _custom_setup() -> void:
   add_file_dialog.add_filter("*.esp, *.esm", "Mod files")
+  backup_restoration_file_dialog.add_filter("esp-esm.load-order.*.txt", "Backup file")
+
+  _add_custom_button("Backup load order").button_up.connect(_backup_active_list_to_file.bind("esp-esm.load-order"))
+
+  var restore_backup_btn := _add_custom_button("Restore load order")
+  restore_backup_btn.tooltip_text = "Restore the load order from a backup file"
+  restore_backup_btn.button_up.connect(_open_backup_restoration_file_dialog)
 
 ## Returns the full path of the Plugins.txt file
 func _get_plugin_file_path() -> String:

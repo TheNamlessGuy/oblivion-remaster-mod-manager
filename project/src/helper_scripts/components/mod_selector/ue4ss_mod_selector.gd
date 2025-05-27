@@ -25,7 +25,7 @@ func _custom_setup() -> void:
   add_file_dialog.add_filter("main.lua,main.dll", "Mod files")
 
 func _attempted_added_mod_is_valid(file: String) -> bool:
-  var result = _is_valid_mod_directory(_get_mod_dir_from_file(file))
+  var result: Variant = _is_valid_mod_directory(_get_mod_dir_from_file(file))
   if result != null:
     alert_container.error(result)
     return false
@@ -139,7 +139,7 @@ func _persist_mod_dir_copy(mod_dir: String, to_dir: String):
 
 func _get_active_paths_for_mod(mod: String) -> Array:
   var mod_dir := _get_active_mod_dir(mod)
-  var paths = FileSystem.directory_contents(mod_dir, true).map(func(content: String) -> String:
+  var paths := FileSystem.directory_contents(mod_dir, true).map(func(content: String) -> String:
     return FileSystem.path([mod_dir, content])
   )
 

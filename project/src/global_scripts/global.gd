@@ -85,6 +85,17 @@ func clear_unchanged_dict_keys(dict: Dictionary, default: Dictionary, ignore_sub
 
   return dict
 
+func current_timestamp_to_filename() -> String:
+  return timestamp_to_filename(Time.get_datetime_dict_from_system())
+func timestamp_to_filename(timestamp_dict: Dictionary) -> String:
+  var year := str(timestamp_dict["year"])
+  var month := str(timestamp_dict["month"]).lpad(2, "0")
+  var day := str(timestamp_dict["day"]).lpad(2, "0")
+  var hour := str(timestamp_dict["hour"]).lpad(2, "0")
+  var minute := str(timestamp_dict["minute"]).lpad(2, "0")
+  var second := str(timestamp_dict["second"]).lpad(2, "0")
+  return Global.array_to_string([year, "-", month, "-", day, "-", hour, "-", minute, "-", second])
+
 class _RunProgramResponse:
   var exit_code: int = -1
   var stdout: String = ""

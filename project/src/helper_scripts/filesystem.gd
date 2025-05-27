@@ -1,7 +1,7 @@
 class_name FileSystem
 
 ## For debugging purposes
-static var _DISABLE_ACTIONS = false
+static var _DISABLE_ACTIONS := false
 
 static func path(arr: Array) -> String:
   if arr.size() == 0: return ""
@@ -40,7 +40,7 @@ static func get_paths_with_swapped_directories(paths: Array, from_dir: String, t
 
   var retval := []
   for p in paths:
-    var tmp = p
+    var tmp: String = p
     if not tmp.ends_with("/"): tmp += "/"
 
     if tmp == from_dir:
@@ -91,10 +91,13 @@ static func read_lines(path_to_file: String) -> Array:
 static func read_json(path_to_file: String) -> Dictionary:
   return JSON.parse_string(read(path_to_file))
 
-static func write(path_to_file: String, content: String) -> void:
+static func write(path_to_file: String, content: String, create_parent_directory_if_doesnt_exist: bool = false) -> void:
   if _DISABLE_ACTIONS:
-    Log.function_call("FileSystem.write", [path_to_file, content])
+    Log.function_call("FileSystem.write", [path_to_file, content, create_parent_directory_if_doesnt_exist])
     return
+
+  if create_parent_directory_if_doesnt_exist:
+    _create_parent_directory_if_doesnt_exist(path_to_file)
 
   var file := FileAccess.open(path_to_file, FileAccess.WRITE)
   if file == null:
@@ -119,8 +122,8 @@ static func append(path_to_file: String, content: String, create_if_nonexistant:
   file.store_string(content)
   file.close()
 
-static func write_lines(path_to_file: String, lines: Array, newline_symbol: String = "\n") -> void:
-  write(path_to_file, newline_symbol.join(lines))
+static func write_lines(path_to_file: String, lines: Array, create_parent_directory_if_doesnt_exist: bool = false, newline_symbol: String = "\n") -> void:
+  write(path_to_file, newline_symbol.join(lines), create_parent_directory_if_doesnt_exist)
 
 static func write_json(path_to_file: String, data: Dictionary, indent: String = "  ") -> void:
   write(path_to_file, JSON.stringify(data, indent))
@@ -231,7 +234,7 @@ static func _directory_contents_recursive(path_to_dir: String, root: String) -> 
   var rootless_path := path_to_dir.replace(root, "")
   while rootless_path.begins_with("/"): rootless_path = rootless_path.substr(1)
 
-  var rootify = func(p: String) -> String:
+  var rootify := func(p: String) -> String:
     if rootless_path.length() == 0: return p
     return path([rootless_path, p])
 

@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://b0r5hq0suqvk3" path="res://res/icons/remove.png" id="7_wgbqt"]
 [ext_resource type="Script" uid="uid://ji36rqi6vcvo" path="res://src/helper_scripts/components/split_containers/expanded_h_split_container.gd" id="10_571wt"]
 
-[node name="ModSelector" type="BoxContainer" node_paths=PackedStringArray("alert_container", "in_button", "out_button", "custom_button_container", "active_mods_list", "up_button", "down_button", "available_mods_list", "add_button", "remove_button", "add_mode_selector", "add_file_dialog")]
+[node name="ModSelector" type="BoxContainer" node_paths=PackedStringArray("alert_container", "in_button", "out_button", "custom_button_container", "backup_restoration_file_dialog", "active_mods_list", "up_button", "down_button", "available_mods_list", "add_button", "remove_button", "add_mode_selector", "add_file_dialog")]
 offset_right = 1149.0
 offset_bottom = 645.0
 size_flags_horizontal = 3
@@ -21,6 +21,7 @@ alert_container = NodePath("MarginContainer/ScrollContainer/VBoxContainer/AlertC
 in_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/MoverButtons/ActivateButton")
 out_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/MoverButtons/DeactivateButton")
 custom_button_container = NodePath("MarginContainer/ScrollContainer/VBoxContainer/CustomButtonContainer")
+backup_restoration_file_dialog = NodePath("MarginContainer/ScrollContainer/VBoxContainer/CustomButtonContainer/BackupRestorationFileDialog")
 active_mods_list = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/ActiveModsList")
 up_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/Header/UpButton")
 down_button = NodePath("MarginContainer/ScrollContainer/VBoxContainer/ModLists/ActiveModsContainer/Header/DownButton")
@@ -173,3 +174,5 @@ layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("10_571wt")
 metadata/_custom_type_script = "uid://ji36rqi6vcvo"
+
+[node name="BackupRestorationFileDialog" type="FileDialog" parent="MarginContainer/ScrollContainer/VBoxContainer/CustomButtonContainer"]

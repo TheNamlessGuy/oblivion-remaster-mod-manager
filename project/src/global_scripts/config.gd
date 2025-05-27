@@ -11,40 +11,42 @@ enum Key {
   DEFAULT_TAB                                 = 1,
   DEFAULT_MODS_FOLDER                         = 2,
   DEFAULT_ADD_MODE                            = 3,
+  DEFAULT_BACKUPS_FOLDER                      = 4,
 
   # ESP/ESM
-  SHOW_ESP_ESM                                = 4,
-  ESP_ESM_DEFAULT_MODS_FOLDER                 = 5,
-  ESP_ESM_DEFAULT_ADD_MODE                    = 6,
+  SHOW_ESP_ESM                                = 5,
+  ESP_ESM_DEFAULT_MODS_FOLDER                 = 6,
+  ESP_ESM_DEFAULT_ADD_MODE                    = 7,
+  ESP_ESM_DEFAULT_BACKUPS_FOLDER              = 8,
 
   # UnrealPak
-  SHOW_UNREAL_PAK                             = 7,
-  UNREAL_PAK_AVAILABLE_MODS_FOLDER            = 8,
-  UNREAL_PAK_DEFAULT_MODS_FOLDER              = 9,
-  UNREAL_PAK_DEFAULT_ADD_MODE                 = 10,
+  SHOW_UNREAL_PAK                             = 9,
+  UNREAL_PAK_AVAILABLE_MODS_FOLDER            = 10,
+  UNREAL_PAK_DEFAULT_MODS_FOLDER              = 11,
+  UNREAL_PAK_DEFAULT_ADD_MODE                 = 12,
 
   # OBSE
-  SHOW_OBSE                                   = 11,
-  OBSE_AVAILABLE_MODS_FOLDER                  = 12,
-  OBSE_DEFAULT_MODS_FOLDER                    = 13,
-  OBSE_DEFAULT_ADD_MODE                       = 14,
+  SHOW_OBSE                                   = 13,
+  OBSE_AVAILABLE_MODS_FOLDER                  = 14,
+  OBSE_DEFAULT_MODS_FOLDER                    = 15,
+  OBSE_DEFAULT_ADD_MODE                       = 16,
 
   # UE4SS
-  SHOW_UE4SS                                  = 15,
-  UE4SS_DEFAULT_MODS_FOLDER                   = 16,
-  UE4SS_DEFAULT_ADD_MODE                      = 17,
+  SHOW_UE4SS                                  = 17,
+  UE4SS_DEFAULT_MODS_FOLDER                   = 18,
+  UE4SS_DEFAULT_ADD_MODE                      = 19,
 
   # MagicLoader
-  SHOW_MAGIC_LOADER                           = 18,
-  MAGIC_LOADER_AVAILABLE_MODS_FOLDER          = 19,
-  MAGIC_LOADER_DEFAULT_MODS_FOLDER            = 20,
-  MAGIC_LOADER_DEFAULT_ADD_MODE               = 21,
+  SHOW_MAGIC_LOADER                           = 20,
+  MAGIC_LOADER_AVAILABLE_MODS_FOLDER          = 21,
+  MAGIC_LOADER_DEFAULT_MODS_FOLDER            = 22,
+  MAGIC_LOADER_DEFAULT_ADD_MODE               = 23,
 
   # TesSyncMapInjector
-  SHOW_TES_SYNC_MAP_INJECTOR                  = 22,
-  TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER = 23,
-  TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER   = 24,
-  TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE      = 25,
+  SHOW_TES_SYNC_MAP_INJECTOR                  = 24,
+  TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER = 25,
+  TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER   = 26,
+  TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE      = 27,
 }
 
 func flush() -> void:
@@ -79,7 +81,7 @@ func get_default_add_mode_for_mod_type(mod_type: ModType.Value) -> AddMode.Value
     ModType.TES_SYNC_MAP_INJECTOR: Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE,
   }, [AddMode.UNKNOWN])
 
-func get_default_mods_folder_mod_type(mod_type: ModType.Value) -> String:
+func get_default_mods_folder_for_mod_type(mod_type: ModType.Value) -> String:
   return _generic_get_value_for_mod_type(mod_type, "", Config.Key.DEFAULT_MODS_FOLDER, {
     ModType.ESP_ESM: Config.Key.ESP_ESM_DEFAULT_MODS_FOLDER,
     ModType.UNREAL_PAK: Config.Key.UNREAL_PAK_DEFAULT_MODS_FOLDER,
@@ -87,6 +89,11 @@ func get_default_mods_folder_mod_type(mod_type: ModType.Value) -> String:
     ModType.UE4SS: Config.Key.UE4SS_DEFAULT_MODS_FOLDER,
     ModType.MAGIC_LOADER: Config.Key.MAGIC_LOADER_DEFAULT_MODS_FOLDER,
     ModType.TES_SYNC_MAP_INJECTOR: Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER,
+  })
+
+func get_default_backups_folder_for_mod_type(mod_type: ModType.Value) -> String:
+  return _generic_get_value_for_mod_type(mod_type, "", Config.Key.DEFAULT_BACKUPS_FOLDER, {
+    ModType.ESP_ESM: Config.Key.ESP_ESM_DEFAULT_BACKUPS_FOLDER,
   })
 
 var unreal_pak_available_mods_folder: String:
@@ -108,11 +115,13 @@ var _DEFAULT: Dictionary = {
   _enum_key_to_str(Config.Key.DEFAULT_TAB): Tab.id_to_settings_key(Tab.SETTINGS),
   _enum_key_to_str(Config.Key.DEFAULT_MODS_FOLDER): OS.get_system_dir(OS.SystemDir.SYSTEM_DIR_DOWNLOADS),
   _enum_key_to_str(Config.Key.DEFAULT_ADD_MODE): AddMode.MOVE_ON_ADD,
+  _enum_key_to_str(Config.Key.DEFAULT_BACKUPS_FOLDER): Global.get_manager_subpath("Backups"),
 
   # ESP/ESM
   _enum_key_to_str(Config.Key.SHOW_ESP_ESM): true,
   _enum_key_to_str(Config.Key.ESP_ESM_DEFAULT_MODS_FOLDER): null,
   _enum_key_to_str(Config.Key.ESP_ESM_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
+  _enum_key_to_str(Config.Key.ESP_ESM_DEFAULT_BACKUPS_FOLDER): null,
 
   # UnrealPak
   _enum_key_to_str(Config.Key.SHOW_UNREAL_PAK): true,

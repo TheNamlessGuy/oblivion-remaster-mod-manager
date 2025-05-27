@@ -70,6 +70,7 @@ enum ModDiffType {
 @export var in_button: Button
 @export var out_button: Button
 @export var custom_button_container: HBoxContainer
+@export var backup_restoration_file_dialog: FileDialog
 
 @export_subgroup("Active mods")
 @export var active_mods_list: ItemList
@@ -93,7 +94,7 @@ func _ready() -> void:
   add_button.button_up.connect(_open_add_available_mods_dialog)
   remove_button.button_up.connect(_delete_selected_available_mods)
 
-  _setup_add_file_dialog()
+  _setup_file_dialogs()
 
   visibility_changed.connect(_on_visibility_changed)
   _on_visibility_changed()
@@ -148,11 +149,16 @@ func _custom_setup() -> void:
 func _custom_disabled_actions() -> void:
   pass
 
-func _setup_add_file_dialog() -> void:
+func _setup_file_dialogs() -> void:
   add_file_dialog.title = "Select the mods to add"
   add_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
   add_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
   add_file_dialog.files_selected.connect(_on_add_selected_files)
+
+  backup_restoration_file_dialog.title = "Select the backup to restore"
+  backup_restoration_file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+  backup_restoration_file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+  backup_restoration_file_dialog.file_selected.connect(_restore_active_from_backup_file)
 
 ## Move a mod from available to active
 func _activate_mod(mod: String) -> void:
@@ -290,13 +296,24 @@ func _delete_available_mod(mod: String) -> void:
 func _open_add_available_mods_dialog() -> void:
   alert_container.clear()
 
-  var folder := Config.get_default_mods_folder_mod_type(mod_type)
+  var folder := Config.get_default_mods_folder_for_mod_type(mod_type)
   if folder != null and folder.length() > 0 and FileSystem.is_dir(folder):
     add_file_dialog.current_dir = folder
   else:
     add_file_dialog.current_dir = ""
 
   add_file_dialog.popup_centered()
+
+func _open_backup_restoration_file_dialog() -> void:
+  alert_container.clear()
+  backup_restoration_file_dialog.current_dir = Config.get_default_backups_folder_for_mod_type(mod_type)
+  backup_restoration_file_dialog.popup_centered()
+
+func _backup_active_list_to_file(file_prefix: String) -> void:
+  var filename := file_prefix + "." + Global.current_timestamp_to_filename() + ".txt"
+  var file := FileSystem.path([Config.get_default_backups_folder_for_mod_type(mod_type), filename])
+  FileSystem.write_lines(file, _mod_list_to_array(active_mods_list), true)
+  Notification.info(["Backup '", filename, "' created"])
 
 ## Called when a ModStatus.REGULAR mod is deleted.
 ## Override in child classes as needed
@@ -817,6 +834,39 @@ func _get_active_mod_diffs() -> Dictionary:
     "added": Global.diff_arrays(active_mods, _persisted_active_mod_cache),
     "removed": Global.diff_arrays(_persisted_active_mod_cache, active_mods)
   }
+
+func _restore_active_from_backup_file(file: String) -> void:
+  var restored_state := FileSystem.read_lines(file).filter(func(mod: String) -> bool: return mod.length() > 0)
+  var active_mods := _mod_list_to_array(active_mods_list).filter(func(mod: String) -> bool: return mod.length() > 0)
+
+  # Deactivate mods that shouldn't be active
+  for mod in active_mods:
+    if mod not in restored_state:
+      _deactivate_mod(mod)
+
+  # Activate available mods that should be active
+  var i := 0
+  while i < restored_state.size():
+    var mod: String = restored_state[i]
+    if _active_mod_exists(mod, false):
+      i += 1
+    elif _available_mod_exists(mod, false):
+      i += 1
+      _activate_mod(mod)
+    else:
+      alert_container.warning(["Couldn't restore mod '", mod, "', as it's not available"])
+      restored_state.pop_at(i)
+
+  # Set load order
+  active_mods = _mod_list_to_array(active_mods_list)
+  for ridx in range(restored_state.size()):
+    var aidx := active_mods.find(restored_state[ridx])
+    if ridx != aidx:
+      active_mods_list.move_item(aidx, ridx)
+      active_mods = _mod_list_to_array(active_mods_list)
+
+  _check_dirty_status()
+  _check_can_save_status()
 
 var _cached_dirty_status: Variant = null
 func _check_dirty_status() -> void:

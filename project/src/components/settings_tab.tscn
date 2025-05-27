@@ -70,6 +70,19 @@ label_tooltip = "Which \"Add mode\" to use when adding new mods per default.
 
 This can be overridden per mod type."
 
+[node name="DefaultBackupsFolder" parent="ScrollContainer/VBoxContainer/GeneralSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 4
+fail_if_path_doesnt_exist = false
+label_text = "Default backups folder"
+label_tooltip = "For some mod types, you can backup the load order. This is the directory where said backups will be stored.
+
+If the folder doesn't exist, it will be created.
+
+This can be overridden per mod type."
+dialog_title = "Select a folder"
+dialog_file_mode = 2
+
 [node name="EspEsmSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
 layout_mode = 2
 title = "'ESP/ESM' specific settings"
@@ -82,7 +95,7 @@ true_name = "Yes"
 true_tooltip = ""
 false_name = "No"
 false_tooltip = ""
-config_key = 4
+config_key = 5
 label_text = "Show"
 label_tooltip = "Show the ESP/ESM tab"
 
@@ -91,7 +104,7 @@ layout_mode = 2
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 5
+config_key = 6
 label_text = "Default mod folder"
 label_tooltip = "The folder to open per default when adding new ESP/ESM mods"
 dialog_title = "Select a directory"
@@ -106,9 +119,20 @@ move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's add
 copy_on_activation_enabled = true
 copy_on_activation_text = "Copy on activation"
 copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 6
+config_key = 7
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new ESP/ESM mods per default."
+
+[node name="DefaultBackupsFolder" parent="ScrollContainer/VBoxContainer/EspEsmSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 8
+fail_if_path_doesnt_exist = false
+label_text = "Default backups folder"
+label_tooltip = "You can backup the load order of ESP/ESM mods. This is the directory where said backups will be stored.
+
+If the folder doesn't exist, it will be created."
+dialog_title = "Select a directory"
+dialog_file_mode = 2
 
 [node name="UnrealPakSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
 layout_mode = 2
@@ -122,7 +146,7 @@ true_name = "Yes"
 true_tooltip = ""
 false_name = "No"
 false_tooltip = ""
-config_key = 7
+config_key = 9
 label_text = "Show"
 label_tooltip = "Show the UnrealPak tab"
 
@@ -131,16 +155,16 @@ layout_mode = 2
 
 [node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 8
+config_key = 10
 fail_if_path_doesnt_exist = false
 label_text = "'Available' mod folder"
-label_tooltip = "The folder to store 'Available' mods in"
+label_tooltip = "The folder to store 'Available' mods in. If the folder doesn't exist, it will be created."
 dialog_title = "Select a directory"
 dialog_file_mode = 2
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 9
+config_key = 11
 label_text = "Default mod folder"
 label_tooltip = "The folder to open per default when adding new UnrealPak mods"
 dialog_title = "Select a directory"
@@ -155,7 +179,7 @@ move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's add
 copy_on_activation_enabled = true
 copy_on_activation_text = "Copy on activation"
 copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 10
+config_key = 12
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new UnrealPak mods per default."
 
@@ -171,7 +195,7 @@ true_name = "Yes"
 true_tooltip = ""
 false_name = "No"
 false_tooltip = ""
-config_key = 11
+config_key = 13
 label_text = "Show"
 label_tooltip = "Show the OBSE tab"
 
@@ -180,16 +204,16 @@ layout_mode = 2
 
 [node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 12
+config_key = 14
 fail_if_path_doesnt_exist = false
 label_text = "'Available' mod folder"
-label_tooltip = "The folder to store 'Available' mods in"
+label_tooltip = "The folder to store 'Available' mods in. If the folder doesn't exist, it will be created."
 dialog_title = "Select a directory"
 dialog_file_mode = 2
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/OBSESettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 13
+config_key = 15
 label_text = "Default mod folder"
 label_tooltip = "The folder to open per default when adding new OBSE mods"
 dialog_title = "Select a directory"
@@ -204,7 +228,7 @@ move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's add
 copy_on_activation_enabled = true
 copy_on_activation_text = "Copy on activation"
 copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 14
+config_key = 16
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new OBSE mods per default."
 
@@ -220,7 +244,7 @@ true_name = "Yes"
 true_tooltip = ""
 false_name = "No"
 false_tooltip = ""
-config_key = 15
+config_key = 17
 label_text = "Show"
 label_tooltip = "Show the UE4SS tab"
 
@@ -229,7 +253,7 @@ layout_mode = 2
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 16
+config_key = 18
 label_text = "Default mod folder"
 label_tooltip = "The folder to open per default when adding new UE4SS mods"
 dialog_title = "Select a directory"
@@ -244,7 +268,7 @@ move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's add
 copy_on_activation_enabled = true
 copy_on_activation_text = "Copy on activation"
 copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 17
+config_key = 19
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new UE4SS mods per default."
 
@@ -260,7 +284,7 @@ true_name = "Yes"
 true_tooltip = ""
 false_name = "No"
 false_tooltip = ""
-config_key = 18
+config_key = 20
 label_text = "Show"
 label_tooltip = "Show the MagicLoader tab"
 
@@ -269,16 +293,16 @@ layout_mode = 2
 
 [node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 19
+config_key = 21
 fail_if_path_doesnt_exist = false
 label_text = "'Available' mod folder"
-label_tooltip = "The folder to store 'Available' mods in"
+label_tooltip = "The folder to store 'Available' mods in. If the folder doesn't exist, it will be created."
 dialog_title = "Select a directory"
 dialog_file_mode = 2
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 20
+config_key = 22
 label_text = "Default mod folder"
 label_tooltip = "The folder to open per default when adding new MagicLoader mods"
 dialog_title = "Select a directory"
@@ -293,7 +317,7 @@ move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's add
 copy_on_activation_enabled = true
 copy_on_activation_text = "Copy on activation"
 copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 21
+config_key = 23
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new MagicLoader mods per default."
 
@@ -309,7 +333,7 @@ true_name = "Yes"
 true_tooltip = ""
 false_name = "No"
 false_tooltip = ""
-config_key = 22
+config_key = 24
 label_text = "Show"
 label_tooltip = "Show the TesSyncMapInjector tab"
 
@@ -318,16 +342,16 @@ layout_mode = 2
 
 [node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/TesSyncMapInjectorSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 23
+config_key = 25
 fail_if_path_doesnt_exist = false
 label_text = "'Available' mod folder"
-label_tooltip = "The folder to store 'Available' mods in"
+label_tooltip = "The folder to store 'Available' mods in. If the folder doesn't exist, it will be created."
 dialog_title = "Select a directory"
 dialog_file_mode = 2
 
 [node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/TesSyncMapInjectorSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 24
+config_key = 26
 label_text = "Default mod folder"
 label_tooltip = "The folder to open per default when adding new TesSyncMapInjector mods"
 dialog_title = "Select a directory"
@@ -342,6 +366,6 @@ move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's add
 copy_on_activation_enabled = true
 copy_on_activation_text = "Copy on activation"
 copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 25
+config_key = 27
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new TesSyncMapInjector mods per default."

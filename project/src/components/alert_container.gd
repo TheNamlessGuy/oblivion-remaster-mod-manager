@@ -18,14 +18,14 @@ func has_errors() -> bool:
 
   return false
 
-func error(msg: Array) -> void:
-  _add_alert(msg, ErrorLabel.new())
+func error(msg: Array, tooltip: Array = []) -> void:
+  _add_alert(msg, tooltip, ErrorLabel.new())
 
-func warning(msg: Array) -> void:
-  _add_alert(msg, WarningLabel.new())
+func warning(msg: Array, tooltip: Array = []) -> void:
+  _add_alert(msg, tooltip, WarningLabel.new())
 
-func info(msg: Array) -> void:
-  _add_alert(msg, InfoLabel.new())
+func info(msg: Array, tooltip: Array = []) -> void:
+  _add_alert(msg, tooltip, InfoLabel.new())
 
 func _enter_tree() -> void:
   if Engine.is_editor_hint():
@@ -39,11 +39,12 @@ enum SeparatorMode {
 
 @export var separator_mode: SeparatorMode = SeparatorMode.EVERY_TIME
 
-func _add_alert(msg: Array, label: Label) -> void:
+func _add_alert(msg: Array, tooltip: Array, label: Label) -> void:
   if separator_mode == SeparatorMode.IN_BETWEEN and get_child_count() > 0:
     _add_separator()
 
   label.text = Global.array_to_string(msg)
+  label.tooltip_text = Global.array_to_string(tooltip)
   label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
   add_child(label)
