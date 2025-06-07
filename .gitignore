@@ -1,6 +1,7 @@
 project/bin/
 .vscode/
 project/namless-oblivion-remaster-mod-manager/
+project/namless-oblivion-remaster-mod-manager.d/
 
 # Godot 4+ specific ignores
 .godot/

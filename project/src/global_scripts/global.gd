@@ -28,17 +28,23 @@ func array_to_string(array: Array) -> String:
 func get_project_name() -> String:
   return ProjectSettings.get_setting("application/config/name")
 
-func get_executable_name() -> String:
+func get_executable_name(file_ends_to_remove = [".exe", ".x86_64"]) -> String:
   if OS.is_debug_build():
     return "namless-oblivion-remaster-mod-manager"
-  return FileSystem.get_filename(OS.get_executable_path(), [".exe", ".x86_64"])
+  return FileSystem.get_filename(OS.get_executable_path(), file_ends_to_remove)
 
 func get_executable_directory() -> String:
   if OS.is_debug_build():
     return ProjectSettings.globalize_path("res://")
   return FileSystem.get_directory(OS.get_executable_path())
 
-func get_manager_folder() -> String: return FileSystem.path([get_executable_directory(), get_executable_name()])
+func get_manager_folder() -> String:
+  var actual_executable_name := get_executable_name([])
+  var executable_name := get_executable_name()
+  if actual_executable_name == executable_name:
+    # We don't want the manager folder to have the same name as the executable file, as (at least in most file systems), you can't have a file and a folder with the same name in the same location.
+    executable_name += '.d'
+  return FileSystem.path([get_executable_directory(), executable_name])
 func get_manager_subpath(file: String) -> String: return FileSystem.path([get_manager_folder(), file])
 
 func get_os() -> OperatingSystem:
