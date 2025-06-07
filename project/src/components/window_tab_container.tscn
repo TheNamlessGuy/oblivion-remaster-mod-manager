@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://0po52glch3w"]
+[gd_scene load_steps=11 format=3 uid="uid://0po52glch3w"]
 
 [ext_resource type="Script" uid="uid://by1lj3ryk104a" path="res://src/components/window_tab_container.gd" id="1_1layt"]
 [ext_resource type="PackedScene" uid="uid://bq3enopddrsdl" path="res://src/components/settings_tab.tscn" id="2_1od4f"]
@@ -7,10 +7,11 @@
 [ext_resource type="Script" uid="uid://bogqdjcqyx6e0" path="res://src/helper_scripts/components/mod_selector/unreal_pak_mod_selector.gd" id="4_mrmo6"]
 [ext_resource type="Script" uid="uid://ctdmjvbxd51es" path="res://src/helper_scripts/components/mod_selector/obse_mod_selector.gd" id="5_dy8p3"]
 [ext_resource type="Script" uid="uid://cece1bqc5i51n" path="res://src/helper_scripts/components/mod_selector/ue4ss_mod_selector.gd" id="6_a5vv3"]
+[ext_resource type="Script" uid="uid://8pc7nh214b70" path="res://src/helper_scripts/components/mod_selector/npc_appearance_manager_mod_selector.gd" id="6_mmv1c"]
 [ext_resource type="Script" uid="uid://hsykbyd7s2n7" path="res://src/helper_scripts/components/mod_selector/magic_loader_mod_selector.gd" id="8_4aywa"]
 [ext_resource type="Script" uid="uid://bajeargn7xqxa" path="res://src/helper_scripts/components/mod_selector/tes_sync_map_injector_mod_selector.gd" id="9_t3cdb"]
 
-[node name="WindowTabContainer" type="TabContainer" node_paths=PackedStringArray("settings_node", "esp_esm_node", "unreal_pak_node", "obse_node", "ue4ss_node", "magic_loader_node", "tes_sync_map_injector_node")]
+[node name="WindowTabContainer" type="TabContainer" node_paths=PackedStringArray("settings_node", "esp_esm_node", "unreal_pak_node", "obse_node", "ue4ss_node", "magic_loader_node", "tes_sync_map_injector_node", "npc_appearance_manager_node")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -27,6 +28,7 @@ obse_node = NodePath("OBSE/OBSEModSelector")
 ue4ss_node = NodePath("UE4SS/UE4SSModSelector")
 magic_loader_node = NodePath("MagicLoader/MagicLoaderModSelector")
 tes_sync_map_injector_node = NodePath("TesSyncMapInjector/TesSyncMapInjectorModSelector")
+npc_appearance_manager_node = NodePath("NPCAppearanceManager/NPCAppearanceManagerModSelector")
 
 [node name="Settings" type="Control" parent="."]
 layout_mode = 2
@@ -69,10 +71,27 @@ grow_vertical = 2
 script = ExtResource("8_4aywa")
 mod_type = 5
 
-[node name="OBSE" type="Control" parent="."]
+[node name="NPCAppearanceManager" type="Control" parent="."]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
+
+[node name="NPCAppearanceManagerModSelector" parent="NPCAppearanceManager" instance=ExtResource("2_yr0b0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_mmv1c")
+mod_type = 7
+
+[node name="OBSE" type="Control" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
 
 [node name="OBSEModSelector" parent="OBSE" instance=ExtResource("2_yr0b0")]
 layout_mode = 1
@@ -89,7 +108,7 @@ mod_type = 3
 [node name="TesSyncMapInjector" type="Control" parent="."]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 4
+metadata/_tab_index = 5
 
 [node name="TesSyncMapInjectorModSelector" parent="TesSyncMapInjector" instance=ExtResource("2_yr0b0")]
 layout_mode = 1
@@ -106,7 +125,7 @@ mod_type = 6
 [node name="UE4SS" type="Control" parent="."]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 5
+metadata/_tab_index = 6
 
 [node name="UE4SSModSelector" parent="UE4SS" instance=ExtResource("2_yr0b0")]
 layout_mode = 1
@@ -123,7 +142,7 @@ mod_type = 4
 [node name="UnrealPak" type="Control" parent="."]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 6
+metadata/_tab_index = 7
 
 [node name="UnrealPakModSelector" parent="UnrealPak" instance=ExtResource("2_yr0b0")]
 layout_mode = 1

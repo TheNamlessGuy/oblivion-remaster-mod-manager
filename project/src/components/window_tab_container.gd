@@ -10,6 +10,7 @@ func tab_node(id: Tab.Value) -> Control:
     Tab.UE4SS: ue4ss_node,
     Tab.MAGIC_LOADER: magic_loader_node,
     Tab.TES_SYNC_MAP_INJECTOR: tes_sync_map_injector_node,
+    Tab.NPC_APPEARANCE_MANAGER: npc_appearance_manager_node,
   }[id]
 
 @export var settings_node: SettingsTab
@@ -19,6 +20,7 @@ func tab_node(id: Tab.Value) -> Control:
 @export var ue4ss_node: UE4SSModSelector
 @export var magic_loader_node: MagicLoaderModSelector
 @export var tes_sync_map_injector_node: TesSyncMapInjectorModSelector
+@export var npc_appearance_manager_node: NPCAppearanceManagerModSelector
 
 func _ready() -> void:
   Config.setting_changed.connect(_on_settings_changed)
@@ -51,3 +53,5 @@ func _on_settings_changed(key: Config.Key, _old_value, new_value, _persisted: bo
     set_tab_hidden(Tab.MAGIC_LOADER, not new_value)
   elif key == Config.Key.SHOW_TES_SYNC_MAP_INJECTOR:
     set_tab_hidden(Tab.TES_SYNC_MAP_INJECTOR, not new_value)
+  elif key == Config.Key.SHOW_NPC_APPEARANCE_MANAGER:
+    set_tab_hidden(Tab.NPC_APPEARANCE_MANAGER, not new_value)

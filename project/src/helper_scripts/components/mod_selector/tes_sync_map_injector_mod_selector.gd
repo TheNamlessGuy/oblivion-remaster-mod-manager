@@ -75,7 +75,7 @@ func _active_mod_is_unmanageable(_mod: String) -> bool:
   return false # No such use-case
 
 func _get_mod_name_from_file(file: String) -> String:
-  return FileSystem.get_filename(file, ['.ini'])
+  return FileSystem.get_filename(file, [".ini"])
 
 func _persist_mod_file_addition(mod: String, file: String, add_mode: AddMode.Value) -> void:
   if add_mode == AddMode.MOVE_ON_ADD:

@@ -4,49 +4,55 @@ signal setting_changed(key: Config.Key, old_value, new_value, persisted: bool)
 
 # Note: if you add anything here aside from at the end, you have to update SettingsTab to use the new values
 enum Key {
-  UNKNOWN                                     = -1,
+  UNKNOWN                                      = -1,
 
   # General
-  INSTALL_DIRECTORY                           = 0,
-  DEFAULT_TAB                                 = 1,
-  DEFAULT_MODS_FOLDER                         = 2,
-  DEFAULT_ADD_MODE                            = 3,
-  DEFAULT_BACKUPS_FOLDER                      = 4,
+  INSTALL_DIRECTORY                            = 0,
+  DEFAULT_TAB                                  = 1,
+  DEFAULT_MODS_FOLDER                          = 2,
+  DEFAULT_ADD_MODE                             = 3,
+  DEFAULT_BACKUPS_FOLDER                       = 4,
 
   # ESP/ESM
-  SHOW_ESP_ESM                                = 5,
-  ESP_ESM_DEFAULT_MODS_FOLDER                 = 6,
-  ESP_ESM_DEFAULT_ADD_MODE                    = 7,
-  ESP_ESM_DEFAULT_BACKUPS_FOLDER              = 8,
+  SHOW_ESP_ESM                                 = 5,
+  ESP_ESM_DEFAULT_MODS_FOLDER                  = 6,
+  ESP_ESM_DEFAULT_ADD_MODE                     = 7,
+  ESP_ESM_DEFAULT_BACKUPS_FOLDER               = 8,
 
   # UnrealPak
-  SHOW_UNREAL_PAK                             = 9,
-  UNREAL_PAK_AVAILABLE_MODS_FOLDER            = 10,
-  UNREAL_PAK_DEFAULT_MODS_FOLDER              = 11,
-  UNREAL_PAK_DEFAULT_ADD_MODE                 = 12,
+  SHOW_UNREAL_PAK                              = 9,
+  UNREAL_PAK_AVAILABLE_MODS_FOLDER             = 10,
+  UNREAL_PAK_DEFAULT_MODS_FOLDER               = 11,
+  UNREAL_PAK_DEFAULT_ADD_MODE                  = 12,
 
   # OBSE
-  SHOW_OBSE                                   = 13,
-  OBSE_AVAILABLE_MODS_FOLDER                  = 14,
-  OBSE_DEFAULT_MODS_FOLDER                    = 15,
-  OBSE_DEFAULT_ADD_MODE                       = 16,
+  SHOW_OBSE                                    = 13,
+  OBSE_AVAILABLE_MODS_FOLDER                   = 14,
+  OBSE_DEFAULT_MODS_FOLDER                     = 15,
+  OBSE_DEFAULT_ADD_MODE                        = 16,
 
   # UE4SS
-  SHOW_UE4SS                                  = 17,
-  UE4SS_DEFAULT_MODS_FOLDER                   = 18,
-  UE4SS_DEFAULT_ADD_MODE                      = 19,
+  SHOW_UE4SS                                   = 17,
+  UE4SS_DEFAULT_MODS_FOLDER                    = 18,
+  UE4SS_DEFAULT_ADD_MODE                       = 19,
 
   # MagicLoader
-  SHOW_MAGIC_LOADER                           = 20,
-  MAGIC_LOADER_AVAILABLE_MODS_FOLDER          = 21,
-  MAGIC_LOADER_DEFAULT_MODS_FOLDER            = 22,
-  MAGIC_LOADER_DEFAULT_ADD_MODE               = 23,
+  SHOW_MAGIC_LOADER                            = 20,
+  MAGIC_LOADER_AVAILABLE_MODS_FOLDER           = 21,
+  MAGIC_LOADER_DEFAULT_MODS_FOLDER             = 22,
+  MAGIC_LOADER_DEFAULT_ADD_MODE                = 23,
 
   # TesSyncMapInjector
-  SHOW_TES_SYNC_MAP_INJECTOR                  = 24,
-  TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER = 25,
-  TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER   = 26,
-  TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE      = 27,
+  SHOW_TES_SYNC_MAP_INJECTOR                   = 24,
+  TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER  = 25,
+  TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER    = 26,
+  TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE       = 27,
+
+  # NPCAppearanceManager
+  SHOW_NPC_APPEARANCE_MANAGER                  = 28,
+  NPC_APPEARANCE_MANAGER_AVAILABLE_MODS_FOLDER = 29,
+  NPC_APPEARANCE_MANAGER_DEFAULT_MODS_FOLDER   = 30,
+  NPC_APPEARANCE_MANAGER_DEFAULT_ADD_MODE      = 31,
 }
 
 func flush() -> void:
@@ -69,6 +75,7 @@ func show_tab(tab: Tab.Value) -> bool:
     Tab.UE4SS: get_by_key(Config.Key.SHOW_UE4SS),
     Tab.MAGIC_LOADER: get_by_key(Config.Key.SHOW_MAGIC_LOADER),
     Tab.TES_SYNC_MAP_INJECTOR: get_by_key(Config.Key.SHOW_TES_SYNC_MAP_INJECTOR),
+    Tab.NPC_APPEARANCE_MANAGER: get_by_key(Config.Key.SHOW_NPC_APPEARANCE_MANAGER),
   }[tab]
 
 func get_default_add_mode_for_mod_type(mod_type: ModType.Value) -> AddMode.Value:
@@ -79,6 +86,7 @@ func get_default_add_mode_for_mod_type(mod_type: ModType.Value) -> AddMode.Value
     ModType.UE4SS: Config.Key.UE4SS_DEFAULT_ADD_MODE,
     ModType.MAGIC_LOADER: Config.Key.MAGIC_LOADER_DEFAULT_ADD_MODE,
     ModType.TES_SYNC_MAP_INJECTOR: Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE,
+    ModType.NPC_APPEARANCE_MANAGER: Config.Key.DEFAULT_ADD_MODE,
   }, [AddMode.UNKNOWN])
 
 func get_default_mods_folder_for_mod_type(mod_type: ModType.Value) -> String:
@@ -89,6 +97,7 @@ func get_default_mods_folder_for_mod_type(mod_type: ModType.Value) -> String:
     ModType.UE4SS: Config.Key.UE4SS_DEFAULT_MODS_FOLDER,
     ModType.MAGIC_LOADER: Config.Key.MAGIC_LOADER_DEFAULT_MODS_FOLDER,
     ModType.TES_SYNC_MAP_INJECTOR: Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER,
+    ModType.NPC_APPEARANCE_MANAGER: Config.Key.NPC_APPEARANCE_MANAGER_DEFAULT_MODS_FOLDER,
   })
 
 func get_default_backups_folder_for_mod_type(mod_type: ModType.Value) -> String:
@@ -107,6 +116,9 @@ var magic_loader_available_mods_folder: String:
 
 var tes_sync_map_injector_available_mods_folder: String:
   get: return get_by_key(Config.Key.TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER)
+
+var npc_appearance_manager_available_mods_folder: String:
+  get: return get_by_key(Config.Key.NPC_APPEARANCE_MANAGER_AVAILABLE_MODS_FOLDER)
 
 var _PATH := Global.get_manager_subpath("config.json")
 var _DEFAULT: Dictionary = {
@@ -151,6 +163,12 @@ var _DEFAULT: Dictionary = {
   _enum_key_to_str(Config.Key.TES_SYNC_MAP_INJECTOR_AVAILABLE_MODS_FOLDER): Global.get_manager_subpath("Available TesSyncMapInjector mods"),
   _enum_key_to_str(Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_MODS_FOLDER): null,
   _enum_key_to_str(Config.Key.TES_SYNC_MAP_INJECTOR_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
+
+  # NPCAppearanceManager
+  _enum_key_to_str(Config.Key.SHOW_NPC_APPEARANCE_MANAGER): true,
+  _enum_key_to_str(Config.Key.NPC_APPEARANCE_MANAGER_AVAILABLE_MODS_FOLDER): Global.get_manager_subpath("Available NPCAppearanceManager mods"),
+  _enum_key_to_str(Config.Key.NPC_APPEARANCE_MANAGER_DEFAULT_MODS_FOLDER): null,
+  _enum_key_to_str(Config.Key.NPC_APPEARANCE_MANAGER_DEFAULT_ADD_MODE): AddMode.UNKNOWN,
 }
 
 func _write(data: Dictionary) -> void:

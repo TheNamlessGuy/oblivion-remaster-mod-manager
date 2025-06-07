@@ -6,11 +6,12 @@ enum Value {
 
   SETTINGS = 0,
   ESP_ESM = 1,
-  UNREAL_PAK = 2,
-  OBSE = 3,
-  UE4SS = 4,
-  MAGIC_LOADER = 5,
-  TES_SYNC_MAP_INJECTOR = 6,
+  MAGIC_LOADER = 2,
+  NPC_APPEARANCE_MANAGER = 3,
+  OBSE = 4,
+  TES_SYNC_MAP_INJECTOR = 5,
+  UE4SS = 6,
+  UNREAL_PAK = 7,
 }
 
 # For use
@@ -22,6 +23,7 @@ const OBSE := Value.OBSE
 const UE4SS := Value.UE4SS
 const MAGIC_LOADER := Value.MAGIC_LOADER
 const TES_SYNC_MAP_INJECTOR := Value.TES_SYNC_MAP_INJECTOR
+const NPC_APPEARANCE_MANAGER := Value.NPC_APPEARANCE_MANAGER
 
 const ALL := [
   SETTINGS,
@@ -31,6 +33,7 @@ const ALL := [
   UE4SS,
   MAGIC_LOADER,
   TES_SYNC_MAP_INJECTOR,
+  NPC_APPEARANCE_MANAGER,
 ]
 
 static func id_to_title(id: Tab.Value) -> String:
@@ -42,6 +45,7 @@ static func id_to_title(id: Tab.Value) -> String:
     UE4SS: "UE4SS",
     MAGIC_LOADER: "MagicLoader",
     TES_SYNC_MAP_INJECTOR: "TesSyncMapInjector",
+    NPC_APPEARANCE_MANAGER: "NPCAppearanceManager",
   }[id]
 
 const _ID_SETTINGS_KEY_MAP := {
@@ -52,6 +56,7 @@ const _ID_SETTINGS_KEY_MAP := {
     UE4SS: "ue4ss",
     MAGIC_LOADER: "magic_loader",
     TES_SYNC_MAP_INJECTOR: "tes_sync_map_injector",
+    NPC_APPEARANCE_MANAGER: "npc_appearance_manager",
   }
 
 static func id_to_settings_key(id: Tab.Value) -> String:

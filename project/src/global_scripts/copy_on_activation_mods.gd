@@ -56,6 +56,7 @@ var _DEFAULT: Dictionary = {
   _mod_type_to_key(ModType.UE4SS): {},
   _mod_type_to_key(ModType.MAGIC_LOADER): {},
   _mod_type_to_key(ModType.TES_SYNC_MAP_INJECTOR): {},
+  _mod_type_to_key(ModType.NPC_APPEARANCE_MANAGER): {},
 }
 
 func _read() -> Dictionary:
@@ -90,4 +91,5 @@ func _mod_type_to_key(mod_type: ModType.Value) -> String:
     ModType.UE4SS: "ue4ss",
     ModType.MAGIC_LOADER: "magic_loader",
     ModType.TES_SYNC_MAP_INJECTOR: "tes_sync_map_injector",
+    ModType.NPC_APPEARANCE_MANAGER: "npc_appearance_manager",
   }[mod_type]
