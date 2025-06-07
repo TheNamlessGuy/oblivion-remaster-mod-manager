@@ -69,7 +69,7 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_4aywa")
-mod_type = 5
+mod_type = 2
 
 [node name="NPCAppearanceManager" type="Control" parent="."]
 visible = false
@@ -86,7 +86,7 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_mmv1c")
-mod_type = 7
+mod_type = 3
 
 [node name="OBSE" type="Control" parent="."]
 visible = false
@@ -103,7 +103,7 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_dy8p3")
-mod_type = 3
+mod_type = 4
 
 [node name="TesSyncMapInjector" type="Control" parent="."]
 visible = false
@@ -120,7 +120,7 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("9_t3cdb")
-mod_type = 6
+mod_type = 5
 
 [node name="UE4SS" type="Control" parent="."]
 visible = false
@@ -137,7 +137,7 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_a5vv3")
-mod_type = 4
+mod_type = 6
 
 [node name="UnrealPak" type="Control" parent="."]
 visible = false
@@ -154,4 +154,4 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_mrmo6")
-mod_type = 2
+mod_type = 7
