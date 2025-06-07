@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.4.1
+Fixes:
+* Manager folder should no longer be accesssed with the name '.d'
+
 ## Version 0.4.0
 Features:
 * Backing up ESP/ESM mods
