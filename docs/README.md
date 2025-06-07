@@ -40,3 +40,4 @@ Note that files _will_ be permanently deleted if you've disabled trash can funct
 * [Settings - what do they mean?](/docs/settings.md)
 * [File conflicts](/docs/file-conflicts.md)
 * [Custom themes](/docs/custom-theme.md)
+* [Command line arguments](/docs/command-line-arguments.md)

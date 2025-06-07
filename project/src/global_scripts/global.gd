@@ -9,7 +9,7 @@ enum OperatingSystem {
 func _ready() -> void:
   get_viewport().get_window().min_size = Vector2i(640, 480) # TODO: This seemingly doesn't do anything
 
-func exit(exit_code) -> void:
+func exit(exit_code: int) -> void:
   var tree := get_tree()
   tree.root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
   tree.quit(exit_code)
@@ -25,6 +25,9 @@ func array_to_string(array: Array) -> String:
     retval += str(item)
   return retval
 
+func prints(msg: Array) -> void:
+  prints(array_to_string(msg))
+
 func get_project_name() -> String:
   return ProjectSettings.get_setting("application/config/name")
 
@@ -39,12 +42,17 @@ func get_executable_directory() -> String:
   return FileSystem.get_directory(OS.get_executable_path())
 
 func get_manager_folder() -> String:
+  var arg: Variant = Args.get_manager_folder()
+  if arg != null:
+    return arg
+
   var actual_executable_name := get_executable_name([])
   var executable_name := get_executable_name()
   if actual_executable_name == executable_name:
     # We don't want the manager folder to have the same name as the executable file, as (at least in most file systems), you can't have a file and a folder with the same name in the same location.
     executable_name += '.d'
   return FileSystem.path([get_executable_directory(), executable_name])
+
 func get_manager_subpath(file: String) -> String: return FileSystem.path([get_manager_folder(), file])
 
 func get_os() -> OperatingSystem:
