@@ -1,5 +1,19 @@
 # Changelog
 
+## Version 0.4.0
+Features:
+* Backing up ESP/ESM mods
+* Added '--manager-folder' command line option
+* NPC Appearance Manager support
+
+Fixes:
+* Loosened up UE4SS mod dir restrictions
+* The binary and the manager folder should never end up with the same name anymore, which would cause instant crashes previously
+* Sorted mod types (tabs and in the settings page) alphabetically
+
+Internal improvements:
+* Added notifications
+
 ## Version 0.3.0
 Features:
 * Linux support (cannot run MagicLoader automatically yet!)
