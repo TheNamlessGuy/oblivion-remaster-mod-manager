@@ -31,7 +31,7 @@ func prints(msg: Array) -> void:
 func get_project_name() -> String:
   return ProjectSettings.get_setting("application/config/name")
 
-func get_executable_name(file_ends_to_remove = [".exe", ".x86_64"]) -> String:
+func get_executable_name(file_ends_to_remove: Array[String] = [".exe", ".x86_64"]) -> String:
   if OS.is_debug_build():
     return "namless-oblivion-remaster-mod-manager"
   return FileSystem.get_filename(OS.get_executable_path(), file_ends_to_remove)
