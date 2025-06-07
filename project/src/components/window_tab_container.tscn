@@ -52,12 +52,12 @@ grow_vertical = 2
 script = ExtResource("3_cd5pc")
 mod_type = 1
 
-[node name="UnrealPak" type="Control" parent="."]
+[node name="MagicLoader" type="Control" parent="."]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="UnrealPakModSelector" parent="UnrealPak" instance=ExtResource("2_yr0b0")]
+[node name="MagicLoaderModSelector" parent="MagicLoader" instance=ExtResource("2_yr0b0")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -66,8 +66,8 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("4_mrmo6")
-mod_type = 2
+script = ExtResource("8_4aywa")
+mod_type = 5
 
 [node name="OBSE" type="Control" parent="."]
 visible = false
@@ -86,10 +86,27 @@ grow_vertical = 2
 script = ExtResource("5_dy8p3")
 mod_type = 3
 
-[node name="UE4SS" type="Control" parent="."]
+[node name="TesSyncMapInjector" type="Control" parent="."]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 4
+
+[node name="TesSyncMapInjectorModSelector" parent="TesSyncMapInjector" instance=ExtResource("2_yr0b0")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("9_t3cdb")
+mod_type = 6
+
+[node name="UE4SS" type="Control" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 5
 
 [node name="UE4SSModSelector" parent="UE4SS" instance=ExtResource("2_yr0b0")]
 layout_mode = 1
@@ -103,29 +120,12 @@ grow_vertical = 2
 script = ExtResource("6_a5vv3")
 mod_type = 4
 
-[node name="MagicLoader" type="Control" parent="."]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 5
-
-[node name="MagicLoaderModSelector" parent="MagicLoader" instance=ExtResource("2_yr0b0")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("8_4aywa")
-mod_type = 5
-
-[node name="TesSyncMapInjector" type="Control" parent="."]
+[node name="UnrealPak" type="Control" parent="."]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 6
 
-[node name="TesSyncMapInjectorModSelector" parent="TesSyncMapInjector" instance=ExtResource("2_yr0b0")]
+[node name="UnrealPakModSelector" parent="UnrealPak" instance=ExtResource("2_yr0b0")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -134,5 +134,5 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("9_t3cdb")
-mod_type = 6
+script = ExtResource("4_mrmo6")
+mod_type = 2

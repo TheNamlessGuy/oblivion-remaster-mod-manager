@@ -134,43 +134,43 @@ If the folder doesn't exist, it will be created."
 dialog_title = "Select a directory"
 dialog_file_mode = 2
 
-[node name="UnrealPakSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+[node name="MagicLoaderSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
 layout_mode = 2
-title = "'UnrealPak' specific settings"
+title = "'MagicLoader' specific settings"
 collapsed_by_default = true
 
-[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("4_p0sff")]
 layout_mode = 2
 script = ExtResource("11_gbo0q")
 true_name = "Yes"
 true_tooltip = ""
 false_name = "No"
 false_tooltip = ""
-config_key = 9
+config_key = 20
 label_text = "Show"
-label_tooltip = "Show the UnrealPak tab"
+label_tooltip = "Show the MagicLoader tab"
 
-[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UnrealPakSettings"]
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings"]
 layout_mode = 2
 
-[node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
+[node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 10
+config_key = 21
 fail_if_path_doesnt_exist = false
 label_text = "'Available' mod folder"
 label_tooltip = "The folder to store 'Available' mods in. If the folder doesn't exist, it will be created."
 dialog_title = "Select a directory"
 dialog_file_mode = 2
 
-[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
 layout_mode = 2
-config_key = 11
+config_key = 22
 label_text = "Default mod folder"
-label_tooltip = "The folder to open per default when adding new UnrealPak mods"
+label_tooltip = "The folder to open per default when adding new MagicLoader mods"
 dialog_title = "Select a directory"
 dialog_file_mode = 2
 
-[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("4_p0sff")]
 layout_mode = 2
 script = ExtResource("7_1rh33")
 move_on_add_enabled = true
@@ -179,9 +179,9 @@ move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's add
 copy_on_activation_enabled = true
 copy_on_activation_text = "Copy on activation"
 copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 12
+config_key = 23
 label_text = "Default add mode"
-label_tooltip = "Which \"Add mode\" to use when adding new UnrealPak mods per default."
+label_tooltip = "Which \"Add mode\" to use when adding new MagicLoader mods per default."
 
 [node name="OBSESettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
 layout_mode = 2
@@ -232,95 +232,6 @@ config_key = 16
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new OBSE mods per default."
 
-[node name="UE4SSSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
-layout_mode = 2
-title = "'UE4SS' specific settings"
-collapsed_by_default = true
-
-[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
-layout_mode = 2
-script = ExtResource("11_gbo0q")
-true_name = "Yes"
-true_tooltip = ""
-false_name = "No"
-false_tooltip = ""
-config_key = 17
-label_text = "Show"
-label_tooltip = "Show the UE4SS tab"
-
-[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UE4SSSettings"]
-layout_mode = 2
-
-[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("2_p0sff")]
-layout_mode = 2
-config_key = 18
-label_text = "Default mod folder"
-label_tooltip = "The folder to open per default when adding new UE4SS mods"
-dialog_title = "Select a directory"
-dialog_file_mode = 2
-
-[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
-layout_mode = 2
-script = ExtResource("7_1rh33")
-move_on_add_enabled = true
-move_on_add_text = "Move on add"
-move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
-copy_on_activation_enabled = true
-copy_on_activation_text = "Copy on activation"
-copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 19
-label_text = "Default add mode"
-label_tooltip = "Which \"Add mode\" to use when adding new UE4SS mods per default."
-
-[node name="MagicLoaderSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
-layout_mode = 2
-title = "'MagicLoader' specific settings"
-collapsed_by_default = true
-
-[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("4_p0sff")]
-layout_mode = 2
-script = ExtResource("11_gbo0q")
-true_name = "Yes"
-true_tooltip = ""
-false_name = "No"
-false_tooltip = ""
-config_key = 20
-label_text = "Show"
-label_tooltip = "Show the MagicLoader tab"
-
-[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings"]
-layout_mode = 2
-
-[node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
-layout_mode = 2
-config_key = 21
-fail_if_path_doesnt_exist = false
-label_text = "'Available' mod folder"
-label_tooltip = "The folder to store 'Available' mods in. If the folder doesn't exist, it will be created."
-dialog_title = "Select a directory"
-dialog_file_mode = 2
-
-[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("2_p0sff")]
-layout_mode = 2
-config_key = 22
-label_text = "Default mod folder"
-label_tooltip = "The folder to open per default when adding new MagicLoader mods"
-dialog_title = "Select a directory"
-dialog_file_mode = 2
-
-[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/MagicLoaderSettings" instance=ExtResource("4_p0sff")]
-layout_mode = 2
-script = ExtResource("7_1rh33")
-move_on_add_enabled = true
-move_on_add_text = "Move on add"
-move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
-copy_on_activation_enabled = true
-copy_on_activation_text = "Copy on activation"
-copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
-config_key = 23
-label_text = "Default add mode"
-label_tooltip = "Which \"Add mode\" to use when adding new MagicLoader mods per default."
-
 [node name="TesSyncMapInjectorSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
 layout_mode = 2
 title = "'TesSyncMapInjector' specific settings"
@@ -369,3 +280,92 @@ copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's a
 config_key = 27
 label_text = "Default add mode"
 label_tooltip = "Which \"Add mode\" to use when adding new TesSyncMapInjector mods per default."
+
+[node name="UE4SSSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "'UE4SS' specific settings"
+collapsed_by_default = true
+
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("11_gbo0q")
+true_name = "Yes"
+true_tooltip = ""
+false_name = "No"
+false_tooltip = ""
+config_key = 17
+label_text = "Show"
+label_tooltip = "Show the UE4SS tab"
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UE4SSSettings"]
+layout_mode = 2
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 18
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new UE4SS mods"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/UE4SSSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 19
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new UE4SS mods per default."
+
+[node name="UnrealPakSettings" parent="ScrollContainer/VBoxContainer" instance=ExtResource("6_nc8sb")]
+layout_mode = 2
+title = "'UnrealPak' specific settings"
+collapsed_by_default = true
+
+[node name="ShowSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("11_gbo0q")
+true_name = "Yes"
+true_tooltip = ""
+false_name = "No"
+false_tooltip = ""
+config_key = 9
+label_text = "Show"
+label_tooltip = "Show the UnrealPak tab"
+
+[node name="HSeparator1" type="HSeparator" parent="ScrollContainer/VBoxContainer/UnrealPakSettings"]
+layout_mode = 2
+
+[node name="AvailableModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 10
+fail_if_path_doesnt_exist = false
+label_text = "'Available' mod folder"
+label_tooltip = "The folder to store 'Available' mods in. If the folder doesn't exist, it will be created."
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultModFolderSelector" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("2_p0sff")]
+layout_mode = 2
+config_key = 11
+label_text = "Default mod folder"
+label_tooltip = "The folder to open per default when adding new UnrealPak mods"
+dialog_title = "Select a directory"
+dialog_file_mode = 2
+
+[node name="DefaultAddMode" parent="ScrollContainer/VBoxContainer/UnrealPakSettings" instance=ExtResource("4_p0sff")]
+layout_mode = 2
+script = ExtResource("7_1rh33")
+move_on_add_enabled = true
+move_on_add_text = "Move on add"
+move_on_add_tooltip = "Moves the file(s) of the selected mod as soon as it's added"
+copy_on_activation_enabled = true
+copy_on_activation_text = "Copy on activation"
+copy_on_activation_tooltip = "Copies the file(s) of the selected mod when it's activated (and saved)"
+config_key = 12
+label_text = "Default add mode"
+label_tooltip = "Which \"Add mode\" to use when adding new UnrealPak mods per default."
