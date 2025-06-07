@@ -11,6 +11,7 @@ It got tiring to manage all the different types of mods that exist, manually hav
 * [`UE4SS`](https://www.nexusmods.com/oblivionremastered/mods/32) mods
 * [`MagicLoader`](https://www.nexusmods.com/oblivionremastered/mods/1966) mods
 * [`TesSyncMapInjector`](https://www.nexusmods.com/oblivionremastered/mods/1272) mods
+* [`NPC Appearance Manager`](https://www.nexusmods.com/oblivionremastered/mods/2345) mods
 
 Are you missing one you want/need/like? [Check if it's already requested/planned](https://github.com/TheNamlessGuy/oblivion-remaster-mod-manager/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22new%20mod%20type%22), and if it isn't, create a new issue and request it!
 
