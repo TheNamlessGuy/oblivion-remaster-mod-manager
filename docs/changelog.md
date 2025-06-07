@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.4.2
+Fixes:
+* Mod type selected per mod selector didn't propagate well during tab move
+
 ## Version 0.4.1
 Fixes:
 * Manager folder should no longer be accesssed with the name '.d'
