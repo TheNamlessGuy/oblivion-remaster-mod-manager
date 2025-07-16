@@ -85,7 +85,7 @@ func _fs_read_mod_files_from_dir(mod: String, dir: String) -> Array:
     return UnrealPakHelper.is_mod_file(file, mod)
   ).map(func(file: String) -> String:
     return FileSystem.path([dir, file])
-  )
+  ) + [dir]
 
 ## Moves all the files related to the given mod in from_dir to to_dir
 func _fs_move_mod_files_to_dir(mod: String, from_dir: String, to_dir: String) -> void:
