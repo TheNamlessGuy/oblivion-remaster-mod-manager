@@ -17,22 +17,21 @@ const COPY_ON_ACTIVATION := ModStatus.Value.COPY_ON_ACTIVATION
 const NOT_FOUND := ModStatus.Value.NOT_FOUND
 const UNMANAGEABLE := ModStatus.Value.UNMANAGEABLE
 
-const _ID_TOOLTIP_MAP := {
-  REGULAR: "",
-  COPY_ON_ACTIVATION: "This mod has been imported as 'Copy on activation'",
-  NOT_FOUND: "This mod seemingly no longer exists",
-  UNMANAGEABLE: "This mod can't be managed by the mod manager.\n\nIt's probably been manually activated in a way the mod manager can't handle.\nManually uninstalling, then reinstalling using the manager should fix this.",
-}
+static func id_to_tooltip(id: ModStatus.Value, files: Array) -> String:
+  files.sort_custom(func(a: String, b: String) -> bool: return a.length() < b.length())
+  var file_str := '\n* ' + '\n* '.join(files)#Global.remove_common_prefix(files)) # TODO
 
-const _ID_COLOR_MAP := {
-  REGULAR: Color.WHITE,
-  COPY_ON_ACTIVATION: Color.CYAN,
-  NOT_FOUND: Color.RED,
-  UNMANAGEABLE: Color.YELLOW,
-}
-
-static func id_to_tooltip(id: ModStatus.Value) -> String:
-  return _ID_TOOLTIP_MAP[id]
+  if id == REGULAR:
+    return "This mod contains the files:" + file_str
+  elif id == COPY_ON_ACTIVATION:
+    return "This is a 'Copy on activation' mod containing the files:" + file_str
+  elif id == NOT_FOUND:
+    return "This mod seemingly no longer exists"
+  elif id == UNMANAGEABLE:
+    return "This mod can't be managed by the mod manager.\n\nIt's probably been manually activated in a way the mod manager can't handle.\nManually uninstalling, then reinstalling using the manager should fix this."
+  else:
+    Global.fatal_error(["Unknown ID '", id, "' encountered"])
+    return ""
 
 static func id_to_color(id: ModStatus.Value, for_node: Control) -> Color:
   return ThemeManager.color({

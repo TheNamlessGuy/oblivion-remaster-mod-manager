@@ -811,8 +811,11 @@ func _add_mod_to_list(mod: String, status: ModStatus.Value, list: ItemList) -> i
 
 func _set_mod_status_in_list_by_idx(idx: int, status: ModStatus.Value, list: ItemList) -> void:
   list.set_item_custom_fg_color(idx, ModStatus.id_to_color(status, self))
-  list.set_item_tooltip(idx, ModStatus.id_to_tooltip(status))
   list.set_item_selectable(idx, status != ModStatus.UNMANAGEABLE)
+
+  var mod_name := list.get_item_text(idx)
+  var files := _get_active_paths_for_mod(mod_name) if list == active_mods_list else _get_available_paths_for_mod(mod_name, status)
+  list.set_item_tooltip(idx, ModStatus.id_to_tooltip(status, files))
 
 func _set_mod_status_in_list_by_name(mod: String, status: ModStatus.Value, list: ItemList) -> void:
   _set_mod_status_in_list_by_idx(_get_mod_idx_in_list(mod, list), status, list)
