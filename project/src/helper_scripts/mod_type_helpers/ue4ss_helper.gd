@@ -3,10 +3,8 @@ class_name UE4SSHelper
 const MOD_NAME := 0
 const MOD_ACTIVATED := 1
 
-static func get_activator_file_path(install_dir: String = "") -> String: return FileSystem.path([Game.get_bin_path(install_dir), "dwmapi.dll"])
-static func activator_file_exists(install_dir: String = "") -> bool: return FileSystem.is_file(get_activator_file_path(install_dir))
 static func mods_dir_exists(install_dir: String = "") -> bool: return FileSystem.is_dir(get_mods_dir(install_dir))
-static func is_active(install_dir: String = "") -> bool: return activator_file_exists(install_dir) && mods_dir_exists(install_dir)
+static func is_active(install_dir: String = "") -> bool: return mods_dir_exists(install_dir)
 
 static func get_mods_dir(install_dir: String = "") -> String:
   return FileSystem.path([Game.get_bin_path(install_dir), "ue4ss", "Mods"])

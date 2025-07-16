@@ -13,9 +13,7 @@ const _INACTIVE_PREINSTALLED_MODS := [
 const _PREINSTALLED_MODS := _ACTIVE_PREINSTALLED_MODS + _INACTIVE_PREINSTALLED_MODS
 
 func _custom_prerequisites_checks() -> void:
-  if not UE4SSHelper.activator_file_exists():
-    alert_container.info(["Couldn't find the file 'dwmapi.dll'. Please make sure UE4SS is installed correctly"])
-  elif not UE4SSHelper.mods_dir_exists():
+  if not UE4SSHelper.mods_dir_exists():
     alert_container.info(["Couldn't find the UE4SS mods folder. Please make sure UE4SS is installed correctly"])
 
 func _custom_setup() -> void:
