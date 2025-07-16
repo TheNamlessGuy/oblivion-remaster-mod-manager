@@ -163,8 +163,9 @@ func _setup_file_dialogs() -> void:
 ## Move a mod from available to active
 func _activate_mod(mod: String) -> void:
   var status := _get_available_mod_status(mod) if _available_mod_exists(mod, true) else _get_active_mod_status(mod)
+  var tooltip := _get_mod_tooltip_in_list(mod, available_mods_list)
   _remove_mod_from_list(mod, available_mods_list)
-  _add_mod_to_list(mod, status, active_mods_list)
+  _add_mod_to_list(mod, status, active_mods_list, tooltip)
 
 ## Move all the selected mods in the available list to the active list
 func _activate_selected_available_mods() -> void:
@@ -193,8 +194,9 @@ func _deactivate_mod(mod: String) -> void:
   if status == ModStatus.UNMANAGEABLE:
     Global.fatal_error(["Tried to deactivate an undeactivatable mod (", mod, "). Probably missed calling set_item_selectable(...) properly"])
 
+  var tooltip := _get_mod_tooltip_in_list(mod, active_mods_list)
   _remove_mod_from_list(mod, active_mods_list)
-  _add_mod_to_list(mod, status, available_mods_list)
+  _add_mod_to_list(mod, status, available_mods_list, tooltip)
   available_mods_list.sort_items_by_text()
 
 ## Move all the selected mods in the active list to the available list
@@ -804,21 +806,20 @@ func _mod_list_to_array(list: ItemList) -> Array:
     retval.push_back(list.get_item_text(i))
   return retval
 
-func _add_mod_to_list(mod: String, status: ModStatus.Value, list: ItemList) -> int:
+func _add_mod_to_list(mod: String, status: ModStatus.Value, list: ItemList, tooltip_override: Variant = null) -> int:
   var idx := list.add_item(mod)
-  _set_mod_status_in_list_by_idx(idx, status, list)
+  _set_mod_status_in_list_by_idx(idx, status, list, mod, tooltip_override)
   return idx
 
-func _set_mod_status_in_list_by_idx(idx: int, status: ModStatus.Value, list: ItemList) -> void:
+func _set_mod_status_in_list_by_idx(idx: int, status: ModStatus.Value, list: ItemList, mod: String, tooltip_override: Variant = null) -> void:
   list.set_item_custom_fg_color(idx, ModStatus.id_to_color(status, self))
   list.set_item_selectable(idx, status != ModStatus.UNMANAGEABLE)
 
-  var mod_name := list.get_item_text(idx)
-  var files := _get_active_paths_for_mod(mod_name) if list == active_mods_list else _get_available_paths_for_mod(mod_name, status)
-  list.set_item_tooltip(idx, ModStatus.id_to_tooltip(status, files))
-
-func _set_mod_status_in_list_by_name(mod: String, status: ModStatus.Value, list: ItemList) -> void:
-  _set_mod_status_in_list_by_idx(_get_mod_idx_in_list(mod, list), status, list)
+  if tooltip_override != null:
+    list.set_item_tooltip(idx, tooltip_override)
+  else:
+    var files := _get_active_paths_for_mod(mod) if list == active_mods_list else _get_available_paths_for_mod(mod, status)
+    list.set_item_tooltip(idx, ModStatus.id_to_tooltip(status, files))
 
 func _get_mod_idx_in_list(mod: String, list: ItemList) -> int:
   for i in range(list.item_count):
@@ -826,6 +827,9 @@ func _get_mod_idx_in_list(mod: String, list: ItemList) -> int:
       return i
 
   return -1
+
+func _get_mod_tooltip_in_list(mod: String, list: ItemList) -> String:
+  return list.get_item_tooltip(_get_mod_idx_in_list(mod, list))
 
 func _remove_mod_from_list(mod: String, list: ItemList) -> void:
   list.remove_item(_get_mod_idx_in_list(mod, list))
