@@ -1,6 +1,7 @@
 class_name FileSystem
 
 ## For debugging purposes
+static var _LOG_ACTIONS := false
 static var _DISABLE_ACTIONS := false
 
 static func path(arr: Array) -> String:
@@ -51,9 +52,8 @@ static func get_paths_with_swapped_directories(paths: Array, from_dir: String, t
   return retval
 
 static func ensure_dir_exists(path_to_directory: String, recursive: bool = true, from_log: bool = false) -> void:
-  if _DISABLE_ACTIONS and not from_log:
-    Log.function_call("FileSystem.ensure_dir_exists", [path_to_directory, recursive])
-    return
+  if _LOG_ACTIONS and not from_log: Log.function_call("FileSystem.ensure_dir_exists", [path_to_directory, recursive])
+  if _DISABLE_ACTIONS: return
 
   if recursive:
     var result := DirAccess.make_dir_recursive_absolute(path_to_directory)
@@ -92,9 +92,8 @@ static func read_json(path_to_file: String) -> Dictionary:
   return JSON.parse_string(read(path_to_file))
 
 static func write(path_to_file: String, content: String, create_parent_directory_if_doesnt_exist: bool = false) -> void:
-  if _DISABLE_ACTIONS:
-    Log.function_call("FileSystem.write", [path_to_file, content, create_parent_directory_if_doesnt_exist])
-    return
+  if _LOG_ACTIONS: Log.function_call("FileSystem.write", [path_to_file, content, create_parent_directory_if_doesnt_exist])
+  if _DISABLE_ACTIONS: return
 
   if create_parent_directory_if_doesnt_exist:
     _create_parent_directory_if_doesnt_exist(path_to_file)
@@ -107,9 +106,8 @@ static func write(path_to_file: String, content: String, create_parent_directory
   file.close()
 
 static func append(path_to_file: String, content: String, create_if_nonexistant: bool = false, from_log: bool = false) -> void:
-  if _DISABLE_ACTIONS and not from_log:
-    Log.function_call("FileSystem.append", [path_to_file, content, create_if_nonexistant])
-    return
+  if _LOG_ACTIONS and not from_log: Log.function_call("FileSystem.append", [path_to_file, content, create_if_nonexistant])
+  if _DISABLE_ACTIONS: return
 
   var file := FileAccess.open(path_to_file, FileAccess.READ_WRITE)
   if file == null:
@@ -149,25 +147,22 @@ static func directory_contents(path_to_dir: String, recursive: bool = false) -> 
   return directories_in(path_to_dir) + files_in(path_to_dir)
 
 static func trash(path_to_trash: String) -> void:
-  if _DISABLE_ACTIONS:
-    Log.function_call("FileSystem.trash", [path_to_trash])
-    return
+  if _LOG_ACTIONS: Log.function_call("FileSystem.trash", [path_to_trash])
+  if _DISABLE_ACTIONS: return
 
   var result := OS.move_to_trash(path_to_trash)
   if result != OK: Global.fatal_error(["Failed to trash '", path_to_trash, "'. Error code: ", result])
 
 static func remove(path_to_remove: String) -> void:
-  if _DISABLE_ACTIONS:
-    Log.function_call("FileSystem.remove", [path_to_remove])
-    return
+  if _LOG_ACTIONS: Log.function_call("FileSystem.remove", [path_to_remove])
+  if _DISABLE_ACTIONS: return
 
   var result := DirAccess.remove_absolute(path_to_remove)
   if result != OK: Global.fatal_error(["Failed to remove '", path_to_remove, "'. Error code: ", result])
 
 static func move(from: String, to: String, create_to_parent_directory_if_doesnt_exist: bool = false) -> void:
-  if _DISABLE_ACTIONS:
-    Log.function_call("FileSystem.move", [from, to, create_to_parent_directory_if_doesnt_exist])
-    return
+  if _LOG_ACTIONS: Log.function_call("FileSystem.move", [from, to, create_to_parent_directory_if_doesnt_exist])
+  if _DISABLE_ACTIONS: return
 
   if create_to_parent_directory_if_doesnt_exist:
     _create_parent_directory_if_doesnt_exist(to)
@@ -176,9 +171,8 @@ static func move(from: String, to: String, create_to_parent_directory_if_doesnt_
   if result != OK: Global.fatal_error(["Failed to move '", from, "' to '", to, "'. Error code: ", result])
 
 static func copy(from: String, to: String, create_to_parent_directory_if_doesnt_exist: bool = false) -> void:
-  if _DISABLE_ACTIONS:
-    Log.function_call("FileSystem.copy", [from, to, create_to_parent_directory_if_doesnt_exist])
-    return
+  if _LOG_ACTIONS: Log.function_call("FileSystem.copy", [from, to, create_to_parent_directory_if_doesnt_exist])
+  if _DISABLE_ACTIONS: return
 
   if create_to_parent_directory_if_doesnt_exist:
     _create_parent_directory_if_doesnt_exist(to)
