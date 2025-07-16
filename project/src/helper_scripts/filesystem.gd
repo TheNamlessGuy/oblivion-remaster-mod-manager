@@ -24,6 +24,9 @@ static func path(arr: Array) -> String:
 static func path_depth(path_to_measure: String) -> int: return path_to_measure.split("/").size()
 
 static func get_filename(path_to_file: String, file_ends_to_remove: Array[String] = []) -> String:
+  while (path_to_file.ends_with('/')):
+    path_to_file = path_to_file.substr(0, path_to_file.length() - 1)
+
   var filename: String = Array(path_to_file.split("/")).pop_back()
   for end in file_ends_to_remove:
     filename = filename.replace(end, "")
