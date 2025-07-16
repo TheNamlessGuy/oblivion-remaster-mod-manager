@@ -21,11 +21,11 @@ func _read_active_mods_from_fs() -> Array:
     if magic_loader_is_installed and dir in ["!!!!_MagicLoader", "ÿÿÿÿ_MagicLoader"]: # We should ignore these folders existence if MagicLoader is installed
       return false
 
-    return not FileSystem.is_file(FileSystem.path([base_dir, dir, FileSystem.get_filename(dir) + "_P.pak"]))
+    return not UnrealPakHelper.mod_file_with_prefix_exists(FileSystem.path([base_dir, dir, FileSystem.get_filename(dir)]))
   )
 
   var mods_outside_dirs := FileSystem.files_in(base_dir).filter(func(file: String) -> bool:
-    return file.ends_with("_P.pak")
+    return UnrealPakHelper.is_pak_file(file)
   ).map(func(file: String) -> String:
     return _get_mod_name_from_file(file)
   )
@@ -77,12 +77,12 @@ func _get_available_mod_dir(mod: String) -> String:
   return FileSystem.path([Config.unreal_pak_available_mods_folder, mod])
 
 func _get_mod_name_from_file(file: String) -> String:
-  return FileSystem.get_filename(file, ["_P.pak"])
+  return UnrealPakHelper.get_mod_name_from_file(file)
 
 ## Returns the full path of all the files related to the mod in the given directory
 func _fs_read_mod_files_from_dir(mod: String, dir: String) -> Array:
   return FileSystem.files_in(dir).filter(func(file: String) -> bool:
-    return file.begins_with(mod + "_P.")
+    return UnrealPakHelper.is_mod_file(file, mod)
   ).map(func(file: String) -> String:
     return FileSystem.path([dir, file])
   )
