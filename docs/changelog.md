@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 0.5.0
+Features:
+* Show a list of mod files related to the mod on hover
+
+Fixes:
+* Remove dwmapi.dll requirement for UE4SS to register as installed
+* Ignore MagicLoader 2.0 folders instead of the 1.0 folder
+* Allow for UnrealPak mods that end with '_p', and not '_P' (even though the documentation says only '_P' is allowed, but since it allows it I guess they like lying)
+* UnrealPak mods should now uninstall properly (left an empty folder previously)
+
+Internal improvements:
+* Separate FileSystem::_DISABLE_ACTIONS into _DISABLE_ACTIONS and _LOG_ACTIONS
+
 ## Version 0.4.2
 Fixes:
 * Mod type selected per mod selector didn't propagate well during tab move
