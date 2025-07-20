@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.5.1
+Fixes:
+* NORMM would sometimes copy or move a full directory of files, even if all the files weren't relevant to the mod. This SHOULD no longer happen.
+
 ## Version 0.5.0
 Features:
 * Show a list of mod files related to the mod on hover
