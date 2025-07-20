@@ -85,17 +85,20 @@ func _fs_read_mod_files_from_dir(mod: String, dir: String) -> Array:
     return UnrealPakHelper.is_mod_file(file, mod)
   ).map(func(file: String) -> String:
     return FileSystem.path([dir, file])
-  ) + [dir]
+  )
 
 ## Moves all the files related to the given mod in from_dir to to_dir
 func _fs_move_mod_files_to_dir(mod: String, from_dir: String, to_dir: String) -> void:
   var from_files := _fs_read_mod_files_from_dir(mod, from_dir)
+  from_files.sort_custom(FileSystem.sort_deepest_first)
+
   for from_file in from_files:
     var to_file := FileSystem.path([to_dir, FileSystem.get_filename(from_file)])
     FileSystem.move(from_file, to_file, true)
 
 func _get_active_paths_for_mod(mod: String) -> Array:
-  return _fs_read_mod_files_from_dir(mod, _get_active_mod_dir(mod))
+  var active_mod_dir = _get_active_mod_dir(mod)
+  return _fs_read_mod_files_from_dir(mod, active_mod_dir) + [active_mod_dir]
 
 func _convert_active_paths_to_available(mod: String, active_paths: Array, status: ModStatus.Value) -> Array:
   if status == ModStatus.REGULAR:
@@ -108,9 +111,11 @@ func _convert_active_paths_to_available(mod: String, active_paths: Array, status
 
 func _get_available_paths_for_mod(mod: String, status: ModStatus.Value) -> Array:
   if status == ModStatus.REGULAR:
-    return _fs_read_mod_files_from_dir(mod, _get_available_mod_dir(mod))
+    var available_mod_dir = _get_available_mod_dir(mod)
+    return _fs_read_mod_files_from_dir(mod, available_mod_dir) + [available_mod_dir]
   elif status == ModStatus.COPY_ON_ACTIVATION:
-    return _fs_read_mod_files_from_dir(mod, CopyOnActivationMods.get_parent_dir_for_mod(mod_type, mod))
+    var parent_dir = CopyOnActivationMods.get_parent_dir_for_mod(mod_type, mod)
+    return _fs_read_mod_files_from_dir(mod, parent_dir) + [parent_dir]
   else:
     Global.fatal_error(["Unknown status '", status, "' encountered in UnrealPakModSelector::_get_available_paths_for_mod"])
     return []

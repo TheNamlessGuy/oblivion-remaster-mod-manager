@@ -99,6 +99,16 @@ func clear_unchanged_dict_keys(dict: Dictionary, default: Dictionary, ignore_sub
 
   return dict
 
+func zip_arrays(a: Array, b: Array) -> Dictionary:
+  if a.size() != b.size():
+    Global.fatal_error(["Tried to zip arrays, but they differed in length.\nA:\n", ", ".join(a), "\nB:\n", ", ".join(b)])
+    return {}
+
+  var retval := {}
+  for i in range(a.size()):
+    retval[a[i]] = b[i]
+  return retval
+
 func current_timestamp_to_filename() -> String:
   return timestamp_to_filename(Time.get_datetime_dict_from_system())
 func timestamp_to_filename(timestamp_dict: Dictionary) -> String:

@@ -649,9 +649,15 @@ func _fs_copy_mod_files(mod: String, from: Array, to: Array) -> void:
   if from.size() != to.size():
     Global.fatal_error(["Tried to copy the files of mod '", mod, "', but the from and to arrays diffed in length.\nFrom:\n", ", ".join(from), "\nTo:\n", ", ".join(to)])
 
+  var zipped_files := Global.zip_arrays(from, to)
+  from.sort_custom(FileSystem.sort_deepest_first)
+
   for i in range(from.size()):
     var from_path: String = from[i]
-    var to_path: String = to[i]
+    var to_path: String = zipped_files[from_path]
+
+    if FileSystem.is_dir(from_path):
+      continue # No need to copy a directory. If there are files in it, the 'to' directory will be created when the files are copied
 
     FileSystem.copy(from_path, to_path, true)
 
@@ -659,22 +665,38 @@ func _fs_move_mod_files(mod: String, from: Array, to: Array) -> void:
   if from.size() != to.size():
     Global.fatal_error(["Tried to move the files of mod '", mod, "', but the from and to arrays diffed in length.\nFrom:\n", ", ".join(from), "\nTo:\n", ", ".join(to)])
 
+  var zipped_files := Global.zip_arrays(from, to)
+  from.sort_custom(FileSystem.sort_deepest_first)
+
   for i in range(from.size()):
     var from_path: String = from[i]
-    var to_path: String = to[i]
+    var to_path: String = zipped_files[from_path]
+
+    if FileSystem.is_dir(from_path):
+      var from_empty = FileSystem.dir_is_empty(from_path)
+      if FileSystem.is_dir(to_path):
+        if from_empty:
+          FileSystem.trash(from_path)
+          continue
+        else:
+          continue # Do nothing
+      elif from_empty:
+        pass # Do the move
+      else: # The mod doesn't own all the files in from_path, and to_path doesn't exist. Pretend we moved the directory without actually moving it
+        FileSystem.ensure_dir_exists(to_path)
+        continue
 
     FileSystem.move(from_path, to_path, true)
 
 func _fs_trash_mod_files(_mod: String, files: Array) -> void:
   files = files.duplicate()
-  files.sort_custom(_fs_sort_deepest_first)
+  files.sort_custom(FileSystem.sort_deepest_first)
 
   for file in files:
-    FileSystem.trash(file)
+    if FileSystem.is_dir(file) and not FileSystem.dir_is_empty(file):
+      continue # Mod doesn't own all files in the folder
 
-## Sorts files so that the ones deepest down come first - that way we can see if we've moved/trashed all files in a directory
-func _fs_sort_deepest_first(fileA: String, fileB: String) -> bool:
-  return FileSystem.path_depth(fileA) > FileSystem.path_depth(fileB)
+    FileSystem.trash(file)
 
 # END: FileSystem section
 

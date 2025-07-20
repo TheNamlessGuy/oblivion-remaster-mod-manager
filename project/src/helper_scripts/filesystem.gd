@@ -23,6 +23,10 @@ static func path(arr: Array) -> String:
 
 static func path_depth(path_to_measure: String) -> int: return path_to_measure.split("/").size()
 
+## Sorts files so that the ones deepest down come first - that way we can see if we've moved/trashed all files in a directory
+static func sort_deepest_first(fileA: String, fileB: String) -> bool:
+  return FileSystem.path_depth(fileA) > FileSystem.path_depth(fileB)
+
 static func get_filename(path_to_file: String, file_ends_to_remove: Array[String] = []) -> String:
   while (path_to_file.ends_with('/')):
     path_to_file = path_to_file.substr(0, path_to_file.length() - 1)
