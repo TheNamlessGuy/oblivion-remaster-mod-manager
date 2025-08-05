@@ -22,3 +22,6 @@ I'd recommend starting with the [getting started guide](/docs/getting-started.md
 
 ## Credits
 Made with [Godot](https://godotengine.org/). Currently on version `4.4.1`.
+
+## Cross-hosted
+This repository is hosted both on [GitHub](https://github.com/TheNamlessGuy/oblivion-remaster-mod-manager) and [Codeberg](https://codeberg.org/TheNamlessGuy/oblivion-remaster-mod-manager)
